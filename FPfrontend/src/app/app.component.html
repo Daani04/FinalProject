@@ -1,2 +1,6 @@
-
+@if (user !== null) {
+    <app-header></app-header>
+}@else {
+    <app-login></app-login>
+}
 <router-outlet />

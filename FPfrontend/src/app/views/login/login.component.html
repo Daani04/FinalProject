@@ -1,0 +1,21 @@
+<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
+    <div class="col-md-6 col-lg-5 shadow-lg p-5 rounded bg-white">
+      <h3 class="text-center mb-4">Iniciar sesión</h3>
+      <form (ngSubmit)="onSubmit()" [formGroup]="reactiveForm">
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input type="email" class="form-control" id="email" placeholder="Introduce tu email" name="email" formControlName="email" >
+        </div>
+        <div class="mb-3">
+          <label for="pwd" class="form-label">Contraseña</label>
+          <input type="password" class="form-control" id="pwd" placeholder="Introduce tu contraseña" name="pswd" formControlName="password" >
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="remember" name="remember" formControlName="rememberMe" >
+          <label class="form-check-label" for="remember">Recordar</label>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Acceder</button>
+      </form>
+    </div>
+  </div>
+  
