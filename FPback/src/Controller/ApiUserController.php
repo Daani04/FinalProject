@@ -22,6 +22,7 @@ class ApiUserController extends AbstractController {
                 'id' => $user->getId(),
                 'username' => $user->getUserName(),
                 'email' => $user->getEmail(),
+                'password' => $user->getPassword(),
                 'company' => $user->getCompanyName(),
                 'role' => $user->getRole(),
             ];

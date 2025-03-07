@@ -134,6 +134,7 @@
       <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/nelmio/cors-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

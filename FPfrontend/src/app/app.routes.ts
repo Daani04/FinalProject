@@ -4,19 +4,18 @@ import { LoginComponent } from './views/login/login.component';
 import { RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { NgModule } from '@angular/core';
+import { RegisterComponent } from './views/register/register.component';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'login', component: LoginComponent }//No se protege por que es la ruta a la que se dirige en caso de no tener un usuario autentificado
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent }
 ];
 
-// Este módulo configura y gestiona las rutas de la aplicación.
-// Utiliza el RouterModule para definir las rutas principales en la aplicación,
-// y hace que el enrutamiento esté disponible en toda la aplicación mediante la exportación del RouterModule.
 @NgModule({
-    imports: [RouterModule.forRoot(routes)], // Configura el enrutador con las rutas definidas en el arreglo 'routes'.
-    exports: [RouterModule] // Hace que las funcionalidades de enrutamiento (como routerLink y router-outlet) estén disponibles globalmente.
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
   })
   export class AppRoutingModule { }
   
