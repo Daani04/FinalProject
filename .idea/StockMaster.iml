@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/FPback/src" isTestSource="false" packagePrefix="App\" />
+      <sourceFolder url="file://$MODULE_DIR$/FPback/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/FPback/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/FPback/vendor/doctrine/cache" />

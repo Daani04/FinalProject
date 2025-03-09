@@ -18,4 +18,8 @@ export class RequestService {
     return this.http.post<User>(url, usuario);
   }
 
+  public loginUser(url: string, email: string, password: string): Observable<any> {
+    return this.http.post<any>(url, { email, password });
+  }
+
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { RequestService } from '../../services/request.service';  // Asegúrate de que la ruta sea correcta
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,26 +11,33 @@ import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 })
 export class LoginComponent {
 
-  private dataUser(email: string, password: string, remember: boolean): void {
-    localStorage.setItem('user', email);
-    localStorage.setItem('password', password);
-    localStorage.setItem('remember', String(remember));  // Convierte el booleano a string
+  constructor(public service: RequestService, private router: Router) { }
 
-    console.log('User:', email);
-    console.log('Password:', password);
-    console.log('Remember:', remember);
-  }
+  public apiUrlUser: string = 'http://127.0.0.1:8000/api/user/login';  
 
   reactiveForm = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
-    rememberMe: new FormControl('')
   });
 
   public onSubmit(): void {
-    let email: string = this.reactiveForm.value.email ?? '';
-    let password: string = this.reactiveForm.value.password ?? '';
-    let remember: boolean = !!this.reactiveForm.value.rememberMe;  //Formzar el valor a booleno(no deja tratarlo como string)
-    this.dataUser(email, password, remember);
+    this.loginUser();
+  }
+
+  public loginUser(): void {
+    const email = this.reactiveForm.value.email ?? '';
+    const password = this.reactiveForm.value.password ?? '';
+
+    this.service.loginUser(this.apiUrlUser, email, password).subscribe(
+      (response) => {
+        console.log('Login exitoso:', response);
+        localStorage.setItem('user', email);
+        this.router.navigate(['/home']);
+      },
+      (error) => {
+        console.error('Error al hacer login:', error);
+        alert('Credenciales incorrectas');
+      }
+    );
   }
 }
