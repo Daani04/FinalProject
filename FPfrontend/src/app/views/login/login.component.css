@@ -89,6 +89,12 @@
     text-decoration: none;
   }
 
+  .text-danger{
+    font-size: 13px;
+    background-color: #ffebee;
+    border-radius: 15px;
+    margin-bottom: 30px;
+  }
   
 
   
