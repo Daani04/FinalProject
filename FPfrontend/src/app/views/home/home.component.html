@@ -1,18 +1,43 @@
 <h1>BIENVENIDO </h1>
 <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-md-4 col-lg-5"> 
-        <div class="chart-container">
-          <app-chart [type]="'bar'" [data]="barChart"></app-chart>
+  <div class="chart">
+      <div class="row justify-content-center">
+        <div class="col-md-4 col-lg-5"> 
+          <div class="chart-container">
+            <app-chart [type]="'bar'" [data]="barChart"></app-chart>
+          </div>
         </div>
-      </div>
-  
-      <div class="col-md-4 col-lg-5">
-        <div class="chart-container">
-          <app-chart [type]="'line'" [data]="lineChart"></app-chart>
+    
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'line'" [data]="lineChart"></app-chart>
+          </div>
         </div>
-      </div>
-      
     </div>
   </div>
+
+  @if (cont === 0) {
+    <div class="row justify-content-center" style="margin-top: 50px; margin-bottom: 50px;">
+      <div class="col-md-6 d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" (click)="toggleForm()">Añadir nuevo almacén</button>
+      </div>
+    </div>
+    
+  } @else {
+    <div class="row justify-content-center" style="margin-top: 50px; margin-bottom: 50px;">
+      <div class="col-md-6">
+          <form (click)="toggleForm()" [formGroup]="reactiveForm" id="warehouseName" class="text-center p-4 border rounded shadow bg-light">
+              <h4>Crear almacén</h4>
+              <label for="name" class="form-label">Nombre del almacén</label>
+              <input type="text" id="name" name="name" class="form-control my-2" required formControlName="warehouseName">
+              <button type="submit" class="btn btn-primary">Enviar</button>
+          </form>
+      </div>
+  </div>
+  }
+
+</div>
+
+<app-footer></app-footer>
+
   

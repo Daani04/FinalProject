@@ -22,4 +22,8 @@ export class RequestService {
     return this.http.post<any>(url, { email, password });
   }
 
+  public createWarehouse(url: string, warehouseData: Warehouse): Observable<any> {
+    return this.http.post<any>(url, warehouseData);
+}
+
 }

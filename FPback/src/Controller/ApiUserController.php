@@ -31,6 +31,32 @@ class ApiUserController extends AbstractController {
         return $this->json($data);
     }
 
+    #[Route('/login', name: 'login', methods: ['POST'])]
+    public function login(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['email'], $data['password'])) {
+            return $this->json(['error' => 'Missing email or password'], 400);
+        }
+
+        $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+
+        if (!$user || !password_verify($data['password'], $user->getPassword())) {
+            return $this->json(['error' => 'Invalid credentials'], 401);
+        }
+
+        return $this->json([
+            'message' => 'Login successful',
+            'user' => [
+                'id' => $user->getId(),
+                'username' => $user->getUserName(),
+                'email' => $user->getEmail(),
+                'role' => $user->getRole(),
+            ]
+        ]);
+    }
+
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse //El request nos permite capturar los datos que envia el postman, es necesario porque a diferencia del delete que solo recibe un id aqui recibimos un json entero
     {

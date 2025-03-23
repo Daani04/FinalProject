@@ -33,12 +33,12 @@ export interface User {
 }
 
 export interface Warehouse {
-    id: number;
-    user: User;  
-    name: string;
+    id: number | null;  
+    userId: User;  
+    warehouseName: string; 
     location: string;
-    products: ProductAllData[];  
-    sales: ProductSold[];  
+    products?: ProductAllData[] | null;  
+    sales?: ProductSold[] | null;  
 }
 
 // Interfaz general para la respuesta de la API

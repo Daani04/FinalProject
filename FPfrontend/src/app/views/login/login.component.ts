@@ -28,20 +28,38 @@ export class LoginComponent {
   }
 
   public loginUser(): void {
-    const email = this.reactiveForm.value.email ?? '';
-    const password = this.reactiveForm.value.password ?? '';
+    let email = this.reactiveForm.value.email ?? '';
+    let password = this.reactiveForm.value.password ?? '';
 
     this.service.loginUser(this.apiUrlUser, email, password).subscribe(
       (response) => {
-        this.cont = 0;
-        console.log('Login exitoso:', response);
-        localStorage.setItem('user', email);
-        this.router.navigate(['/home']);
+        if (response && response.user) {
+          let user = response.user;
+          this.cont = 0;
+          console.log('Login exitoso:', user);
+
+          localStorage.setItem('userId', user.id?.toString() ?? '');
+          localStorage.setItem('username', user.username ?? '');
+          localStorage.setItem('company', user.company ?? '');
+          localStorage.setItem('email', user.email ?? '');
+          localStorage.setItem('role', user.role ?? '');
+
+          localStorage.setItem('user', user.email);
+
+          this.router.navigate(['/home']).then(() => {
+            console.log('Redirección exitosa a /home');
+          }).catch(err => {
+            console.error('Error en la redirección:', err);
+          });
+        } else {
+          console.error('Error: La respuesta del servidor no contiene los datos esperados');
+        }
       },
       (error) => {
         this.cont = 1;
         console.error('Error al hacer login:', error);
       }
     );
-  }
+}
+
 }

@@ -22,9 +22,9 @@ class ApiWarehouseController extends AbstractController
         foreach ($warehouses as $warehouse) {
             $data[] = [
                 'id' => $warehouse->getId(),
+                'user_id' => $warehouse->getUser()->getId(),
                 'name' => $warehouse->getName(),
                 'location' => $warehouse->getLocation(),
-                'user_id' => $warehouse->getUser()->getId(),
             ];
         }
 

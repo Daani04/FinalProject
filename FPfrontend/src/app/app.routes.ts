@@ -5,12 +5,14 @@ import { RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { NgModule } from '@angular/core';
 import { RegisterComponent } from './views/register/register.component';
+import { WarehouseComponent } from './views/warehouse/warehouse.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent }
+    { path: 'register', component: RegisterComponent },
+    { path: 'warehouse', component: WarehouseComponent }
 ];
 
 @NgModule({
