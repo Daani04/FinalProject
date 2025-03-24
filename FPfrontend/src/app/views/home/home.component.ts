@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule],

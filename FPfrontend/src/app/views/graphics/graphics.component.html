@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="chart">
+      <div class="row justify-content-center">
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'bar'" [data]="barChart"></app-chart>
+          </div>
+        </div>
+  
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'line'" [data]="lineChart"></app-chart>
+          </div>
+        </div>
+  
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'pie'" [data]="pieChart"></app-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="chart">
+      <div class="row justify-content-center">
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'line'" [data]="areaChart"></app-chart> <!-- Gráfico de área -->
+          </div>
+        </div>
+  
+        <div class="col-md-4 col-lg-5">
+          <div class="chart-container">
+            <app-chart [type]="'radar'" [data]="radarChart"></app-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

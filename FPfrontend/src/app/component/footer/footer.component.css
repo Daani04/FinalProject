@@ -1,5 +1,6 @@
 footer {
     width: 100%;
+    min-width: 320px;
     height: auto;
     background-color:#212529
 }
@@ -34,7 +35,6 @@ footer {
 }
 
 #logo {
-    margin-left: 200px;
     width: 200px;
     margin-top: 10px;
 }
