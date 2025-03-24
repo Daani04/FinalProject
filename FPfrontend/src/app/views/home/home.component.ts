@@ -5,22 +5,39 @@ import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { Warehouse } from '../../models/response.interface';
 import { User } from '../../models/response.interface';
-
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
 
-  constructor(public service: RequestService) { }
+  constructor(public service: RequestService, private http: HttpClient) { }
 
   public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
+  private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
 
   public cont: number = 0;
+  public cont2: number = 0;
 
   public userLocation: string = '';
+
+  getStreet(lat: number, lon: number): Observable<string> {
+    const url = `${this.apiLocationUrl}&lat=${lat}&lon=${lon}`;
+    return this.http.get<any>(url).pipe(
+      map(response => 
+        response.address?.village || 
+        response.address?.town || 
+        response.address?.city || 
+        'Localidad no encontrada' 
+      )
+    );
+  }
 
   reactiveForm = new FormGroup({
     openForm: new FormControl(''),
@@ -32,28 +49,34 @@ export class HomeComponent {
     this.getLocation();
     this.newWarehouse();
   }
-  
 
   public getLocation(): void {
-
     if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                this.userLocation = `${position.coords.latitude}, ${position.coords.longitude}`;
-                console.log("Ubicación guardada:", this.userLocation);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("Ubicación obtenida:", position.coords);
+          this.getStreet(position.coords.latitude, position.coords.longitude).subscribe(
+            (pueblo) => {
+              this.userLocation = pueblo;
+              console.log("Localidad obtenida:", this.userLocation);  // ✅ Ahora se guarda el pueblo/ciudad
             },
             (error) => {
-                this.userLocation = `Error: ${error.message}`;
-                console.error("No se pudo obtener la ubicación:", this.userLocation);
+              console.error("Error obteniendo la localidad:", error);
+              this.userLocation = "Error obteniendo la localidad";
             }
-        );
+          );
+        },
+        (error) => {
+          this.userLocation = `Error: ${error.message}`;
+          console.error("No se pudo obtener la ubicación:", this.userLocation);
+        }
+      );
     } else {
-        this.userLocation = "Error: Geolocalización no soportada";
-        console.error(this.userLocation);
+      this.userLocation = "Error: Geolocalización no soportada";
+      console.error(this.userLocation);
     }
   }
 
-  
   public newWarehouse(): void {
     const userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
 

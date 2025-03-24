@@ -13,15 +13,6 @@
     flex-wrap: wrap; 
 }
 
-#warehouseName {
-    max-width: 100%;
-    width: 100%;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); 
-    background: #f8f9fa;
-    border-radius: 10px;
-}
-
 h1 {
     font-size: 2.5em;
     font-weight: 700;
@@ -29,4 +20,28 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
     margin-top: 20px;
+}
+
+.warehouseP {
+    background-color: rgba(0, 0, 0, 0.1); 
+    border-radius: 20px;
+    width: 200px;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    margin-top: 20px;
+    font-size: 0.8em;
+}
+
+#addAndRemove {
+    margin-top: 10px;
+    width: 70px;
+    height: 70px;
+    transition: all 0.3s ease-in-out; 
+}
+
+#addAndRemove:hover {
+    cursor: pointer; /* Cuando sea enlace no hará falta */
+    background-color: rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+    transform: scale(1.1); /* Efecto de zoom ligero */
 }
