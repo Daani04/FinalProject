@@ -84,13 +84,18 @@
     color: #03e9f4;
   }
   
-.user-box select {
-  color: #fff;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #fff;
-}
-
+  .user-box select {
+    color: white; 
+    background-color: #0F1026; 
+    border: none;
+    border-bottom: 1px solid #fff; 
+  }
+  
+  .user-box select option {
+    color: white;  
+    background-color: #191b3e; 
+  }
+  
 form a {
   text-decoration: none;
 }

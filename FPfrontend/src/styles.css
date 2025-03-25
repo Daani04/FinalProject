@@ -1,22 +1,22 @@
 body {
-    background-color: #ede4e4;
+  background-color: #ede4e4;
 }
 
 nav {
-    background-color: #343a40;
-    color: white;
+  background-color: #343a40;
+  color: white;
 }
 
 .btn {
-    background-color: #343a40;
-    color: #fff;
-    border: none;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
+  background-color: #343a40;
+  color: #fff;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
 .btn:hover {
-    background-color: #1d2124;
-    color: #fff;
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
+  background-color: #1d2124;
+  color: #fff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

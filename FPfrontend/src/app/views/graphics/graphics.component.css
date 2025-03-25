@@ -47,8 +47,8 @@
 }
 
 h1 {
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
   text-align: center;
   font-size: 2.5em;
   font-weight: 700;
@@ -59,6 +59,46 @@ h3 {
   margin-top: 10px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+#addButton {
+  margin-top: 10px;
+  width: 70px;
+  height: 70px;
+  transition: all 0.3s ease-in-out;
+}
+
+#addButton:hover {
+  cursor: pointer; 
+  background-color: rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+  transform: scale(1.1); 
+}
+
+#contButton {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+#newGraphics{
+  background-color: rgb(230, 232, 235);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
+  width: 400px;
+  height: 300px;
+}
+
+#newGraphics > h3 {
+  padding: 20px;
+}
+
+#newGraphics > button {
+
+}
+
+.form-check {
+  margin-left: 20px;
 }
 
 /*Esto permite que en pantallas mas pequñas a 767px se le apliquen estos estilos al double-chart*/

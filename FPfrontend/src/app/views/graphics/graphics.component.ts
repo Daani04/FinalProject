@@ -1,15 +1,54 @@
 import { Component } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
+import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
   selector: 'app-graphics',
-  imports: [ChartComponent, FooterComponent],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule],
   templateUrl: './graphics.component.html',
   styleUrl: './graphics.component.css'
 })
 export class GraphicsComponent {
+
+  public cont1: number = 0;
+  public cont2: number = 0;
+  public cont3: number = 0;
+
+  public contButton: number = 0;
+
+  public modifyContButton(): void {
+    if (this.contButton === 0) {
+      this.contButton = 1;
+    } else {
+      this.contButton = 0;
+    }
+  }
+
+  reactiveForm = new FormGroup({
+    check1: new FormControl(''),
+    check2: new FormControl(''),
+    check3: new FormControl('')
+  });
+
+  public onSubmit(): void {
+    if (this.reactiveForm.value.check1) {
+      this.cont1 = 1;
+    }
+    if (this.reactiveForm.value.check2) {
+      this.cont2 = 1;
+    }
+    if (this.reactiveForm.value.check3) {
+      this.cont3 = 1;
+    }
+
+    console.log(this.reactiveForm.value);
+    console.log(this.cont1);    
+    console.log(this.cont2);
+    console.log(this.cont3);
+
+  }
 
   public barSale = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
@@ -87,6 +126,64 @@ export class GraphicsComponent {
       backgroundColor: 'rgba(209, 176, 123, 0.3)', 
       borderWidth: 2,
       fill: true
+    }]
+  };
+
+  //GRAFICOS EXTRA
+  public stockAvailable = {  
+    labels: ['Producto A', 'Producto B', 'Producto C'],
+    datasets: [{
+      data: [30, 40, 30],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+    }]
+  };
+
+  public discountsApplied = {  
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    datasets: [{
+      label: 'Descuentos aplicados',
+      data: [200, 250, 300, 350, 400],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      borderColor: 'rgb(117, 71, 24)',
+      borderWidth: 2
+    }]
+  };
+
+  public monthlySalesComparison = {  
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    datasets: [{
+      label: 'Comparación de ventas por mes',
+      data: [3000, 4000, 5000, 6000, 7000],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      borderColor: 'rgb(117, 71, 24)',
+      borderWidth: 2
+    }]
+  };
+
+  public productReturns = {  
+    labels: ['Producto A', 'Producto B', 'Producto C'],
+    datasets: [{
+      data: [100, 150, 200],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+    }]
+  };
+
+  public categorySales = {  
+    labels: ['Electrónica', 'Ropa', 'Alimentos', 'Hogar'],
+    datasets: [{
+      data: [5000, 3000, 4000, 2000],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+    }]
+  };
+
+  public productCosts = {  
+    labels: ['Producto A', 'Producto B', 'Producto C'],
+    datasets: [{
+      label: 'Costos de productos',
+      data: [150, 200, 250],
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      borderColor: 'rgb(117, 71, 24)',
+      borderWidth: 2
     }]
   };
   
