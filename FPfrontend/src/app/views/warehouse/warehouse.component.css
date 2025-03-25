@@ -1,0 +1,14 @@
+#filter {
+    background: rgba(113, 113, 113, 0.2);  
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border: solid 1px #bcb9b9;
+    width: 500px;
+    height: 60px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+
+}

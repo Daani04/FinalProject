@@ -108,23 +108,23 @@ export class HomeComponent {
 
 
 
-  public barChart = {  
+  public lineExitProducts = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
-      label: 'Ventas',
-      data: [10, 20, 15, 30, 25],
-      backgroundColor: ['red', 'blue', 'yellow', 'green', 'purple'],
-      borderColor: 'black',
-      borderWidth: 1
+      label: 'Entrada de productos',
+      data: [5, 15, 10, 20, 18],
+      borderColor: '#A67058', 
+      borderWidth: 2,
+      fill: false
     }]
   };
-
-  public lineChart = {  
+  
+  public lineEntrateProducts = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
-      label: 'Crecimiento',
+      label: 'Salida de productos',
       data: [5, 15, 10, 20, 18],
-      borderColor: 'blue',
+      borderColor: '#D1B07B', 
       borderWidth: 2,
       fill: false
     }]

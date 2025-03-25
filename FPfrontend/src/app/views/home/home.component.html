@@ -1,34 +1,33 @@
 <h1>BIENVENIDO </h1>
 <div class="container">
-  <div class="chart">
     <div class="row justify-content-center">
-      <div class="col-md-4 col-lg-5">
-        <div class="chart-container">
-          <app-chart [type]="'bar'" [data]="barChart"></app-chart>
+      <div class="col-md-12 mb-4">
+        <div class="double-chart h-100">
+          <div class="graphics">
+            <h3>Entrada de productos</h3>
+            <app-chart [type]="'line'" [data]="lineExitProducts"></app-chart> 
+          </div>
+          <div class="graphics">
+            <h3>Salida de productos</h3>
+            <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
+          </div>
         </div>
-      </div>
-
-      <div class="col-md-4 col-lg-5">
-        <div class="chart-container">
-          <app-chart [type]="'line'" [data]="lineChart"></app-chart>
-        </div>
-      </div>
+      </div>     
     </div>
-  </div>
 
   <div class="row justify-content-center gap-5" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5 bg-light p-4 border rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+    <div class="col-md-5 p-4 border rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Mis almacenes</h3>
       <p class="warehouseP">No tienes ningun almacen</p>
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
         @if (cont === 0) {
-          <button type="button" class="btn btn-primary" (click)="toggleForm()">Añadir nuevo almacén</button>
+          <button type="button" class="btn" (click)="toggleForm()">Añadir nuevo almacén</button>
         } @else {
           <form (click)="toggleForm()" [formGroup]="reactiveForm" id="warehouseName"
             class="text-center">
             <label for="name" class="form-label">Nombre del almacén</label>
             <input type="text" id="name" name="name" class="form-control my-2" required formControlName="warehouseName">
-            <button type="submit" class="btn btn-primary">Crear</button>
+            <button type="submit" class="btn">Crear</button>
           </form>
         }
       } @else {
@@ -37,11 +36,11 @@
 
     </div>
 
-    <div class="col-md-5 bg-light p-4 border rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+    <div class="col-md-5 p-4 border rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Mis productos</h3>
       <p class="warehouseP">No tienes ningun producto</p>
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
-        <button class="btn btn-primary" [routerLink]="['/login']">Añadir productos</button>        
+        <button class="btn" [routerLink]="['/login']">Añadir productos</button>        
       } @else {
         <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
       }
@@ -49,12 +48,12 @@
   </div>
 
   <div class="row justify-content-center gap-5" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5 bg-light p-4 border rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+    <div class="col-md-5  p-4 border rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Añadir producto</h3>
       <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
     </div>
 
-    <div class="col-md-5 bg-light p-4 border rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+    <div class="col-md-5 p-4 border rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Retirar producto</h3>
       <img id="addAndRemove" src="/img/removePhoto.png" class="img-fluid" alt="Añadir foto">
     </div>

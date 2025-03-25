@@ -1,42 +1,59 @@
+<h1>MIS GRAFICOS</h1>
 <div class="container">
-    <div class="chart">
-      <div class="row justify-content-center">
-        <div class="col-md-4 col-lg-5">
-          <div class="chart-container">
-            <app-chart [type]="'bar'" [data]="barChart"></app-chart>
-          </div>
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
+      <div class="stacked-charts h-100">
+        <div class="graphics">
+          <h3>Ventas de este año</h3>
+          <app-chart [type]="'bar'" [data]="barSale"></app-chart>
         </div>
-  
-        <div class="col-md-4 col-lg-5">
-          <div class="chart-container">
-            <app-chart [type]="'line'" [data]="lineChart"></app-chart>
-          </div>
+        <div class="graphics">
+          <h3>Ventas de esta semana</h3>
+          <app-chart [type]="'line'" [data]="lineSale"></app-chart>
         </div>
-  
-        <div class="col-md-4 col-lg-5">
-          <div class="chart-container">
-            <app-chart [type]="'pie'" [data]="pieChart"></app-chart>
-          </div>
+      </div>
+    </div>
+
+    <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
+      <div class="single-chart h-100">
+        <h3>Productos mas vendidos</h3>
+        <app-chart [type]="'pie'" [data]="circularMostSale"></app-chart>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="row justify-content-center">
+    <div class="col-md-12 mb-4">
+      <div class="double-chart h-100">
+        <div class="graphics">
+          <h3>Entrada de productos</h3>
+          <app-chart [type]="'line'" [data]="lineExitProducts"></app-chart>
+        </div>
+        <div class="graphics">
+          <h3>Salida de productos</h3>
+          <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="container">
-    <div class="chart">
-      <div class="row justify-content-center">
-        <div class="col-md-4 col-lg-5">
-          <div class="chart-container">
-            <app-chart [type]="'line'" [data]="areaChart"></app-chart> <!-- Gráfico de área -->
-          </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-12 mb-4">
+      <div class="double-chart h-100">
+        <div class="graphics">
+          <h3>Ingresos brutos</h3>
+          <app-chart [type]="'line'" [data]="lineGrossProfits"></app-chart>
         </div>
-  
-        <div class="col-md-4 col-lg-5">
-          <div class="chart-container">
-            <app-chart [type]="'radar'" [data]="radarChart"></app-chart>
-          </div>
+        <div class="graphics">
+          <h3>Ingresos netos</h3>
+          <app-chart [type]="'line'" [data]="lineNetProfits"></app-chart>
         </div>
       </div>
     </div>
   </div>
-  
+
+</div>
+
+<app-footer></app-footer>

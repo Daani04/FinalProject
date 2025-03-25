@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import { RegisterComponent } from './views/register/register.component';
 import { WarehouseComponent } from './views/warehouse/warehouse.component';
 import { GraphicsComponent } from './views/graphics/graphics.component';
+import { ProductDataComponent } from './views/product-data/product-data.component';
+import { DataUserComponent } from './views/data-user/data-user.component';
 
 //MODIFICAR, LAS RUTAS NO ESTAN PROTEGIDAS, AÑADIR --> canActivate: [AuthGuard] 
 export const routes: Routes = [
@@ -15,7 +17,9 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'warehouse', component: WarehouseComponent },
-    { path: 'graphics', component: GraphicsComponent }
+    { path: 'graphics', component: GraphicsComponent },
+    { path: 'product_data', component: ProductDataComponent },
+    { path: 'data_user', component: DataUserComponent }
 ];
 
 @NgModule({
