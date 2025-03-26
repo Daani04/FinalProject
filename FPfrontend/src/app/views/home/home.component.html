@@ -40,7 +40,12 @@
       <h3>Mis productos</h3>
       <p class="warehouseP">No tienes ningun producto</p>
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
-        <button class="btn" [routerLink]="['/login']">Añadir productos</button>        
+        @if (contInsertionData === 1) {
+          <button class="btn" [routerLink]="['/login']" (click)="insertionMethod()">Añadir manualmente</button> 
+          <button class="btn" [routerLink]="['/login']" (click)="insertionMethod()">Escanear productos</button> 
+        } @else {
+          <button class="btn" (click)="insertionMethod()">Añadir productos</button> 
+        }       
       } @else {
         <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
       }

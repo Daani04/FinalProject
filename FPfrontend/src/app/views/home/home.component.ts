@@ -27,7 +27,14 @@ export class HomeComponent {
   public cont: number = 0;
   public cont2: number = 0;
 
+  public contInsertionData: number = 0;
+
   public userLocation: string = '';
+
+  public insertionMethod(): void {
+    this.contInsertionData = 1;
+  }
+
 
   getStreet(lat: number, lon: number): Observable<string> {
     const url = `${this.apiLocationUrl}&lat=${lat}&lon=${lon}`;
