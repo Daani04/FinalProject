@@ -42,3 +42,20 @@ footer {
 p {
     color: white;
 }
+
+.col-md-3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.col-md-6 {
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    /*Solo se aplica al primer hijo*/
+    .row > .col-md-3:first-child {
+        margin-top: 50px;
+    }
+}

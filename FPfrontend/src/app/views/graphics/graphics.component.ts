@@ -72,10 +72,10 @@ export class GraphicsComponent implements OnInit {
   }
   
   public barSale = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ventas anuales',
-      data: [10, 20, 15, 30, 25],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
       borderColor: '#3E2A47', 
       borderWidth: 1
@@ -105,10 +105,10 @@ export class GraphicsComponent implements OnInit {
   };
   
   public lineExitProducts = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Entrada de productos',
-      data: [5, 15, 10, 20, 18],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       borderColor: '#A67058', 
       borderWidth: 2,
       fill: false
@@ -116,10 +116,10 @@ export class GraphicsComponent implements OnInit {
   };
   
   public lineEntrateProducts = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Salida de productos',
-      data: [5, 15, 10, 20, 18],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       borderColor: '#D1B07B', 
       borderWidth: 2,
       fill: false
@@ -127,10 +127,10 @@ export class GraphicsComponent implements OnInit {
   };
   
   public lineGrossProfits  = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ingresos brutos',
-      data: [12, 19, 3, 5, 2],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       borderColor: '#A67058', 
       backgroundColor: 'rgba(166, 112, 88, 0.3)', 
       borderWidth: 2,
@@ -139,10 +139,10 @@ export class GraphicsComponent implements OnInit {
   };
   
   public lineNetProfits  = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ingresos netos',
-      data: [6, 8, 3, 9, 2],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       borderColor: '#D1B07B', 
       backgroundColor: 'rgba(209, 176, 123, 0.3)', 
       borderWidth: 2,
@@ -160,21 +160,21 @@ export class GraphicsComponent implements OnInit {
   };
 
   public discountsApplied = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Descuentos aplicados',
-      data: [200, 250, 300, 350, 400],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
-      borderColor: 'rgb(117, 71, 24)',
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B', '#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B', '#D1B07B', '#A67058'], 
+      borderColor: 'rgb(117, 71, 24, 100, 300, 222, 33, 33, 66, 677, 0, 1)', 
       borderWidth: 2
     }]
-  };
+};
 
   public monthlySalesComparison = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Comparación de ventas por mes',
-      data: [3000, 4000, 5000, 6000, 7000],
+      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
       backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
       borderColor: 'rgb(117, 71, 24)',
       borderWidth: 2

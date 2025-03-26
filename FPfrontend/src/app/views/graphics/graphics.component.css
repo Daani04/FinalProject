@@ -75,33 +75,47 @@ h3 {
   transform: scale(1.1); 
 }
 
-#contButton {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-}
-
 #newGraphics{
   background-color: rgb(230, 232, 235);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-radius: 15px;
   width: 400px;
-  height: 300px;
+  height: auto;
 }
 
 #newGraphics > h3 {
   padding: 20px;
 }
 
-#newGraphics > button {
-
-}
-
 .form-check {
   margin-left: 20px;
 }
 
-/*Esto permite que en pantallas mas pequñas a 767px se le apliquen estos estilos al double-chart*/
+#closeButton {
+  margin-top: 20px;
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+}
+
+#contButton {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  margin-bottom: 30px;
+}
+
+#addGraphicsButton {
+  display: block; 
+  margin: 0 auto;   
+  margin-top: 20px;
+}
+
+
+#closeButton:hover {
+  background-color: #cccdcf;
+  border-radius: 30px;
+}
+
 @media (max-width: 767px) {
   .double-chart {
     flex-direction: column;

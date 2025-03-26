@@ -9,10 +9,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
+import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
 
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, BarcodeScannerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

@@ -1,14 +1,105 @@
-#filter {
-    background: rgba(113, 113, 113, 0.2);  
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    border: solid 1px #bcb9b9;
-    width: 500px;
-    height: 60px;
-    border-radius: 30px;
+.container {
+  max-width: 1100px;
+  margin: 0 auto; 
+  padding: 15px;
+}
+.card {
+  height: 450px;
+  width: 100%; 
+  max-width: 300px; 
+  min-width: 280px; 
+  background-color: rgb(230, 232, 235);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin: 10px; 
+}
+
+.card-body {
+    padding: 20px;
+}
+
+#warehouseImgCont {
+    width: 230px;
+    height: 150px;
+    background-color: rgb(187, 189, 192);
+    border-radius: 10px;
+    margin: 0 auto;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    margin: 0 auto;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    align-items: center;
+    object-fit: cover;
+}
 
+h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #343a40;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+
+.card-text {
+    background-color: rgb(187, 189, 192);
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.card-title {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+img {
+    width: 150px;
+    height: 100px;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+a:hover {
+    background-color: #343a40;
+    color: wheat;
+    border-radius: 5px;
+  }
+
+
+  #addWarehouseButton {
+    margin-top: 10px;
+    width: 70px;
+    height: 70px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  #addWarehouseButton:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    transform: scale(1.1);
+  }
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px; 
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las cards se ajusten cuando hay poco espacio */
+  justify-content: space-evenly; /* Distribuye las cards equitativamente */
 }

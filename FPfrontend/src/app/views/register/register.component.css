@@ -4,13 +4,20 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, 
-        #670d10 0%, 
-        #092756 25%, 
-        #3e1d6d 50%, 
-        #6eb6de 75%, 
-        #4a77d4 100%);
+    #B28A55 0%, 
+    #9E7A4B 8%, 
+    #8F5B45 16%, 
+    #8A5D4E 24%, 
+    #7C4B3F 32%, 
+    #6A4737 40%, 
+    #5C3F30 48%, 
+    #4E3829 56%, 
+    #7C4B3F 64%, 
+    #8A5D4E 72%, 
+    #9E7A4B 80%, 
+    #B28A55 100%);
     background-size: 400% 400%;
-    animation: gradientAnimation 30s ease infinite; 
+    animation: gradientAnimation 20s ease infinite; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,22 +92,30 @@
   }
   
   .user-box select {
-    color: white; 
-    background-color: #0F1026; 
+    background-color: rgba(70, 46, 46, 0.5);  
+    color: white;
     border: none;
     border-bottom: 1px solid #fff; 
   }
   
   .user-box select option {
     color: white;  
-    background-color: #191b3e; 
+    background-color: #494951; 
   }
   
-form a {
-  text-decoration: none;
-}
-
+  form a {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
   
+  form a:hover {
+    background-color: #343a40;
+    border-radius: 5px;
+    transform: scale(1.1);
+  }
 
   
 

@@ -4,6 +4,6 @@
 
 /*Cambia el color del texto del nav de la pagina en la que nos encontramos*/
 .navbar-nav .nav-link.active {
-    color: #ff2600; 
+    color: wheat;   
 }
 
