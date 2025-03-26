@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -10,7 +10,8 @@ import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
   templateUrl: './graphics.component.html',
   styleUrl: './graphics.component.css'
 })
-export class GraphicsComponent {
+export class GraphicsComponent implements OnInit {
+
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -27,29 +28,49 @@ export class GraphicsComponent {
   }
 
   reactiveForm = new FormGroup({
-    check1: new FormControl(''),
-    check2: new FormControl(''),
-    check3: new FormControl('')
+    check1: new FormControl(false),
+    check2: new FormControl(false),
+    check3: new FormControl(false)
   });
 
+  ngOnInit(): void {
+    this.cont1 = Number(localStorage.getItem('cont1')) || 0;
+    this.cont2 = Number(localStorage.getItem('cont2')) || 0;
+    this.cont3 = Number(localStorage.getItem('cont3')) || 0;
+
+    // Si contX esta marcado es true y el ckeckbox saldra marcado
+    this.reactiveForm.setValue({
+      check1: this.cont1 === 1,
+      check2: this.cont2 === 1,
+      check3: this.cont3 === 1
+    });
+  }
+
   public onSubmit(): void {
-    if (this.reactiveForm.value.check1) {
-      this.cont1 = 1;
+    if (this.reactiveForm.value.check1 !== undefined) {
+      let cont1Local = this.reactiveForm.value.check1 ? 1 : 0;
+      localStorage.setItem('cont1', cont1Local.toString());
+      this.cont1 = cont1Local;
     }
-    if (this.reactiveForm.value.check2) {
-      this.cont2 = 1;
+
+    if (this.reactiveForm.value.check2 !== undefined) {
+      let cont2Local = this.reactiveForm.value.check2 ? 1 : 0;
+      localStorage.setItem('cont2', cont2Local.toString());
+      this.cont2 = cont2Local;
     }
-    if (this.reactiveForm.value.check3) {
-      this.cont3 = 1;
+
+    if (this.reactiveForm.value.check3 !== undefined) {
+      let cont3Local = this.reactiveForm.value.check3 ? 1 : 0;
+      localStorage.setItem('cont3', cont3Local.toString());
+      this.cont3 = cont3Local;
     }
 
     console.log(this.reactiveForm.value);
-    console.log(this.cont1);    
+    console.log(this.cont1);
     console.log(this.cont2);
     console.log(this.cont3);
-
   }
-
+  
   public barSale = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
