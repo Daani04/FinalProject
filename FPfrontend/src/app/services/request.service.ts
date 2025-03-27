@@ -28,21 +28,21 @@ export class RequestService {
 
 //API
 
-  private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
-  private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  
+    private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
+    private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  
 
-  sendMessage(prompt: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${this.apiKey}`
-    });
+    sendMessage(prompt: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      });
 
-    const body = {
-      model: 'deepseek-chat',  // MODELO QUE SE VA A USAR 
-      messages: [{ role: 'user', content: prompt }]
-    };
+      const body = {
+        model: 'deepseek-chat',  // MODELO QUE SE VA A USAR 
+        messages: [{ role: 'user', content: prompt }]
+      };
 
-    return this.http.post<any>(this.apiUrl, body, { headers });
-  }
+      return this.http.post<any>(this.apiUrl, body, { headers });
+    }
 
 }

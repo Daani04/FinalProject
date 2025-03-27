@@ -23,8 +23,12 @@ export class DeepseekComponent {
   public answers: string[] = []; 
   public questions: string[] = []; 
 
+  public loading: boolean = false;
 
   sendMessage() {
+    this.loading = true;
+    let editableDiv = document.querySelector('.editable') as HTMLDivElement; //Selecciona el contenido del input
+    editableDiv.innerText = ''; // Esto vacía el contenido del div editable
     this.service.sendMessage(this.userInput).subscribe(
       (res) => {
         this.response = res.choices[0].message.content;
@@ -32,9 +36,11 @@ export class DeepseekComponent {
         this.questions.push(this.userInput);
         console.log(this.answers);
         console.log(this.questions);
+        this.loading = false;  
       },
       (error) => {
         console.error('Error:', error);
+        this.loading = false;  
       }
     );
   }

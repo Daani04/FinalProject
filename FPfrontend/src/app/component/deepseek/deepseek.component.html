@@ -16,6 +16,18 @@
     }
   }
 
+  @if (loading === true) {
+    <div class="row">
+      <div class="col-md-6 p-4 mb-4">
+        <div class="spinner">
+          <div class="double-bounce1"></div>
+          <div class="double-bounce2"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+
   <div class="row center-last-row">
     <div class="col-md-6 small-container mb-5">
       <div class="editable" contenteditable="true" (input)="updateUserInput($event)" [attr.placeholder]="placeHolderText"></div>
