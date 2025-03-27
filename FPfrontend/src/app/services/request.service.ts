@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Welcome, User, ProductAllData, ProductSold, Warehouse } from '../models/response.interface';
 
@@ -25,5 +25,24 @@ export class RequestService {
   public createWarehouse(url: string, warehouseData: Warehouse): Observable<any> {
     return this.http.post<any>(url, warehouseData);
 }
+
+//API
+
+  private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
+  private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  
+
+  sendMessage(prompt: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.apiKey}`
+    });
+
+    const body = {
+      model: 'deepseek-chat',  // MODELO QUE SE VA A USAR 
+      messages: [{ role: 'user', content: prompt }]
+    };
+
+    return this.http.post<any>(this.apiUrl, body, { headers });
+  }
 
 }
