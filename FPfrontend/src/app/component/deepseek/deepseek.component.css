@@ -19,7 +19,6 @@ html,body {
     width: 800px;
     border-radius: 30px;
     display: flex;
-    justify-content: center;
     align-items: center;
 }   
 
@@ -35,6 +34,7 @@ html,body {
     white-space: pre-wrap;
     word-wrap: break-word;
     color: white;
+    margin-left: 20px;
 }
 
 .editable:empty:before {

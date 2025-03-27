@@ -1,19 +1,24 @@
 <div class="container">
 
   @if (answers.length !== 0) {
-  @for (answer of answers; track $index) {
-  <div class="row">
-    <div class="col-md-6 mb-4 p-4">
-      <p>{{ answers[$index] }}</p>
-    </div>
-  </div>
-  }
+    @for (answer of answers; track $index) {
+      <div class="row">
+        <div class="col-md-6 mb-0 p-4" style="background-color: rgba(97, 97, 102, 0.5); border-end-end-radius: 0; border-end-start-radius: 0;">
+          <p>{{ questions[$index] }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-4 p-4" style="border-top-left-radius: 0; border-top-right-radius: 0;">
+          <p>{{ answers[$index] }}</p>
+        </div>
+      </div>
+    }
   }
 
-  <div class="row">
+  <div class="row center-last-row">
     <div class="col-md-6 small-container mb-5">
-      <div class="editable" contenteditable="true" (input)="updateUserInput($event)"
-        [attr.placeholder]="placeHolderText"></div>
+      <div class="editable" contenteditable="true" (input)="updateUserInput($event)" [attr.placeholder]="placeHolderText"></div>
       <button (click)="sendMessage()"><img id="logo" src="/img/enviar.png" alt="logo"></button>
     </div>
   </div>
