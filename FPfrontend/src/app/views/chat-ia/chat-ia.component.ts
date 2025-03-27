@@ -10,4 +10,5 @@ import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
 })
 export class ChatIAComponent {
 
+
 }

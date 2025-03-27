@@ -1,5 +1,21 @@
-<div>
-  <p>{{ response }}</p>
-  <textarea [(ngModel)]="userInput" [placeholder]="placeHolderText" (input)="adjustHeight($event)"></textarea>
-  <button (click)="sendMessage()"><img id="logo" src="/img/enviar.png"  alt="logo"></button>
+<div class="container">
+
+  @if (answers.length !== 0) {
+  @for (answer of answers; track $index) {
+  <div class="row">
+    <div class="col-md-6 mb-4 p-4">
+      <p>{{ answers[$index] }}</p>
+    </div>
+  </div>
+  }
+  }
+
+  <div class="row">
+    <div class="col-md-6 small-container mb-5">
+      <div class="editable" contenteditable="true" (input)="updateUserInput($event)"
+        [attr.placeholder]="placeHolderText"></div>
+      <button (click)="sendMessage()"><img id="logo" src="/img/enviar.png" alt="logo"></button>
+    </div>
+  </div>
+
 </div>

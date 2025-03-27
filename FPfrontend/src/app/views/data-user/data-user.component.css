@@ -1,6 +1,7 @@
 .container {
-    background-color: rgb(230, 232, 235);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);   
+    background-color: rgba(60, 60, 64, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 0.1px solid rgba(146, 146, 147, 0.5);
     border-radius: 15px;
     margin-top: 40px;
     margin-bottom: 100px;
@@ -18,15 +19,15 @@
     display: flex;
     justify-content: center;
     padding: 30px;
-    background-color: rgb(187, 189, 192);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    background-color: rgba(38, 35, 35, 0.5);
+    border: 3px solid rgba(69, 69, 70, 0.5);
     border-radius: 15px;
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 .col-md-3:hover {
-    background-color: rgb(172, 173, 175);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+    background-color: rgba(55, 53, 53, 0.5);
+    border: 3px solid rgba(69, 69, 70, 0.5);
     transform: scale(1.1);
 }
 
@@ -37,5 +38,4 @@ h1 {
     text-align: center;
     font-size: 2.5em;
     font-weight: 700;
-    color: #343a40;
   }

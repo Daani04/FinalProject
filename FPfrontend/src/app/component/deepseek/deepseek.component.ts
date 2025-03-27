@@ -17,15 +17,17 @@ export class DeepseekComponent {
   public response: string = '';
 
   public placeHolderText: string = '';
-  public arrayPlaceHolder: string[] = ['¿', 'E', 'n',' ', 'q', 'u', 'e',' ', 'p', 'u', 'e', 'd', 'o',' ', 'a', 'y', 'u', 'd', 'a', 't', 'e', '?'];
+  public arrayPlaceHolder: string[] = ['¿', 'E', 'n', ' ', 'q', 'u', 'e', ' ', 'p', 'u', 'e', 'd', 'o', ' ', 'a', 'y', 'u', 'd', 'a', 't', 'e', '?'];
   private currentIndex: number = 0;
 
-
+  public answers: string[] = []; 
 
   sendMessage() {
     this.service.sendMessage(this.userInput).subscribe(
       (res) => {
         this.response = res.choices[0].message.content;
+        this.answers.push(this.response); 
+        console.log(this.answers);
       },
       (error) => {
         console.error('Error:', error);
@@ -33,15 +35,14 @@ export class DeepseekComponent {
     );
   }
 
-  //Permite que el contenedor crezca dinamicamente con el texto
-  adjustHeight(event: Event): void {
-    const textarea = event.target as HTMLTextAreaElement;
-    textarea.style.height = 'auto';  // Restablece la altura para poder ajustarse
-    textarea.style.height = `${textarea.scrollHeight}px`;  // Ajusta la altura según el contenido
+  // Input para introducir datos
+  updateUserInput(event: Event): void {
+    let target = event.target as HTMLDivElement;
+    this.userInput = target.innerText;
   }
 
   public ngOnInit() {
-    // Texto dinamico
+    // Texto dinámico
     const interval = setInterval(() => {
       if (this.currentIndex < this.arrayPlaceHolder.length) {
         this.placeHolderText += this.arrayPlaceHolder[this.currentIndex]; 
@@ -51,5 +52,4 @@ export class DeepseekComponent {
       }
     }, 100); 
   }
-
 }

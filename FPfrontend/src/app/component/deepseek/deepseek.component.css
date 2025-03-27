@@ -1,31 +1,57 @@
-div {
-    padding: 30px;
-    display: flex;            /* Establece el contenedor como un flex container */
-    flex-direction: column;   /* Organiza los elementos en columna */
+html,body {
+    height: 100%; /* Asegúrate de que el body ocupe toda la altura */
+    margin: 0;
 }
 
-textarea {
-    width: 100%;                
+
+.container {
+    min-height: 50vh; /* CAMBIAR, EL TAMAÑO DE LA PANTALLA PUEDE AFECTAR A SU FUNCION*/
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.col-md-6 {
+    background-color: rgba(60, 60, 64, 0.5);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    width: 800px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}   
+
+.editable {
+    width: 85%;
     background-color: transparent;
-    padding: 10px;             
-    font-size: 16px;           
-    resize: none;              /* Desactiva el icono para cambiar el tamaño */
-    border: none;               
-    overflow: hidden;          
-    outline: none;             /* Elimina el contorno al seleccionar */
-    min-height: 50px;           
-    white-space: pre-wrap;      /* Mantiene los saltos de línea */
-    word-wrap: break-word;      /* Permite que las palabras largas se ajusten */
+    padding: 10px;
+    font-size: 16px;
+    min-height: 50px;
+    border: none;
+    outline: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     color: white;
 }
 
+.editable:empty:before {
+    content: attr(placeholder);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+
 button {
-    margin-top: 10px;
+    margin-top: 20px;
     background-color: white;
     border-radius: 100px;
     padding: 5px;
     border: none;
-    align-self: flex-end;       /* Alinea el botón a la derecha */
+    float: right;
+    margin-right: 10px;    
+    margin-bottom: 20px;
 }
 
 button:hover {
