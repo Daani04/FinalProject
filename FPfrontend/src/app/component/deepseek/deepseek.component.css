@@ -1,0 +1,38 @@
+div {
+    padding: 30px;
+    display: flex;            /* Establece el contenedor como un flex container */
+    flex-direction: column;   /* Organiza los elementos en columna */
+}
+
+textarea {
+    width: 100%;                
+    background-color: transparent;
+    padding: 10px;             
+    font-size: 16px;           
+    resize: none;              /* Desactiva el icono para cambiar el tamaño */
+    border: none;               
+    overflow: hidden;          
+    outline: none;             /* Elimina el contorno al seleccionar */
+    min-height: 50px;           
+    white-space: pre-wrap;      /* Mantiene los saltos de línea */
+    word-wrap: break-word;      /* Permite que las palabras largas se ajusten */
+    color: white;
+}
+
+button {
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 100px;
+    padding: 5px;
+    border: none;
+    align-self: flex-end;       /* Alinea el botón a la derecha */
+}
+
+button:hover {
+    background-color: rgba(216, 213, 213, 0.5);
+}
+
+img {
+    width: 40px;
+    height: 30px;
+}

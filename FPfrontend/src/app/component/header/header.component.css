@@ -7,3 +7,11 @@
     color: wheat;   
 }
 
+#pChat {
+    font-weight: bold; 
+    background-image: linear-gradient(to bottom, #4E2394, #DBC9F5); /* El degradado de color */
+    background-clip: text; /* Aplica el degradado solo al texto */
+    color: transparent; /* Hace el color de texto transparente para que se vea el degradado */
+    letter-spacing: 1px; 
+  }
+  

@@ -20,22 +20,53 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   // ngAfterViewInit, parecido al ngOnInit, se ejecuta sin tener que llamarlo, pero espera a que el <canvas> este listo antes de intentar inicializar los graficos
   ngAfterViewInit(): void {
     if (this.chartRef) {
-      //Se inicia un nuevo grafico con los datos que le hemos pasado 
       this.chart = new Chart(this.chartRef.nativeElement.getContext('2d'), {
-        type: this.type, 
+        type: this.type,  
         data: this.data, 
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          scales: {
+          scales: this.type === 'doughnut' || this.type === 'pie' ? {} : { 
+            //Graficos de barra y linea
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(149, 146, 146, 0.5)',  
+              },
+            },
+            x: {
+              grid: {
+                color: 'rgba(149, 146, 146, 0.5)',  
+              },
+            },
+            // Grafico tipo tipo Radar
+            r: {
+              grid: {
+                color: 'rgb(181, 177, 177)',  
+                lineWidth: 1,  
+              },
+              angleLines: {
+                color: 'rgb(181, 177, 177)',  
+                lineWidth: 1,  
+              },
+              ticks: {
+                display: false,  
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              labels: {
+                color: 'white'  //Color del texto
+              }
             }
           }
-        }
+        },
       });
     }
   }
+  
+  
 
   //Sirve para que si no estamos usando los graficos(por ejemplo cambiamos de pagina) se eliminen lo graficos de chart para que deje de ocupar memoria
   //Se ejecuta automaticamente apra hacer la comprobacion 

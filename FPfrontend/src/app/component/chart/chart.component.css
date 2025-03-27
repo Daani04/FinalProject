@@ -1,8 +1,8 @@
 .chart-container {
   padding: 10px;
-  background: #f8f9fa;
+  background-color: rgba(38, 35, 35, 0.5);
+  border: 3px solid rgba(69, 69, 70, 0.5);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,3 +16,4 @@ canvas {
   max-height: 100%;
   display: block;
 }
+

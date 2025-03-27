@@ -1,7 +1,5 @@
 <div>
-    <h2>Chat con DeepSeek</h2>
-    <input [(ngModel)]="userInput" placeholder="Escribe un mensaje..." />
-    <button (click)="sendMessage()">Enviar</button>
-    <p><strong>Respuesta:</strong> {{ response }}</p>
-  </div>
-  
+  <p>{{ response }}</p>
+  <textarea [(ngModel)]="userInput" [placeholder]="placeHolderText" (input)="adjustHeight($event)"></textarea>
+  <button (click)="sendMessage()"><img id="logo" src="/img/enviar.png"  alt="logo"></button>
+</div>

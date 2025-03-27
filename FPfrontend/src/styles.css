@@ -1,5 +1,7 @@
 body {
-  background-color: #ede4e4;
+  background-color: #232426;
+  color: white;
+  height: 100%; /* Asegúrate de que el body ocupe toda la altura */
 }
 
 nav {

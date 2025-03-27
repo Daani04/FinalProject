@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RequestService } from '../../services/request.service';  
+import { RequestService } from '../../services/request.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,10 +10,17 @@ import { FormsModule } from '@angular/forms';
   providers: [RequestService] // Para Standalone Components
 })
 export class DeepseekComponent {
-  userInput: string = '';
-  response: string = '';
 
   constructor(public service: RequestService) { }
+
+  public userInput: string = '';
+  public response: string = '';
+
+  public placeHolderText: string = '';
+  public arrayPlaceHolder: string[] = ['¿', 'E', 'n',' ', 'q', 'u', 'e',' ', 'p', 'u', 'e', 'd', 'o',' ', 'a', 'y', 'u', 'd', 'a', 't', 'e', '?'];
+  private currentIndex: number = 0;
+
+
 
   sendMessage() {
     this.service.sendMessage(this.userInput).subscribe(
@@ -25,4 +32,24 @@ export class DeepseekComponent {
       }
     );
   }
+
+  //Permite que el contenedor crezca dinamicamente con el texto
+  adjustHeight(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';  // Restablece la altura para poder ajustarse
+    textarea.style.height = `${textarea.scrollHeight}px`;  // Ajusta la altura según el contenido
+  }
+
+  public ngOnInit() {
+    // Texto dinamico
+    const interval = setInterval(() => {
+      if (this.currentIndex < this.arrayPlaceHolder.length) {
+        this.placeHolderText += this.arrayPlaceHolder[this.currentIndex]; 
+        this.currentIndex++; 
+      } else {
+        clearInterval(interval); 
+      }
+    }, 100); 
+  }
+
 }
