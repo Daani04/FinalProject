@@ -34,8 +34,8 @@ export class DeepseekComponent {
         this.response = res.choices[0].message.content;
         this.answers.push(this.response); 
         this.questions.push(this.userInput);
-        console.log(this.answers);
-        console.log(this.questions);
+        console.log('Pregunta: ', this.answers);
+        console.log('Respuesta', this.questions);
         this.loading = false;  
       },
       (error) => {
