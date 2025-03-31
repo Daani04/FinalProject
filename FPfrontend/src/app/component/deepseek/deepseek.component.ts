@@ -27,7 +27,7 @@ export class DeepseekComponent {
 
   sendMessage() {
     this.loading = true;
-    let editableDiv = document.querySelector('.editable') as HTMLDivElement; //Selecciona el contenido del input
+    let editableDiv = document.querySelector('.editable') as HTMLDivElement; //Selecciona el contenido del input para vaciarlo posteriormente
     editableDiv.innerText = ''; // Esto vacía el contenido del div editable
     this.service.sendMessage(this.userInput).subscribe(
       (res) => {
@@ -45,8 +45,15 @@ export class DeepseekComponent {
     );
   }
 
+  public questionsList(event: Event): void {
+    let target = event.target as HTMLElement; //Si no se le indica que es un elemento html no lo saca bien
+    let paragraphText = target.innerText;
+    this.userInput = paragraphText;
+    this.sendMessage();
+  }
+  
   // Input para introducir datos
-  updateUserInput(event: Event): void {
+  public updateUserInput(event: Event): void {
     let target = event.target as HTMLDivElement;
     this.userInput = target.innerText;
   }

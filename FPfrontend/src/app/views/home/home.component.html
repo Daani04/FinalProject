@@ -41,13 +41,74 @@
       <p class="warehouseP">No tienes ningun producto</p>
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
         @if (contInsertionData === 1) {
-          <button class="btn" [routerLink]="['/login']" (click)="insertionMethod()">Añadir manualmente</button> 
-          <button class="btn" [routerLink]="['/login']" (click)="insertionMethod()">Escanear productos</button> 
+          <button class="btn" (click)="changeShowForm()">Añadir manualmente</button> 
+          <button class="btn" [routerLink]="['/login']" (click)="changeShowForm()">Escanear productos</button> 
         } @else {
           <button class="btn" (click)="insertionMethod()">Añadir productos</button> 
         }       
       } @else {
         <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
+      }
+      @if ( showForm === true) {
+        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input id="name" formControlName="name" type="text" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="brand">Marca</label>
+            <input id="brand" formControlName="brand" type="text" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="price">Precio</label>
+            <input id="price" formControlName="price" type="number" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="stock">Stock</label>
+            <input id="stock" formControlName="stock" type="number" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="productType">Tipo de Producto</label>
+            <input id="productType" formControlName="productType" type="text" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="expirationDate">Fecha de Expiración</label>
+            <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="warrantyPeriod">Período de Garantía</label>
+            <input id="warrantyPeriod" formControlName="warrantyPeriod" type="number" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="weight">Peso</label>
+            <input id="weight" formControlName="weight" type="number" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="dimensions">Dimensiones</label>
+            <input id="dimensions" formControlName="dimensions" type="text" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="entryDate">Fecha de Entrada</label>
+            <input id="entryDate" formControlName="entryDate" type="date" class="form-control" />
+          </div>
+          
+          <div class="form-group">
+            <label for="productPhoto">Foto del Producto</label>
+            <input id="productPhoto" formControlName="productPhoto" type="file" class="form-control" accept="image/*" />
+          </div>
+          
+          <button type="submit" class="btn btn-success" [disabled]="productForm.invalid">Enviar</button>
+        </form>
+        
       }
     </div>
   </div>

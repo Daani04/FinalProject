@@ -94,12 +94,6 @@ h3 {
   margin-left: 20px;
 }
 
-#closeButton {
-  margin-top: 20px;
-  transition: all 0.3s ease-in-out;
-  text-align: center;
-}
-
 #contButton {
   display: flex;
   justify-content: center;
@@ -113,10 +107,16 @@ h3 {
   margin-top: 20px;
 }
 
+#closeButton {
+  margin-top: 20px;
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+}
 
 #closeButton:hover {
-  background-color: #cccdcf;
-  border-radius: 30px;
+  background-color: #343a40;
+  color: wheat;
+  border-radius: 5px;
 }
 
 @media (max-width: 767px) {
@@ -125,3 +125,6 @@ h3 {
     align-items: center;
   }
 }
+
+
+

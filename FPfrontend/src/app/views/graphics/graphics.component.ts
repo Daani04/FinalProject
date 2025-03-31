@@ -76,8 +76,8 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Ventas anuales',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
-      borderColor: '#3E2A47', 
+      backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA'],
+      borderColor: '#5B3F7C', 
       borderWidth: 1
     }]
   };
@@ -88,7 +88,7 @@ export class GraphicsComponent implements OnInit {
       {
         label: 'Ventas semanales',
         data: [12, 19, 3, 5, 2, 3],
-        borderColor: '#D1B07B',
+        borderColor: '#8F5B8C',
         fill: false,
         stepped: true,
       }
@@ -100,7 +100,7 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Distribución de Ventas',
       data: [40, 30, 30],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B'] 
+      backgroundColor: ['#A67BB1', '#B784C4', '#D5A5D6'] 
     }]
   };
   
@@ -109,7 +109,7 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Entrada de productos',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      borderColor: '#A67058', 
+      borderColor: '#6F4D94', 
       borderWidth: 2,
       fill: false
     }]
@@ -120,7 +120,7 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Salida de productos',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      borderColor: '#D1B07B', 
+      borderColor: '#9A8BCA', 
       borderWidth: 2,
       fill: false
     }]
@@ -131,8 +131,8 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Ingresos brutos',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      borderColor: '#A67058', 
-      backgroundColor: 'rgba(166, 112, 88, 0.3)', 
+      borderColor: '#6F4D94', 
+      backgroundColor: 'rgba(145, 112, 188, 0.3)', 
       borderWidth: 2,
       fill: true
     }]
@@ -143,69 +143,68 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Ingresos netos',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      borderColor: '#D1B07B', 
-      backgroundColor: 'rgba(209, 176, 123, 0.3)', 
+      borderColor: '#8F5B8C', 
+      backgroundColor: 'rgba(159, 94, 148, 0.3)', 
       borderWidth: 2,
       fill: true
     }]
   };
-
+  
   //GRAFICOS EXTRA
   public stockAvailable = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       data: [30, 40, 30],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA'], 
     }]
   };
-
+  
   public discountsApplied = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Descuentos aplicados',
       data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B', '#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B', '#D1B07B', '#A67058'], 
-      borderColor: 'rgb(117, 71, 24, 100, 300, 222, 33, 33, 66, 677, 0, 1)', 
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA'], 
+      borderColor: 'rgb(159, 94, 148)', 
       borderWidth: 2
     }]
-};
-
+  };
+  
   public monthlySalesComparison = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Comparación de ventas por mes',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
-      borderColor: 'rgb(117, 71, 24)',
+      data: [200, 250, 300, 350, 700, 450, 500, 550, 600, 650, 700, 750],  
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7'], 
+      borderColor: 'rgb(159, 94, 148)',
       borderWidth: 2
     }]
   };
-
+  
   public productReturns = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       data: [100, 150, 200],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#7A6DA7', '#9A8BCA'], 
     }]
   };
-
+  
   public categorySales = {  
     labels: ['Electrónica', 'Ropa', 'Alimentos', 'Hogar'],
     datasets: [{
       data: [5000, 3000, 4000, 2000],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#7A6DA7', '#9A8BCA'], 
     }]
   };
-
+  
   public productCosts = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       label: 'Costos de productos',
       data: [150, 200, 250],
-      backgroundColor: ['#D1B07B', '#A67058', '#D1B07B', '#A67058', '#D1B07B'], 
-      borderColor: 'rgb(117, 71, 24)',
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#7A6DA7', '#9A8BCA'], 
+      borderColor: 'rgb(159, 94, 148)',
       borderWidth: 2
     }]
   };
-  
-}
+}  

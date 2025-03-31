@@ -20,9 +20,18 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">AÑADIR NUEVO ALMACEN</h4>
-          <div class="image-container">
-            <img id="addWarehouseButton" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
-          </div>
+          @if (formWarehouse === false) {
+            <div class="image-container" (click)="controlForm()">
+              <img id="addWarehouseButton" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
+            </div>
+          } @else {
+            <form class="text-center">
+              <label for="name" class="form-label">Nombre del almacén</label>
+              <input type="text" id="name" name="name" class="form-control my-2" required formControlName="warehouseName">
+              <button type="submit" class="btn">Crear</button>
+            </form>
+              <p id="close" (click)="controlForm()">Cerrar</p>
+          }
         </div>
       </div>
     </div>

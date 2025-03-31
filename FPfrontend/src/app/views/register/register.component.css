@@ -1,21 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 .login-page {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, 
-    #B28A55 0%, 
-    #9E7A4B 8%, 
-    #8F5B45 16%, 
-    #8A5D4E 24%, 
-    #7C4B3F 32%, 
-    #6A4737 40%, 
-    #5C3F30 48%, 
-    #4E3829 56%, 
-    #7C4B3F 64%, 
-    #8A5D4E 72%, 
-    #9E7A4B 80%, 
-    #B28A55 100%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+  #4f0a0d 0%,      
+  #1a3c64 25%,     
+  #503266 50%,    
+  #7a9fae 75%,     
+  #3d66a1 100%    
+);
     background-size: 400% 400%;
     animation: gradientAnimation 20s ease infinite; 
     display: flex;
@@ -112,7 +106,7 @@
   }
   
   form a:hover {
-    background-color: #343a40;
+    background-color: #686868;
     border-radius: 5px;
     transform: scale(1.1);
   }

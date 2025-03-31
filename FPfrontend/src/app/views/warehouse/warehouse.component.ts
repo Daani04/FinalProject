@@ -9,4 +9,14 @@ import { FooterComponent } from "../../component/footer/footer.component";
 })
 export class WarehouseComponent {
 
+  public formWarehouse: boolean = false;
+
+  public controlForm(): void {
+    if (this.formWarehouse === false) {
+      this.formWarehouse = true;
+    } else {
+      this.formWarehouse = false;
+    }
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Host } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
@@ -28,12 +28,32 @@ export class HomeComponent {
   public cont: number = 0;
   public cont2: number = 0;
 
+  public showForm: boolean = false;
+
   public contInsertionData: number = 0;
 
   public userLocation: string = '';
 
   public insertionMethod(): void {
     this.contInsertionData = 1;
+  }
+
+  productForm = new FormGroup({
+    name: new FormControl(''),
+    brand: new FormControl(''),
+    price: new FormControl(''),
+    stock: new FormControl(''),
+    productType: new FormControl(''),
+    expirationDate: new FormControl(''),
+    warrantyPeriod: new FormControl(''),
+    weight: new FormControl(''),
+    dimensions: new FormControl(''),
+    entryDate: new FormControl(''),
+    productPhoto: new FormControl('')
+  });
+
+  onSubmit(): void {
+      console.log('Formulario enviado', this.productForm.value);
   }
 
 
@@ -68,7 +88,7 @@ export class HomeComponent {
           this.getStreet(position.coords.latitude, position.coords.longitude).subscribe(
             (pueblo) => {
               this.userLocation = pueblo;
-              console.log("Localidad obtenida:", this.userLocation);  // ✅ Ahora se guarda el pueblo/ciudad
+              console.log("Localidad obtenida:", this.userLocation);  
             },
             (error) => {
               console.error("Error obteniendo la localidad:", error);
@@ -87,6 +107,7 @@ export class HomeComponent {
     }
   }
 
+  //NO FUNCIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
   public newWarehouse(): void {
     const userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
 
@@ -115,14 +136,20 @@ export class HomeComponent {
     );
 }
 
-
+  public changeShowForm(): void {
+    if (this.showForm === false) {
+      this.showForm = true;
+    } else {
+      this.showForm = false;
+    }
+  }
 
   public lineExitProducts = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
       label: 'Entrada de productos',
       data: [5, 15, 10, 20, 18],
-      borderColor: '#A67058', 
+      borderColor: '#8F5B8C', 
       borderWidth: 2,
       fill: false
     }]
@@ -133,7 +160,7 @@ export class HomeComponent {
     datasets: [{
       label: 'Salida de productos',
       data: [5, 15, 10, 20, 18],
-      borderColor: '#D1B07B', 
+      borderColor: '#6F4D94', 
       borderWidth: 2,
       fill: false
     }]
