@@ -39,7 +39,10 @@ export class RequestService {
 
       const body = {
         model: 'deepseek-chat',  // MODELO QUE SE VA A USAR 
-        messages: [{ role: 'user', content: prompt }]
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.5,       // Reduce la aleatoriedad (respuestas más estructuradas)
+        top_p: 0.9,            // Controla la diversidad de la respuesta
+        max_tokens: 1000       // Limita la longitud para evitar respuestas desordenadas
       };
 
       return this.http.post<any>(this.apiUrl, body, { headers });
