@@ -29,6 +29,7 @@
             <input type="text" id="name" name="name" class="form-control my-2" required formControlName="warehouseName">
             <button type="submit" class="btn">Crear</button>
           </form>
+            <p class="close" (click)="closeWarehouse()">Cerrar</p>
         }
       } @else {
         <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
@@ -51,64 +52,64 @@
       }
       @if ( showForm === true) {
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="name">Nombre</label>
             <input id="name" formControlName="name" type="text" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="brand">Marca</label>
             <input id="brand" formControlName="brand" type="text" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="price">Precio</label>
             <input id="price" formControlName="price" type="number" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="stock">Stock</label>
             <input id="stock" formControlName="stock" type="number" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="productType">Tipo de Producto</label>
             <input id="productType" formControlName="productType" type="text" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="expirationDate">Fecha de Expiración</label>
             <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="warrantyPeriod">Período de Garantía</label>
             <input id="warrantyPeriod" formControlName="warrantyPeriod" type="number" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="weight">Peso</label>
             <input id="weight" formControlName="weight" type="number" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="dimensions">Dimensiones</label>
             <input id="dimensions" formControlName="dimensions" type="text" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="entryDate">Fecha de Entrada</label>
             <input id="entryDate" formControlName="entryDate" type="date" class="form-control" />
           </div>
           
-          <div class="form-group">
+          <div class="form-group mb-3">
             <label for="productPhoto">Foto del Producto</label>
             <input id="productPhoto" formControlName="productPhoto" type="file" class="form-control" accept="image/*" />
           </div>
           
           <button type="submit" class="btn btn-success" [disabled]="productForm.invalid">Enviar</button>
         </form>
-        
+        <p class="close" (click)="closeProducts()">Cerrar</p>
       }
     </div>
   </div>

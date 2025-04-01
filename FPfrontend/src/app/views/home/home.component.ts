@@ -19,6 +19,7 @@ import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  
 
   constructor(public service: RequestService, private http: HttpClient) { }
 
@@ -142,6 +143,14 @@ export class HomeComponent {
     } else {
       this.showForm = false;
     }
+  }
+
+  public closeWarehouse(): void {
+    this.cont = 0;
+  }
+
+  public closeProducts(): void {
+    this.showForm = false;
   }
 
   public lineExitProducts = {  

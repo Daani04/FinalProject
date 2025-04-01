@@ -19,10 +19,10 @@
         <div class="col-md-3 mx-4 mb-4">
             <p>Cerrar sesion</p>
         </div>
-        <div class="col-md-3 mx-4 mb-4" style="background-color: rgb(195, 58, 58);">
+        <div (click)="openModal()" class="col-md-3 mx-4 mb-4" style="background-color: rgb(195, 58, 58);">
             <p>Eliminar cuenta</p>
         </div>
     </div>
 </div>
-<app-modal></app-modal>
+<app-modal [isOpen]="isModalOpen" (closeModal)="closeModal()"></app-modal>
 <app-footer></app-footer>
