@@ -10,6 +10,7 @@ import { GraphicsComponent } from './views/graphics/graphics.component';
 import { ProductDataComponent } from './views/product-data/product-data.component';
 import { DataUserComponent } from './views/data-user/data-user.component';
 import { ChatIAComponent } from './views/chat-ia/chat-ia.component';
+import { DataMapComponent } from './views/data-map/data-map.component';
 
 //MODIFICAR, LAS RUTAS NO ESTAN PROTEGIDAS, AÑADIR --> canActivate: [AuthGuard] 
 export const routes: Routes = [
@@ -21,6 +22,7 @@ export const routes: Routes = [
     { path: 'graphics', component: GraphicsComponent },
     { path: 'product_data', component: ProductDataComponent },
     { path: 'data_user', component: DataUserComponent },
+    { path: 'data_map', component: DataMapComponent },
     { path: 'chat_ia', component: ChatIAComponent }
 ];
 

@@ -1,4 +1,49 @@
 <h1>INVENTARIO</h1>
+<div id="filter" [ngStyle]="{'width': widthMenu}">
+    @if (viewMenu === false) {
+        <img id="filterImg" src="/img/filter.png" alt="Filtrar" (click)="deployMenu()">
+    } @else {
+        <form [formGroup]="reactiveForm" (ngSubmit)="onSearch()" class="search-form">
+            <div class="search-bar">
+                <div class="form-group">
+                    <label>Buscar un producto</label>
+                    <input type="text" formControlName="searchQuery" placeholder="Buscar por nombre" class="search-input"/>
+                </div>
+        
+                <div class="form-group">
+                    <label>Precio: {{ reactiveForm.get('minPrice')?.value }} - {{ reactiveForm.get('maxPrice')?.value }} €</label>
+                    <input type="range" formControlName="minPrice" min="0" max="1000" step="10" class="price-slider"/>
+                    <input type="range" formControlName="maxPrice" min="0" max="1000" step="10" class="price-slider"/>
+                </div>
+        
+                <div class="form-group">
+                    <label>Filtrar productos</label>
+                    <select formControlName="productType" class="search-select">
+                        <option value="">Todos los tipos</option>
+                        <option *ngFor="let type of productTypes" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+        
+                <div class="form-group">
+                    <label>Filtrar por fecha</label>
+                    <input type="date" formControlName="entryDate" class="search-input"/>
+                </div>
+                
+                <button type="submit" class="search-button">Filtrar</button>
+            </div>     
+        </form>        
+        <img id="filterImg" src="/img/arrowClose.png" alt="Filtrar" (click)="deployMenu()">
+    }
+</div>
+
+<span class="inline-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"/>
+    </svg>
+    <p style="margin: 0;">Para una mejor gestión de los productos prueba a preguntarle a la IA</p>
+</span>
+
 <div class="table-container">
     <table>
         <thead>
@@ -21,26 +66,36 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1001</td>
-                <td>WH-001</td>
-                <td>Ultra HD Smart TV</td>
-                <td>Samsung</td>
-                <td>$899.99</td>
-                <td>45</td>
-                <td>Electronics</td>
-                <td>N/A</td>
-                <td>2 years</td>
-                <td>15.2 kg</td>
-                <td>48" x 28" x 4"</td>
-                <td>2023-05-15</td>
-                <td><img src="tv.jpg" alt="Smart TV" width="50"></td>
-                <td><img id="logo" src="/img/editar.png"  alt="logo"></td>
-                <td><img id="logo" src="/img/papelera.png"  alt="logo"></td>
+                @for (product of products; track $index) {
+                <tr>
+                    <td>{{product.ID}}</td>
+                    <td>{{product.WarehouseID}}</td>
+                    <td>{{product.Name}}</td>
+                    <td>{{product.Brand}}</td>
+                    <td>{{product.Price}}</td>
+                    <td>{{product.Stock}}</td>
+                    <td>{{product.ProductType}}</td>
+                    <td>{{product.ExpirationDate}}</td>
+                    <td>{{product.WarrantyPerios}}</td> 
+                    <td>{{product.Weight}}</td>
+                    <td>{{product.Dimensions}}</td>
+                    <td>{{product.EntryDate}}</td>
+                    <td>{{product.ProductPhoto}}</td>
 
-            </tr>
+                    <td><img src="/img/editar.png"  alt="editar"></td>
+                    <td><img src="/img/papelera.png"  alt="eliminar"></td>
+                </tr>
+                }
         </tbody>
     </table>
+</div>
+
+<div class="pagination-container">
+    <img id="lefArrow" src="/img/lefArrow.png" alt="flecha izquierda" (click)="beforePage()" class="pagination-arrow">
+    
+    <p class="pagination-text">Página {{actualPage}} de {{totalPages}}</p>
+    
+    <img id="rigArrow" src="/img/rigArrow.png" alt="flecha derecha" (click)="nextPage()" class="pagination-arrow">
 </div>
 
 <app-footer></app-footer>

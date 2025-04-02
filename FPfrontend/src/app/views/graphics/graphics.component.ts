@@ -100,7 +100,7 @@ export class GraphicsComponent implements OnInit {
     datasets: [{
       label: 'Distribución de Ventas',
       data: [40, 30, 30],
-      backgroundColor: ['#A67BB1', '#B784C4', '#D5A5D6'] 
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA'] 
     }]
   };
   

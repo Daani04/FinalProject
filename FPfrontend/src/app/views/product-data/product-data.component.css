@@ -1,7 +1,7 @@
 .table-container {
     width: 100%;
     overflow-x: auto;
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 table {
@@ -32,3 +32,128 @@ img {
     height: 50px;
 }
 
+
+.pagination-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    margin: 20px auto; 
+    text-align: center;
+}
+
+.pagination-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+}
+
+.pagination-arrow {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+#filter {
+    background-color: #343a40;
+    max-height: 200px;
+    margin-bottom: 5px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    transition: width 0.5s ease; 
+}
+
+#filterImg {
+    transition: filter 0.5s ease;  
+}
+
+#filterImg:hover {
+    filter: grayscale(100%) brightness(200%);  /* Cambia el color a un blanco */
+}
+
+#lefArrow, #rigArrow{
+    transition: filter 0.5s ease;  
+}
+
+#lefArrow:hover {
+    filter: grayscale(100%) brightness(200%);
+}
+
+#rigArrow:hover {
+    filter: grayscale(100%) brightness(200%);
+}
+.search-bar {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px;  
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;  
+    width: calc(25% - 20px);  /*Hace que no se muevan los campos del formulario al colapsar*/
+    max-width: 200px; 
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.search-input, .price-slider, .search-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-button {
+    background-color: #686868;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.search-button:hover {
+  background-color: #1d2124;
+  color: wheat;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.inline-container {
+    display: inline-flex;
+    align-items: center; 
+    gap: 8px; 
+    vertical-align: middle; 
+    color: rgb(182, 180, 180);
+}
+
+
+  @media (max-width: 850px) {
+    .search-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-group {
+        width: 100%;
+        max-width: none;
+    }
+
+    #filter {
+        max-height: 800px;
+        max-width: 300px;
+    }
+}

@@ -5,3 +5,4 @@ DEPENDENCIAS:
 Escaner(Revisar dependencias)
 DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)
+OpenLayers(Revisar dependencias)

@@ -23,11 +23,16 @@
         @if (cont === 0) {
           <button type="button" class="btn" (click)="toggleForm()">Añadir nuevo almacén</button>
         } @else {
-          <form (click)="toggleForm()" [formGroup]="reactiveForm" id="warehouseName"
-            class="text-center">
+          <form [formGroup]="reactiveForm" id="warehouseName" class="text-center">
             <label for="name" class="form-label">Nombre del almacén</label>
-            <input type="text" id="name" name="name" class="form-control my-2" required formControlName="warehouseName">
-            <button type="submit" class="btn">Crear</button>
+            <input type="text" id="name" name="name" class="form-control my-2" placeholder="Introduzca un nombre" required formControlName="warehouseName">
+
+            <label for="city" class="form-label">Ciudad</label>
+            <input type="text" id="city" name="city" class="form-control my-2" placeholder="Introduzca la ciudad" required formControlName="locationWarehouseCity">
+
+            <label for="location" class="form-label">Ubicación almacén</label>
+            <input type="text" id="location" name="location" class="form-control my-2" placeholder="Introduzca la calle" required formControlName="locationWarehouseStreet">
+            <button type="submit" class="btn" (click)="getStreetForm()">Crear</button>
           </form>
             <p class="close" (click)="closeWarehouse()">Cerrar</p>
         }

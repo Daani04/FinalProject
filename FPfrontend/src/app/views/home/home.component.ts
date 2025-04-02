@@ -73,12 +73,19 @@ export class HomeComponent {
   reactiveForm = new FormGroup({
     openForm: new FormControl(''),
     warehouseName: new FormControl(''),
+    locationWarehouseCity: new FormControl(''),
+    locationWarehouseStreet: new FormControl('')
   });
 
   public toggleForm(): void {
     this.cont = 1;
+  }
+
+  public getStreetForm(): void {
     this.getLocation();
     this.newWarehouse();
+    this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet);
+    console.log(this.reactiveForm.value);
   }
 
   public getLocation(): void {
@@ -108,7 +115,21 @@ export class HomeComponent {
     }
   }
 
-  //NO FUNCIONA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
+  getLocationCoordinates(city: any, street: any) {
+    this.service.getLocationCoordinates(city, street).subscribe(
+      (res) => {
+        let coordinates = res.choices[0].message.content;
+        //let notifications = notificationContent.split('!');
+        console.log(coordinates);
+        
+      },
+      (error) => {
+        console.error('Error al generar notificación:', error);
+      }
+    );
+  }
+
+  //NO FUNCIONA!!####################################################################################
   public newWarehouse(): void {
     const userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
 
@@ -136,7 +157,7 @@ export class HomeComponent {
         (error) => console.error('Error al crear almacén:', error)
     );
 }
-
+//#################################################################################################
   public changeShowForm(): void {
     if (this.showForm === false) {
       this.showForm = true;

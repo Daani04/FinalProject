@@ -30,7 +30,6 @@ export class RequestService {
 private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
 private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  
 
-//Generar Notificacion
 generateNotification(prompt: string, ignoreNotifications: string): Observable<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json',
@@ -47,7 +46,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
         Eres un asistente de notificaciones, tu trabajo es mediante los datos obtenidos enviar las notificaciones necesarias
         considerando con tu criterio si es necesario enviar la notificacion.
 
-        Es imperativo que siempre hagas estas dos cosas: cada notificacion separada por un !, nunca repetir notificaciones ya realizadas y no intentar generar notificaciones siempre, cuando no hay nada que notificar se devuelve "Sin notificacoines"
+        Es imperativo que siempre hagas estas dos cosas: cada notificacion separada por un !, nunca repetir notificaciones ya realizadas y no intentar generar notificaciones siempre, cuando no hay nada que notificar se devuelve "Sin notificacoines", aunque esto no quita que si hay algo inisual comentarlo, a no ser que la notificacion a ignorar ya lo diga
 
         Tienes que separar las notificaciones por ! cada notificacion diferente tendra uno de estos 
 
@@ -76,7 +75,6 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
   return this.http.post<any>(this.apiUrl, body, { headers });
 }
 
-//ChatIA
     sendMessage(prompt: string, products: string): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
@@ -114,6 +112,8 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             - El usuario piensa que tienes accesa a muchos datos, si alguno no esta a tu alzance diselo y no te inventes informacion
 
             PAGINAS DE LA WEB: Estas son las paginas de la web, si el usuario se refiere a ellas de otra forma corrigele, al nombrar las paginas elige uno de los dos nombres nombrados
+            - Login, pagina de inicio de sesion
+            - Registro, pagina para registrarse
             - Inicio/Home, pagina principal donde puedes encontrar dos graficos, puedes añadir y eliminar productos mediante el lector de QR y hacerlo a mano, puedes ver tus almacenes, crearlos y lo mismo con los productos 
             - Almacen, pagina donde se pueden ver todos los almacenes y crear almacenes nuevos, desde esta pagina se accede a los productos de los distintos almacenes
             - Productos/Stock solo se puede acceder desde el almacen que contenga estos productos, una tabla que muestra todos los productos permitiendo filtros y paginacion
@@ -144,6 +144,37 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
         temperature: 0.3   
       };
 
+      return this.http.post<any>(this.apiUrl, body, { headers });
+    }
+
+    getLocationCoordinates(city: any, street: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      });
+    
+      const body = {
+        model: 'deepseek-chat',
+        messages: [
+          { 
+            role: 'system', 
+            content: 
+            `
+            Eres un sistema de traduccion de calles a coordenadas, tu trabajo es sacar la latitud y longitud de las ubicaciones que te pasen
+            ES MUY IMPORTANTE DE QUE NO AÑADAS NADA MAS AL MENAJE QUE LA LATITUD Y LONGITUD YA QUE POSTERIORMENTE SE PROCESARAN LOS DATOS Y SI AÑADES INFORMACION DARA ERROR
+
+            NORMAS:
+              - Solo puedes devolver una cosa latitud y longitud
+              - No se especifica el pais por que se da por hehco que es españa
+              - Dado que tus respuestas no son precisas consultaras la calle en aplicaciones como google maps
+           ` 
+          },
+          { role: 'user', content: `Ciudad: ${city}, Calle ${street}` }
+        ],  
+        max_tokens: 50,
+        temperature: 0.3   
+      };
+    
       return this.http.post<any>(this.apiUrl, body, { headers });
     }
 
