@@ -1,7 +1,9 @@
 FALTA REVISAR PORQUE NO FUNCIONA LA PARTE DE HOME QUE SE ENCARGA DE CREAR EL WAREHOUSE 
 
-DEPENDENCIAS: 
+MODIFICACON BASE DE DATOS:
+- Añadir precio de venta y asi poder sacar el colculo de margen de ganancias
 
+DEPENDENCIAS: 
 Escaner(Revisar dependencias)
 DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)

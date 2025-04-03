@@ -69,6 +69,11 @@ h1 {
   border: 0.1px solid rgba(146, 146, 147, 0.5);
 }
 
+.custom-row {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
 .btn {
   margin: 10px;
 }

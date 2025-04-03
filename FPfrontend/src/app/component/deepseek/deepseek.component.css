@@ -106,8 +106,8 @@ img {
 
 @media (max-width: 600px) {
   .row {
-    margin-left: 5px;
-    margin-right: 5px;
+    margin-left: 1px;
+    margin-right: 1px;
   }
 }
 
