@@ -49,7 +49,7 @@ export class DeepseekComponent {
 
   public questionsList(event: Event): void {
     let target = event.target as HTMLElement; //Si no se le indica que es un elemento html no lo saca bien
-    let paragraphText = target.innerText;
+    let paragraphText = target.getAttribute('data-info') ?? ""; 
     this.userInput = paragraphText;
     this.sendMessage();
   }
@@ -160,6 +160,21 @@ export class DeepseekComponent {
       "Expiration_Date": "N/A",
       "Warranty_Period": "2 years",
       "Weight": "4 kg",
+      "Dimensions": "N/a",
+      "Entry_Date": "2023-09-20",
+      "Product_Photo": "N/a"
+    },
+    {
+      "ID": 1006,
+      "Warehouse_ID": "WH-005",
+      "Name": "Cocaina",
+      "Brand": "N/A",
+      "Price": "$100",
+      "Stock": 10,
+      "Product_Type": "party",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "1 nigth",
+      "Weight": "100g",
       "Dimensions": "N/a",
       "Entry_Date": "2023-09-20",
       "Product_Photo": "N/a"

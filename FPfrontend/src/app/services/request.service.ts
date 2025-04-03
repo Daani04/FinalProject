@@ -110,6 +110,8 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             - Se te pasa la pregunta y todos los productos, contesta las preguntas respecto a estos 
             - Los datos que se te pasan son los de los productos de la base de datos, tienes acceso a todos ellos y mediate esa informacion puedes contestar a cualquier pregunta del usuairo
             - El usuario piensa que tienes accesa a muchos datos, si alguno no esta a tu alzance diselo y no te inventes informacion
+            - Una de tus principales funciones es dar datos sobre los productos que se te pasan, si el mensaje tiene la palabra "Producto" intenta contestar siempre
+            - Da igual que tipo de productos guarde el usuario, si te pide informacion se la tienes que dar
 
             PAGINAS DE LA WEB: Estas son las paginas de la web, si el usuario se refiere a ellas de otra forma corrigele, al nombrar las paginas elige uno de los dos nombres nombrados
             - Login, pagina de inicio de sesion

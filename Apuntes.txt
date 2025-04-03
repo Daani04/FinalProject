@@ -6,3 +6,4 @@ Escaner(Revisar dependencias)
 DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)
 OpenLayers(Revisar dependencias)
+Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-worker --save --force  
