@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
 import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
+import { Overrides } from 'chart.js';
 
 @Component({
   selector: 'app-home',
@@ -34,6 +35,9 @@ export class HomeComponent {
   public contInsertionData: number = 0;
 
   public userLocation: string = '';
+
+  public openAddScanner: boolean = false;
+  public openDeleteScanner: boolean = false;
 
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -172,6 +176,24 @@ export class HomeComponent {
 
   public closeProducts(): void {
     this.showForm = false;
+  }
+
+  public openScannerAdd(): void {
+    this.openDeleteScanner = false; 
+    if (this.openAddScanner === false) {
+      this.openAddScanner = true;
+    } else {
+      this.openAddScanner = false;
+    }
+  }
+
+  public openScannerRemove(): void {
+    this.openAddScanner = false;
+    if (this.openDeleteScanner === false) {
+      this.openDeleteScanner = true;
+    } else {
+      this.openDeleteScanner = false;
+    }
   }
 
   public lineExitProducts = {  

@@ -122,17 +122,20 @@
   <div class="row justify-content-center gap-5 custom-row" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
     <div class="col-md-5  p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Añadir producto</h3>
-      <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
+      <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto" (click)="openScannerAdd()">
+      @if (openAddScanner === true) {
+        <app-barcode-scanner></app-barcode-scanner>
+      }
     </div>
 
     <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Retirar producto</h3>
-      <img id="addAndRemove" src="/img/removePhoto.png" class="img-fluid" alt="Añadir foto">
+      <img id="addAndRemove" src="/img/removePhoto.png" class="img-fluid" alt="Añadir foto" (click)="openScannerRemove()">
+      @if (openDeleteScanner === true) {
+        <app-barcode-scanner></app-barcode-scanner>
+      }
     </div>
   </div>
 
 </div>
-
-
-<!--<app-barcode-scanner></app-barcode-scanner>-->
 <app-footer></app-footer>
