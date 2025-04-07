@@ -12,10 +12,11 @@ import { Router, RouterModule } from '@angular/router';
 import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
 import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
 import { Overrides } from 'chart.js';
+import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
 
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, BarcodeScannerComponent, DeepseekComponent],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, BarcodeScannerComponent, DeepseekComponent, ModalScannerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -36,8 +37,7 @@ export class HomeComponent {
 
   public userLocation: string = '';
 
-  public openAddScanner: boolean = false;
-  public openDeleteScanner: boolean = false;
+  public openModalScanner: boolean = false;
 
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -178,22 +178,12 @@ export class HomeComponent {
     this.showForm = false;
   }
 
-  public openScannerAdd(): void {
-    this.openDeleteScanner = false; 
-    if (this.openAddScanner === false) {
-      this.openAddScanner = true;
-    } else {
-      this.openAddScanner = false;
-    }
+  public openModal(): void {
+    this.openModalScanner = true;
   }
 
-  public openScannerRemove(): void {
-    this.openAddScanner = false;
-    if (this.openDeleteScanner === false) {
-      this.openDeleteScanner = true;
-    } else {
-      this.openDeleteScanner = false;
-    }
+  public closeModal(): void {
+    this.openModalScanner = false;
   }
 
   public lineExitProducts = {  

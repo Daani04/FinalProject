@@ -107,6 +107,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             6. Las respuestas tienen que ser cortas y directas, intentando en la mayoria de los casos no pasar de 60 lineas 
 
             INSTRUCCIONES DE RESPUESTA INTERACTIVA:
+            - Tienes los tokens limitados a 150, no puedes hacer uso de mas tokens, tendras que contestar la pregunta unicamente con esos tokens, muy importante que te ajustes a los toquens que tieness y la contestes entrera, no la puedes dejar a medias
             - Se te pasa la pregunta y todos los productos, contesta las preguntas respecto a estos 
             - Los datos que se te pasan son los de los productos de la base de datos, tienes acceso a todos ellos y mediate esa informacion puedes contestar a cualquier pregunta del usuairo
             - El usuario piensa que tienes accesa a muchos datos, si alguno no esta a tu alzance diselo y no te inventes informacion
