@@ -11,12 +11,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
 import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
-import { Overrides } from 'chart.js';
+import { Overrides } from 'chart.js';  
 import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
 
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, BarcodeScannerComponent, DeepseekComponent, ModalScannerComponent],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
