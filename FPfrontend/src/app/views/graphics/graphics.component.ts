@@ -27,7 +27,7 @@ export class GraphicsComponent implements OnInit {
 
   public showFormIa: boolean = false;
   public GraphicIA: any;
-  public dataNewGraphics: { labels: string, label: string, data: string }[] = [];
+  public dataNewGraphics: string[] = [];
 
   public modifyContButton(): void {
     if (this.contButton === 0) {
@@ -58,6 +58,7 @@ export class GraphicsComponent implements OnInit {
       check2: this.cont2 === 1,
       check3: this.cont3 === 1
     });
+    this.checkAndLoadGraphics();
   }
 
   onSubmitGraphics(): void {
@@ -95,23 +96,24 @@ export class GraphicsComponent implements OnInit {
   }
 
   createGraphics(prompt: any) {
-    this.loading = true;  
-    this.service.createGraphics(prompt).subscribe(
+    let promptbbdd = this.createPromptFromProducts();
+    this.loading = true; 
+    this.dataNewGraphics = []; 
+    this.service.createGraphics(prompt, promptbbdd).subscribe(
       (res) => {
         this.response = res.choices[0].message.content;
-        let separateData = this.response.split('!');
+        let separateData = this.response.split('!'); // Separar la respuesta por "!".
         separateData.forEach((item: string) => {
           if (item.trim()) {  
-            this.dataNewGraphics.push({
-              labels: item.trim(),  
-              label: item.trim(),       
-              data: item.trim()          
-            });
+            this.dataNewGraphics.push(item.trim()); 
           }
         });
-        this.generateGraphics();
-        //localStorage.setItem('cont1', cont1Local.toString());
-        this.loading = false;  
+
+      localStorage.setItem(`Customgraphic`, JSON.stringify(this.dataNewGraphics));
+      
+      console.log('Respuesta:', this.response);
+      this.generateGraphics();
+      this.loading = false;  
       },
       (error) => {
         console.error('Error:', error);
@@ -120,16 +122,36 @@ export class GraphicsComponent implements OnInit {
     );
   }
 
-  public generateGraphics() {
+  public checkAndLoadGraphics(): void {
+    const localStorageData = localStorage.getItem('Customgraphic');
+    this.dataNewGraphics = localStorageData ? JSON.parse(localStorageData) : [];
+  
+    if (this.dataNewGraphics.length >= 3) {
+      this.generateGraphics();
+    }
+  }
+  
+  
+  
+  public generateGraphics(): void {
     if (this.dataNewGraphics.length > 0) {
+      let allColors: string[] = ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA', '#8A7DBD', '#9A8BCA',
+        '#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA', '#8A7DBD', '#9A8BCA',
+        '#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA', '#8A7DBD', '#9A8BCA'
+      ];
+      let necessaryColors: string[] = [];
       let parsedLabels: string[] = [];
       let parsedData: string[] = [];
 
-      let labelsSplit = this.dataNewGraphics[0].labels.split(' ');
-      let dataSplit = this.dataNewGraphics[2].labels.split(' ');
+      let labelsSplit = this.dataNewGraphics[0].split(' ');
+      let dataSplit = this.dataNewGraphics[2].split(' ');
+
+      for (let i = 0; i < dataSplit.length; i++) {
+        necessaryColors.push(allColors[i]);  
+      }
       
       for (let i = 0; i < labelsSplit.length; i++) {
-        let label = labelsSplit[i].trim(); //Trim elimina los espacios en blanco
+        let label = labelsSplit[i].trim();
           parsedLabels.push(label);
         
       }
@@ -142,17 +164,43 @@ export class GraphicsComponent implements OnInit {
       this.GraphicIA = {
         labels: parsedLabels,
         datasets: [{
-          label: this.dataNewGraphics[1].label,
+          label: this.dataNewGraphics[1],
           data: parsedData, 
-          backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA', '#8A7DBD', '#9A8BCA'],
+          backgroundColor: necessaryColors,
           borderColor: '#5B3F7C',
           borderWidth: 1
         }]
       };
     }
   }
-  
-  
+
+  public createPromptFromProducts(): string {
+    let promptbbdd = '';
+    this.products.forEach(product => {
+      promptbbdd += `
+        Producto: ${product.Name} (${product.Brand})
+        Precio: ${product.Price}
+        Stock: ${product.Stock}
+        Tipo: ${product.Product_Type}
+        Fecha de Entrada: ${product.Entry_Date}
+        Fecha de Venta: ${product.Sale_Date} 
+        Garantía: ${product.Warranty_Period}
+        Cantidad Vendida: ${product.Quantity}
+        Expiración: ${product.Expiration_Date}
+        Peso: ${product.Weight}
+        Dimensiones: ${product.Dimensions}
+
+        -----------------------------------
+      `;
+    });
+    return promptbbdd;
+  }
+
+  public deleteCustomGraphic(): void {
+    localStorage.removeItem('Customgraphic');
+    location.reload();//Recarga la pagina para aplicar los cambios
+  }
+
   //GRAFICOS PREDEFINIDOS
   public barSale = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -291,5 +339,95 @@ export class GraphicsComponent implements OnInit {
     }]
   };
 
+
+  //Simulacro de conexion a base de datos 
+  public products = [
+    {
+      "ID": 1001,
+      "Warehouse_ID": "WH-001",
+      "Name": "Ultra HD Smart TV",
+      "Brand": "Samsung",
+      "Price": "$12,99",
+      "Stock": 5,
+      "Product_Type": "Electronics",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "2 years",
+      "Weight": "15.2 kg",
+      "Dimensions": "48\" x 28\" x 4\"",
+      "Entry_Date": "2023-05-15",
+      "Sale_Date": "2023-06-01",  // Agregado
+      "Quantity": 2,              // Agregado
+      "Product_Photo": "Smart TV"
+    },
+    {
+      "ID": 1002,
+      "Warehouse_ID": "WH-002",
+      "Name": "Wireless Earbuds",
+      "Brand": "Apple",
+      "Price": "$199.99",
+      "Stock": 120,
+      "Product_Type": "Electronics",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "1 year",
+      "Weight": "0.05 kg",
+      "Dimensions": "2.5\" x 2\" x 1\"",
+      "Entry_Date": "2023-06-01",
+      "Sale_Date": "2023-06-05",  // Agregado
+      "Quantity": 5,               // Agregado
+      "Product_Photo": "Wireless Earbuds"
+    },
+    {
+      "ID": 1003,
+      "Warehouse_ID": "WH-003",
+      "Name": "Gaming Laptop",
+      "Brand": "Delll",
+      "Price": "$1,499.99",
+      "Stock": 25,
+      "Product_Type": "Electronics",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "2 years",
+      "Weight": "2.5 kg",
+      "Dimensions": "15.6\" x 10\" x 0.7\"",
+      "Entry_Date": "2023-07-12",
+      "Sale_Date": "2023-07-15",  // Agregado
+      "Quantity": 10,              // Agregado
+      "Product_Photo": "Gaming Laptop"
+    },
+    {
+      "ID": 1004,
+      "Warehouse_ID": "WH-004",
+      "Name": "Air Fryer",
+      "Brand": "Philips",
+      "Price": "$129.99",
+      "Stock": 60,
+      "Product_Type": "Home Appliances",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "100 year",
+      "Weight": "4.5 kg",
+      "Dimensions": "12\" x 12\" x 14\"",
+      "Entry_Date": "2023-08-03",
+      "Sale_Date": "2024-08-10",  // Agregado
+      "Quantity": 30,              // Agregado
+      "Product_Photo": "Air Fryer"
+    },
+    {
+      "ID": 1005,
+      "Warehouse_ID": "WH-005",
+      "Name": "4K Action Camera",
+      "Brand": "GoPro",
+      "Price": "$399.99",
+      "Stock": 90,
+      "Product_Type": "Electronics",
+      "Expiration_Date": "N/A",
+      "Warranty_Period": "2 years",
+      "Weight": "0.4 kg",
+      "Dimensions": "3.5\" x 2.5\" x 1.5\"",
+      "Entry_Date": "2023-09-20",
+      "Sale_Date": "2025-09-25",  // Agregado
+      "Quantity": 15,              // Agregado
+      "Product_Photo": "Action Camera"
+    }
+  ];
+  
  
 }  

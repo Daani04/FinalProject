@@ -93,8 +93,11 @@
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
-            <h3>Ingresos brutos</h3>
-            <app-chart [type]="'bar'" [data]="GraphicIA"></app-chart>
+            <div id="customGraphic">
+              <h3 id="titleCustomGraphic">{{dataNewGraphics[1]}}</h3>
+              <app-chart [type]="'bar'" [data]="GraphicIA"></app-chart>
+              <img id="deleteCustonGraphic" src="/img/eliminar.png" alt="logo" (click)="deleteCustomGraphic()">
+            </div>
           </div>
         </div>
       </div>
