@@ -27,6 +27,29 @@
             <label for="name" class="form-label">Nombre del almacén</label>
             <input type="text" id="name" name="name" class="form-control my-2" placeholder="Introduzca un nombre" required formControlName="warehouseName">
 
+            <label for="com" class="form-label">Comunidad</label>
+            <select id="com" name="com" class="form-control my-2" required formControlName="locationWarehouseCommunity">
+              <option value="" disabled selected>Seleccione una comunidad</option>
+              <option value="Andalucía">Andalucía</option>
+              <option value="Aragón">Aragón</option>
+              <option value="Asturias">Asturias</option>
+              <option value="Islas Baleares">Islas Baleares</option>
+              <option value="Canarias">Canarias</option>
+              <option value="Cantabria">Cantabria</option>
+              <option value="Castilla-La Mancha">Castilla-La Mancha</option>
+              <option value="Castilla y León">Castilla y León</option>
+              <option value="Cataluña">Cataluña</option>
+              <option value="Extremadura">Extremadura</option>
+              <option value="Galicia">Galicia</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Comunidad de Madrid">Comunidad de Madrid</option>
+              <option value="Región de Murcia">Región de Murcia</option>
+              <option value="Navarra">Navarra</option>
+              <option value="País Vasco">País Vasco</option>
+              <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+            </select>
+            
+
             <label for="city" class="form-label">Ciudad</label>
             <input type="text" id="city" name="city" class="form-control my-2" placeholder="Introduzca la ciudad" required formControlName="locationWarehouseCity">
 

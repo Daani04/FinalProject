@@ -150,7 +150,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
       return this.http.post<any>(this.apiUrl, body, { headers });
     }
 
-    getLocationCoordinates(city: any, street: any): Observable<any> {
+    getLocationCoordinates(city: any, street: any, comunity: any): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`
@@ -167,12 +167,61 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             ES MUY IMPORTANTE DE QUE NO AÑADAS NADA MAS AL MENAJE QUE LA LATITUD Y LONGITUD YA QUE POSTERIORMENTE SE PROCESARAN LOS DATOS Y SI AÑADES INFORMACION DARA ERROR
 
             NORMAS:
-              - Solo puedes devolver una cosa latitud y longitud
+              - Solo puedes devolver una cosa latitud y longitud, tienen que ser exactas de las calles solicitadas y si especifican el numero mas exactas aun
               - No se especifica el pais por que se da por hehco que es españa
               - Dado que tus respuestas no son precisas consultaras la calle en aplicaciones como google maps
            ` 
           },
-          { role: 'user', content: `Ciudad: ${city}, Calle ${street}` }
+          { role: 'user', content: ` Comunidad Autonoma:${comunity},  Ciudad: ${city}, Calle: ${street}` }
+        ],  
+        max_tokens: 50,
+        temperature: 0.3   
+      };
+    
+      return this.http.post<any>(this.apiUrl, body, { headers });
+    }
+
+    createGraphics(pronpt: string): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      });
+    
+      const body = {
+        model: 'deepseek-chat',
+        messages: [
+          { 
+            role: 'system', 
+            content: 
+            `
+            Eres un sistema de creacion de graficos, tu trabajo es generar graficos que reflejen los datos que se soliciten, los graficos que se van a usar son losde la libreria Chart.js
+
+            EJEMPLO DE COMO MANEJAMOS LOS GRAFICOS:
+              public discountsApplied = {  
+              labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+              datasets: [{
+                label: 'Descuentos aplicados',
+                data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+                backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA'], 
+                borderColor: 'rgb(159, 94, 148)', 
+                borderWidth: 2
+              }]
+            };
+
+            DATOS QUE TIENES QUE DEVOLVER:
+            - labels
+            - label
+            - data
+
+            NORMAS:
+              - Tu solo te encargas de generar los datos y nada mas, posteriormente seran procesados para crear el grafico
+              - Para que no se prblemas a la hora de pasarle los datos a chart.js solo tienes que devolver los datos necesarios, nada mas
+              - Cada seccion tiene que ir separada por un !, esto lo aplicaras a las dos primeras, labels y label
+              - Solo saca los datos, no los nombres de las secciones de labels, label y data, UNICAMENTE TIENEN QUE ESTAR LOS DATOS, NADA MAS
+              - Los datos tienen que salir sin formato, es decir sin corchetes, comas ni nada 
+           ` 
+          },
+          { role: 'user', content: `Peticion del usuario:${pronpt}` }
         ],  
         max_tokens: 50,
         temperature: 0.3   

@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
 import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
-import { Overrides } from 'chart.js';  
+import { Overrides } from 'chart.js';
 import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
 
 @Component({
@@ -29,7 +29,7 @@ export class HomeComponent {
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
 
   public cont: number = 0;
-  public cont2: number = 0;
+  public cont2: number = 0; 
 
   public showForm: boolean = false;
 
@@ -78,7 +78,8 @@ export class HomeComponent {
     openForm: new FormControl(''),
     warehouseName: new FormControl(''),
     locationWarehouseCity: new FormControl(''),
-    locationWarehouseStreet: new FormControl('')
+    locationWarehouseStreet: new FormControl(''),
+    locationWarehouseCommunity: new FormControl('')
   });
 
   public toggleForm(): void {
@@ -88,7 +89,7 @@ export class HomeComponent {
   public getStreetForm(): void {
     this.getLocation();
     this.newWarehouse();
-    this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet);
+    this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
 
@@ -119,8 +120,8 @@ export class HomeComponent {
     }
   }
 
-  getLocationCoordinates(city: any, street: any) {
-    this.service.getLocationCoordinates(city, street).subscribe(
+  getLocationCoordinates(city: any, street: any, comunity: any ) {
+    this.service.getLocationCoordinates(city, street, comunity).subscribe(
       (res) => {
         let coordinates = res.choices[0].message.content;
         //let notifications = notificationContent.split('!');

@@ -44,7 +44,7 @@ export class LeafletMapComponent {
       source: vectorSource,
       style: new Style({
         image: new Circle({
-          radius: 15, 
+          radius: 25, 
           fill: new Fill({
             color: 'rgba(78, 35, 148, 0.8)', 
           }),

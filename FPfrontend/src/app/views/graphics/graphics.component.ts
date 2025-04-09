@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
-
+import { RequestService } from '../../services/request.service';
+import { data } from 'jquery';
 
 @Component({
   selector: 'app-graphics',
@@ -12,12 +13,21 @@ import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 })
 export class GraphicsComponent implements OnInit {
 
+  constructor(public service: RequestService) { }
 
   public cont1: number = 0;
   public cont2: number = 0;
   public cont3: number = 0;
 
   public contButton: number = 0;
+
+  public response: string = '';
+
+  public loading: boolean = false;
+
+  public showFormIa: boolean = false;
+  public GraphicIA: any;
+  public dataNewGraphics: { labels: string, label: string, data: string }[] = [];
 
   public modifyContButton(): void {
     if (this.contButton === 0) {
@@ -33,6 +43,10 @@ export class GraphicsComponent implements OnInit {
     check3: new FormControl(false)
   });
 
+  reactiveFormGraphics = new FormGroup({
+    graphicInstructions: new FormControl(''),
+  });
+
   ngOnInit(): void {
     this.cont1 = Number(localStorage.getItem('cont1')) || 0;
     this.cont2 = Number(localStorage.getItem('cont2')) || 0;
@@ -44,6 +58,11 @@ export class GraphicsComponent implements OnInit {
       check2: this.cont2 === 1,
       check3: this.cont3 === 1
     });
+  }
+
+  onSubmitGraphics(): void {
+    console.log( this.reactiveFormGraphics.value.graphicInstructions);
+    this.createGraphics(this.reactiveFormGraphics.value.graphicInstructions);
   }
 
   public onSubmit(): void {
@@ -70,7 +89,71 @@ export class GraphicsComponent implements OnInit {
     console.log(this.cont2);
     console.log(this.cont3);
   }
+
+  public showNewGraphicsIAForm(): void {
+    this.showFormIa = true
+  }
+
+  createGraphics(prompt: any) {
+    this.loading = true;  
+    this.service.createGraphics(prompt).subscribe(
+      (res) => {
+        this.response = res.choices[0].message.content;
+        let separateData = this.response.split('!');
+        separateData.forEach((item: string) => {
+          if (item.trim()) {  
+            this.dataNewGraphics.push({
+              labels: item.trim(),  
+              label: item.trim(),       
+              data: item.trim()          
+            });
+          }
+        });
+        this.generateGraphics();
+        //localStorage.setItem('cont1', cont1Local.toString());
+        this.loading = false;  
+      },
+      (error) => {
+        console.error('Error:', error);
+        this.loading = false;  
+      }
+    );
+  }
+
+  public generateGraphics() {
+    if (this.dataNewGraphics.length > 0) {
+      let parsedLabels: string[] = [];
+      let parsedData: string[] = [];
+
+      let labelsSplit = this.dataNewGraphics[0].labels.split(' ');
+      let dataSplit = this.dataNewGraphics[2].labels.split(' ');
+      
+      for (let i = 0; i < labelsSplit.length; i++) {
+        let label = labelsSplit[i].trim(); //Trim elimina los espacios en blanco
+          parsedLabels.push(label);
+        
+      }
+
+      for (let i = 0; i < dataSplit.length; i++) {
+        let label = dataSplit[i].trim();
+          parsedData.push(label);
+      }
   
+      this.GraphicIA = {
+        labels: parsedLabels,
+        datasets: [{
+          label: this.dataNewGraphics[1].label,
+          data: parsedData, 
+          backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA', '#8A7DBD', '#9A8BCA'],
+          borderColor: '#5B3F7C',
+          borderWidth: 1
+        }]
+      };
+    }
+  }
+  
+  
+  //GRAFICOS PREDEFINIDOS
   public barSale = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
@@ -207,4 +290,6 @@ export class GraphicsComponent implements OnInit {
       borderWidth: 2
     }]
   };
+
+ 
 }  
