@@ -215,10 +215,12 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             - data
             NORMAS:
               - IMPORTANTE!! Los productos que vayan en la misma categoria se separan CON ESPACIOS, eso quiere decir que todo lo que haya dentro de labels, label o data se separa con espacios
+              - Solo trabajas con los datos de los productos que se te pasan, no puedes sacar nada de la nada, solo puedes trabajar con los datos que se te pasan
               - Tu solo te encargas de generar los datos y nada mas, posteriormente seran procesados para crear el grafico
               - Para que no se prblemas a la hora de pasarle los datos a chart.js solo tienes que devolver los datos necesarios, nada mas
               - Cada seccion tiene que ir separada por un !, esto lo aplicaras a las dos primeras, labels y label
               - Solo saca los datos, no los nombres de las secciones de labels, label y data, UNICAMENTE TIENEN QUE ESTAR LOS DATOS, NADA MAS
+              - Texto limpio, evitar el uso de caracteres especiales, comas o puntos innecesarios entre otros.
               - Los datos tienen que salir sin formato, es decir sin corchetes, comas ni nada 
               - Label siempre va a tener la primera letra en mayuscula
               - El nombre del labeL sera descriptivo y describira de forma corta y clara lo que hace el grafico, TIENE QUE SER UNA PEQUEÑA DESCRIPCION DE LA FUNCION QUE VA A REALIZER EL GRAFICO

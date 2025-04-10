@@ -184,6 +184,18 @@ h3 {
   transform: scale(1.1); 
 }
 
+#warningGraphicsIA{
+  margin: 0;
+}
+
+.inline-container {
+  display: inline-flex;
+  align-items: center; 
+  gap: 8px; 
+  vertical-align: middle; 
+  color: rgb(182, 180, 180);
+}
+
 @media (max-width: 767px) {
   .double-chart {
     flex-direction: column;
