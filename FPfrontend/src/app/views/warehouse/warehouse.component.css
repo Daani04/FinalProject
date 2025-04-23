@@ -5,14 +5,15 @@
 }
 
 .card {
-  height: 450px;
-  width: 100%;
+  height: auto;
+  width: auto;
   max-width: 300px;
   min-width: 280px;
   background-color: rgba(60, 60, 64, 0.5);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border: 0.1px solid rgba(146, 146, 147, 0.5);
   margin: 10px;
+  padding: 1  0px;
 }
 
 .card-body {

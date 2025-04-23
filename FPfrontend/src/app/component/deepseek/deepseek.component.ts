@@ -49,7 +49,7 @@ export class DeepseekComponent {
 
   public questionsList(event: Event): void {
     let target = event.target as HTMLElement; //Si no se le indica que es un elemento html no lo saca bien
-    let paragraphText = target.innerText;
+    let paragraphText = target.getAttribute('data-info') ?? ""; 
     this.userInput = paragraphText;
     this.sendMessage();
   }
@@ -149,21 +149,6 @@ export class DeepseekComponent {
       "Entry_Date": "2023-09-20",
       "Product_Photo": "Action Camera"
     },
-    {
-      "ID": 1005,
-      "Warehouse_ID": "WH-005",
-      "Name": "ak47",
-      "Brand": "N/A",
-      "Price": "$399.99",
-      "Stock": 1,
-      "Product_Type": "war",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "2 years",
-      "Weight": "4 kg",
-      "Dimensions": "N/a",
-      "Entry_Date": "2023-09-20",
-      "Product_Photo": "N/a"
-    }
   ]
 
   public createPromptFromProducts(): string {

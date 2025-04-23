@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library'; 
 import { CommonModule } from '@angular/common';
@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './barcode-scanner.component.css'
 })
 export class BarcodeScannerComponent {
+  @Output() scanResult = new EventEmitter<string>();//Modal
+
   productInfo: { [key: string]: { name: string, description: string, calories?: number, price: string, brand: string } } = {
     '8720181027796': { name: 'Desodorante Axe', description: 'Desodorante en aerosol de larga duración.', price: '3.99€', brand: 'Axe' },
     '5060326275280': { name: 'Creatina', description: 'Suplemento deportivo para mejorar el rendimiento.', calories: 0, price: '19.99€', brand: 'MyProtein' },
@@ -37,5 +39,6 @@ export class BarcodeScannerComponent {
       this.productDetails = { name: 'Producto no encontrado', description: '' };
       this.isValid = false;
     }
+    this.scanResult.emit(result);//Modal
   }
 }

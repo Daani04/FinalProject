@@ -96,9 +96,11 @@ h3 {
 
 #contButton {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   margin-bottom: 30px;
+  width: 100%; 
 }
 
 #addGraphicsButton {
@@ -119,10 +121,140 @@ h3 {
   border-radius: 5px;
 }
 
+.newGraphicsIA {
+  background-color: rgba(60, 60, 64, 0.5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 0.1px solid rgba(146, 146, 147, 0.5);
+  border-radius: 15px;
+  width: 400px;
+  height: auto;
+  margin-top: 30px;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+}
+
+#addNewGraphicsIA {
+  background-color: #686868;
+  color: #fff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  width: 200px;
+  height: 35px;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#addNewGraphicsIA:hover {
+  background-color: #1d2124;
+  color: wheat;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#newGrapicsIaContent {
+  padding: 10px;
+  text-align: center;
+}
+
+#customGraphic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#titleCustomGraphic{
+  margin-right: 10px;
+}
+
+#deleteCustonGraphic {
+  width: 30px;
+  right: 35px;
+  margin-left: 20px;
+  transition: transform 0.3s ease
+}
+
+#deleteCustonGraphic:hover {
+  cursor: pointer; 
+  background-color: rgba(0, 0, 0, 0.1); 
+  border-radius: 10px;
+  transform: scale(1.1); 
+}
+
+#warningGraphicsIA{
+  margin: 0;
+}
+
+.inline-container {
+  display: inline-flex;
+  align-items: center; 
+  gap: 8px; 
+  vertical-align: middle; 
+  color: rgb(182, 180, 180);
+}
+
 @media (max-width: 767px) {
   .double-chart {
     flex-direction: column;
     align-items: center;
+  }
+}
+
+/*CSS para la imagen de carga*/
+.spinner {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+  margin: 100px auto;
+}
+
+.double-bounce1,
+.double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-image: linear-gradient(to bottom, #4E2394, #DBC9F5);
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+
+  0%,
+  100% {
+    -webkit-transform: scale(0.0)
+  }
+
+  50% {
+    -webkit-transform: scale(1.0)
+  }
+}
+
+@keyframes sk-bounce {
+
+  0%,
+  100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  }
+
+  50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
   }
 }
 

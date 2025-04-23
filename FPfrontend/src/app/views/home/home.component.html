@@ -15,8 +15,8 @@
       </div>     
     </div>
 
-  <div class="row justify-content-center gap-5" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5 p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+    <div class="row justify-content-center gap-5 custom-row" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
+      <div class="col-md-5 p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Mis almacenes</h3>
       <p class="warehouseP">No tienes ningun almacen</p>
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
@@ -26,6 +26,29 @@
           <form [formGroup]="reactiveForm" id="warehouseName" class="text-center">
             <label for="name" class="form-label">Nombre del almacén</label>
             <input type="text" id="name" name="name" class="form-control my-2" placeholder="Introduzca un nombre" required formControlName="warehouseName">
+
+            <label for="com" class="form-label">Comunidad</label>
+            <select id="com" name="com" class="form-control my-2" required formControlName="locationWarehouseCommunity">
+              <option value="" disabled selected>Seleccione una comunidad</option>
+              <option value="Andalucía">Andalucía</option>
+              <option value="Aragón">Aragón</option>
+              <option value="Asturias">Asturias</option>
+              <option value="Islas Baleares">Islas Baleares</option>
+              <option value="Canarias">Canarias</option>
+              <option value="Cantabria">Cantabria</option>
+              <option value="Castilla-La Mancha">Castilla-La Mancha</option>
+              <option value="Castilla y León">Castilla y León</option>
+              <option value="Cataluña">Cataluña</option>
+              <option value="Extremadura">Extremadura</option>
+              <option value="Galicia">Galicia</option>
+              <option value="La Rioja">La Rioja</option>
+              <option value="Comunidad de Madrid">Comunidad de Madrid</option>
+              <option value="Región de Murcia">Región de Murcia</option>
+              <option value="Navarra">Navarra</option>
+              <option value="País Vasco">País Vasco</option>
+              <option value="Comunidad Valenciana">Comunidad Valenciana</option>
+            </select>
+            
 
             <label for="city" class="form-label">Ciudad</label>
             <input type="text" id="city" name="city" class="form-control my-2" placeholder="Introduzca la ciudad" required formControlName="locationWarehouseCity">
@@ -48,7 +71,9 @@
       @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
         @if (contInsertionData === 1) {
           <button class="btn" (click)="changeShowForm()">Añadir manualmente</button> 
-          <button class="btn" [routerLink]="['/login']" (click)="changeShowForm()">Escanear productos</button> 
+          <button class="btn" (click)="openModal()">Escanear productos</button> 
+            <app-modal-scanner (closeModal)="closeModal()"></app-modal-scanner>
+          
         } @else {
           <button class="btn" (click)="insertionMethod()">Añadir productos</button> 
         }       
@@ -119,20 +144,19 @@
     </div>
   </div>
 
-  <div class="row justify-content-center gap-5" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5  p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+  <div class="row justify-content-center gap-5 custom-row" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
+    <div class="col-md-5  p-4  rounded" (click)="openModal()" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Añadir producto</h3>
       <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
+        <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>
     </div>
 
     <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Retirar producto</h3>
-      <img id="addAndRemove" src="/img/removePhoto.png" class="img-fluid" alt="Añadir foto">
+      <img id="addAndRemove" src="/img/removePhoto.png" (click)="openModal()" class="img-fluid" alt="Añadir foto">
+        <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>
     </div>
   </div>
 
 </div>
-
-
-<!--<app-barcode-scanner></app-barcode-scanner>-->
 <app-footer></app-footer>

@@ -107,9 +107,12 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             6. Las respuestas tienen que ser cortas y directas, intentando en la mayoria de los casos no pasar de 60 lineas 
 
             INSTRUCCIONES DE RESPUESTA INTERACTIVA:
+            - Tienes los tokens limitados a 150, no puedes hacer uso de mas tokens, tendras que contestar la pregunta unicamente con esos tokens, muy importante que te ajustes a los toquens que tieness y la contestes entrera, no la puedes dejar a medias
             - Se te pasa la pregunta y todos los productos, contesta las preguntas respecto a estos 
             - Los datos que se te pasan son los de los productos de la base de datos, tienes acceso a todos ellos y mediate esa informacion puedes contestar a cualquier pregunta del usuairo
             - El usuario piensa que tienes accesa a muchos datos, si alguno no esta a tu alzance diselo y no te inventes informacion
+            - Una de tus principales funciones es dar datos sobre los productos que se te pasan, si el mensaje tiene la palabra "Producto" contesta siempre
+            - Da igual que tipo de productos guarde el usuario, si te pide informacion se la tienes que dar
 
             PAGINAS DE LA WEB: Estas son las paginas de la web, si el usuario se refiere a ellas de otra forma corrigele, al nombrar las paginas elige uno de los dos nombres nombrados
             - Login, pagina de inicio de sesion
@@ -147,7 +150,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
       return this.http.post<any>(this.apiUrl, body, { headers });
     }
 
-    getLocationCoordinates(city: any, street: any): Observable<any> {
+    getLocationCoordinates(city: any, street: any, comunity: any): Observable<any> {
       const headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.apiKey}`
@@ -164,12 +167,66 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             ES MUY IMPORTANTE DE QUE NO AÑADAS NADA MAS AL MENAJE QUE LA LATITUD Y LONGITUD YA QUE POSTERIORMENTE SE PROCESARAN LOS DATOS Y SI AÑADES INFORMACION DARA ERROR
 
             NORMAS:
-              - Solo puedes devolver una cosa latitud y longitud
+              - Solo puedes devolver una cosa latitud y longitud, tienen que ser exactas de las calles solicitadas y si especifican el numero mas exactas aun
               - No se especifica el pais por que se da por hehco que es españa
               - Dado que tus respuestas no son precisas consultaras la calle en aplicaciones como google maps
            ` 
           },
-          { role: 'user', content: `Ciudad: ${city}, Calle ${street}` }
+          { role: 'user', content: ` Comunidad Autonoma:${comunity},  Ciudad: ${city}, Calle: ${street}` }
+        ],  
+        max_tokens: 50,
+        temperature: 0.3   
+      };
+    
+      return this.http.post<any>(this.apiUrl, body, { headers });
+    }
+
+    createGraphics(pronpt: string, products: any): Observable<any> {
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`
+      });
+    
+      const body = {
+        model: 'deepseek-chat',
+        messages: [
+          { 
+            role: 'system', 
+            content: 
+            `
+            Eres un sistema de creacion de graficos, tu trabajo es generar graficos que reflejen los datos que se soliciten, los graficos que se van a usar son losde la libreria Chart.js.
+            Trabajas con los datos que se te pasan y haras los graficos respecto a estos datos, no puedes inventarte nada ni sacar datos de la nada, solo puedes trabajar con los datos que se te pasan
+
+            EJEMPLO DE COMO MANEJAMOS LOS GRAFICOS:
+              public discountsApplied = {  
+              labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+              datasets: [{
+                label: 'Descuentos aplicados',
+                data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+                backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA'], 
+                borderColor: 'rgb(159, 94, 148)', 
+                borderWidth: 2
+              }]
+            };
+
+            DATOS QUE TIENES QUE DEVOLVER:
+            - labels
+            - label
+            - data
+            NORMAS:
+              - IMPORTANTE!! Los productos que vayan en la misma categoria se separan CON ESPACIOS, eso quiere decir que todo lo que haya dentro de labels, label o data se separa con espacios
+              - Solo trabajas con los datos de los productos que se te pasan, no puedes sacar nada de la nada, solo puedes trabajar con los datos que se te pasan
+              - Tu solo te encargas de generar los datos y nada mas, posteriormente seran procesados para crear el grafico
+              - Para que no se prblemas a la hora de pasarle los datos a chart.js solo tienes que devolver los datos necesarios, nada mas
+              - Cada seccion tiene que ir separada por un !, esto lo aplicaras a las dos primeras, labels y label
+              - Solo saca los datos, no los nombres de las secciones de labels, label y data, UNICAMENTE TIENEN QUE ESTAR LOS DATOS, NADA MAS
+              - Texto limpio, evitar el uso de caracteres especiales, comas o puntos innecesarios entre otros.
+              - Los datos tienen que salir sin formato, es decir sin corchetes, comas ni nada 
+              - Label siempre va a tener la primera letra en mayuscula
+              - El nombre del labeL sera descriptivo y describira de forma corta y clara lo que hace el grafico, TIENE QUE SER UNA PEQUEÑA DESCRIPCION DE LA FUNCION QUE VA A REALIZER EL GRAFICO
+           ` 
+          },
+          { role: 'user', content: `Peticion del usuario:${pronpt}, datos sobre los que generar graficos: ${products}` }
         ],  
         max_tokens: 50,
         temperature: 0.3   

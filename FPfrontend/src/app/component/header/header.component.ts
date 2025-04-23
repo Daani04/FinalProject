@@ -167,6 +167,7 @@ export class HeaderComponent {
       return prompt;
     }
 
+/*Comentado para no gastar saldo de la API
   ngOnInit() {
     this.generateNotification();  
     setInterval(() => {
@@ -174,7 +175,7 @@ export class HeaderComponent {
       this.generateNotification();
     }, 300000)
   }
-
+*/
 
 
 }

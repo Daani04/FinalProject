@@ -1,8 +1,12 @@
 FALTA REVISAR PORQUE NO FUNCIONA LA PARTE DE HOME QUE SE ENCARGA DE CREAR EL WAREHOUSE 
+DESCOMENTAR EL ngOnInit de header que se encarga de gestionar las notificacones
+
+MODIFICACON BASE DE DATOS:
+- Añadir precio de venta y asi poder sacar el colculo de margen de ganancias
 
 DEPENDENCIAS: 
-
 Escaner(Revisar dependencias)
 DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)
 OpenLayers(Revisar dependencias)
+Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-worker --save --force  
