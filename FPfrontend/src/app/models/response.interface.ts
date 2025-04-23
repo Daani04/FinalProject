@@ -1,4 +1,5 @@
 //IMPORTANTE, PUEDEN HABER CAMPOS QUE NO SE LLAMEN IGUAL QUE EN LA BASE DE DATOS LO CUAL DA ERROR A LA HORA DE INSERAR DATOS 
+//!!!!LOS CAMPOS SE TIENEN QUE LLAMAR IGUAL QUE EN LA BASE DE DATOS QUE ES LO MISMO QUE LOS DATOS QUE SACAMOS POR EL POSTMAN!!!!
 export interface ProductAllData {
     id: number;
     warehouse: Warehouse;
@@ -34,8 +35,8 @@ export interface User {
 
 export interface Warehouse {
     id: number | null;  
-    userId: User;  
-    warehouseName: string; 
+    user_id: number;  
+    name: string; 
     location: string;
     products?: ProductAllData[] | null;  
     sales?: ProductSold[] | null;  
