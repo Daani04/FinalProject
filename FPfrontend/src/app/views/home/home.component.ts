@@ -88,7 +88,7 @@ export class HomeComponent {
 
   public getStreetForm(): void {
     this.getLocation();
-    this.newWarehouse();
+    //this.newWarehouse();
     this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
@@ -126,6 +126,7 @@ export class HomeComponent {
         let coordinates = res.choices[0].message.content;
         //let notifications = notificationContent.split('!');
         console.log(coordinates);
+        this.newWarehouse(coordinates);
         
       },
       (error) => {
@@ -135,7 +136,7 @@ export class HomeComponent {
   }
 
   //NO FUNCIONA!!####################################################################################
-  public newWarehouse(): void {
+  public newWarehouse(coordinates: any): void {
     const userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
 
     if (!userIdString) {
@@ -154,7 +155,7 @@ export class HomeComponent {
         id: null,  
         userId: { id: userId } as User,  // Se asigna un objeto User con solo el ID
         warehouseName: this.reactiveForm.value.warehouseName ?? '',
-        location: this.userLocation ?? '',
+        location: coordinates ?? '',
     };
 
     this.service.createWarehouse(this.apiWarehouseUrl, warehouseData).subscribe(
