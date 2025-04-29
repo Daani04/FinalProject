@@ -35,6 +35,7 @@ export class GraphicsComponent implements OnInit {
     } else {
       this.contButton = 0;
     }
+    this.showFormIa = false;
   }
 
   reactiveForm = new FormGroup({

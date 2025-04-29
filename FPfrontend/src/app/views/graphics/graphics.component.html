@@ -117,7 +117,6 @@
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
-            <!-- Contenedor con margen superior de 100px -->
             <div class="loading-overlay">
               <div class="spinner" style="margin-top: 160px;">
                 <div class="double-bounce1"></div>
@@ -153,13 +152,12 @@
     
               <div class="form-check mb-3">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check3"> Consto de los productos y descuentos 
+                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check3"> Costo de los productos y descuentos 
                 </label>
               </div>
     
               <button id="addGraphicsButton" type="submit" class="btn btn-primary">Aplicar</button>
             </form>
-            <p id="closeButton" (click)="modifyContButton()">Cerrar</p>
           </div>
 
           <div class="newGraphicsIA">
@@ -177,6 +175,7 @@
             </div>
           </div>
         } 
+        <button id="closeButton" type="submit" class="btn btn-primary"  (click)="modifyContButton()">Cerrar</button>
     }
   </div>
 

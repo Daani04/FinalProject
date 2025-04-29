@@ -135,7 +135,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
             - Historial de movimientos total de los productos del almacén
             - Calculo automatico de ganancias basándoselas en la venta de los productos del almacén 
 
-            Existiran dos roles, usuario y administrador, el usuario el el usuario al que va dirigida la aplicación, este podrá gestionar todas sus tiendas/almacenes, 
+            El usuario podrá gestionar todas sus tiendas/almacenes, 
             por otro lado el administrador podra ver los usuarios registrados, la ubicación de los almacenes de estos, la cantidad de productos que manejan y acceder 
             a todos los datos de estos Implementación de la IA: Se usara una IA para facilitar datos a los usuarios, de forma que si por ejemplo quieren saber el 
             producto mas vendido o el que tiene falta de stock le podrá proporcionar la información 
