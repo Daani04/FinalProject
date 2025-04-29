@@ -356,8 +356,8 @@ export class GraphicsComponent implements OnInit {
       "Weight": "15.2 kg",
       "Dimensions": "48\" x 28\" x 4\"",
       "Entry_Date": "2023-05-15",
-      "Sale_Date": "2023-06-01",  // Agregado
-      "Quantity": 2,              // Agregado
+      "Sale_Date": "2021-06-01",  // Agregado
+      "Quantity": 5,              // Agregado
       "Product_Photo": "Smart TV"
     },
     {
@@ -373,8 +373,8 @@ export class GraphicsComponent implements OnInit {
       "Weight": "0.05 kg",
       "Dimensions": "2.5\" x 2\" x 1\"",
       "Entry_Date": "2023-06-01",
-      "Sale_Date": "2023-06-05",  // Agregado
-      "Quantity": 5,               // Agregado
+      "Sale_Date": "2022-06-05",  // Agregado
+      "Quantity": 4,               // Agregado
       "Product_Photo": "Wireless Earbuds"
     },
     {
@@ -391,7 +391,7 @@ export class GraphicsComponent implements OnInit {
       "Dimensions": "15.6\" x 10\" x 0.7\"",
       "Entry_Date": "2023-07-12",
       "Sale_Date": "2023-07-15",  // Agregado
-      "Quantity": 10,              // Agregado
+      "Quantity": 3,              // Agregado
       "Product_Photo": "Gaming Laptop"
     },
     {
@@ -408,7 +408,7 @@ export class GraphicsComponent implements OnInit {
       "Dimensions": "12\" x 12\" x 14\"",
       "Entry_Date": "2023-08-03",
       "Sale_Date": "2024-08-10",  // Agregado
-      "Quantity": 30,              // Agregado
+      "Quantity": 10,              // Agregado
       "Product_Photo": "Air Fryer"
     },
     {
@@ -425,7 +425,7 @@ export class GraphicsComponent implements OnInit {
       "Dimensions": "3.5\" x 2.5\" x 1.5\"",
       "Entry_Date": "2023-09-20",
       "Sale_Date": "2025-09-25",  // Agregado
-      "Quantity": 15,              // Agregado
+      "Quantity": 4,              // Agregado
       "Product_Photo": "Action Camera"
     }
   ];
