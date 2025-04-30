@@ -29,7 +29,6 @@ class ApiProductAllDataController extends AbstractController {
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
                 'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'warranty_period' => $productData->getWarrantyPeriod()?->format('Y-m-d H:i:s'),
                 'weight' => $productData->getWeight(),
                 'dimensions' => $productData->getDimensions(),
                 'product_photo' => $productData->getProductPhoto(),
@@ -52,6 +51,7 @@ class ApiProductAllDataController extends AbstractController {
             $data['stock'],
             $data['product_type'],
             $data['entry_date'],
+            $data['expiration_date'],
             $data['weight'],
             $data['dimensions']
         )) {
@@ -71,6 +71,7 @@ class ApiProductAllDataController extends AbstractController {
         $productData->setStock($data['stock']);
         $productData->setProductType($data['product_type']);
         $productData->setEntryDate(new \DateTime($data['entry_date']));
+        $productData->setExpirationDate(new \DateTime($data['expiration_date']));
         $productData->setWeight($data['weight']);
         $productData->setDimensions($data['dimensions']);
 

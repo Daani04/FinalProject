@@ -38,9 +38,6 @@ class ProductAllData
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $expiration_date = null;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
-    private ?\DateTimeInterface $warranty_period = null;
-
     #[ORM\Column]
     private ?int $weight = null;
 
@@ -112,22 +109,6 @@ class ProductAllData
     public function setWeight($weight)
     {
         $this->weight = $weight;
-    }
-
-    /**
-     * @return \DateTimeInterface|null
-     */
-    public function getWarrantyPeriod()
-    {
-        return $this->warranty_period;
-    }
-
-    /**
-     * @param \DateTimeInterface|null $warranty_period
-     */
-    public function setWarrantyPeriod($warranty_period)
-    {
-        $this->warranty_period = $warranty_period;
     }
 
     /**
