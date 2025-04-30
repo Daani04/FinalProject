@@ -88,7 +88,7 @@ export class HomeComponent {
 
   public getStreetForm(): void {
     this.getLocation();
-    this.newWarehouse();
+    //this.newWarehouse();
     this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
@@ -126,6 +126,7 @@ export class HomeComponent {
         let coordinates = res.choices[0].message.content;
         //let notifications = notificationContent.split('!');
         console.log(coordinates);
+        this.newWarehouse(coordinates);
         
       },
       (error) => {
@@ -134,9 +135,9 @@ export class HomeComponent {
     );
   }
 
-  //NO FUNCIONA!!####################################################################################
-  public newWarehouse(): void {
-    const userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
+  public newWarehouse(coordinates: any): void {
+    let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
+    let coordinatesString = String(coordinates); 
 
     if (!userIdString) {
         console.error('Error: No se encontró userId en localStorage');
@@ -149,21 +150,26 @@ export class HomeComponent {
         console.error('Error: userId en localStorage no es un número válido');
         return;
     }
+    console.log('Id del usuario', userId);
+    console.log('Nombre del almacen', this.reactiveForm.value.warehouseName);
+    console.log('Coordenadas del almacen', coordinatesString);
 
     const warehouseData: Warehouse = {
-        id: null,  
-        userId: { id: userId } as User,  // Se asigna un objeto User con solo el ID
-        warehouseName: this.reactiveForm.value.warehouseName ?? '',
-        location: this.userLocation ?? '',
+      id: null,  
+      user_id: userId,  
+      name: this.reactiveForm.value.warehouseName ?? '',  
+      location: coordinatesString ?? '',  
     };
+
+    console.log('Datos enviados al servidor:', warehouseData);
 
     this.service.createWarehouse(this.apiWarehouseUrl, warehouseData).subscribe(
         (response) => console.log('Almacén creado con éxito:', response),
         (error) => console.error('Error al crear almacén:', error)
     );
 }
-//#################################################################################################
-  public changeShowForm(): void {
+
+public changeShowForm(): void {
     if (this.showForm === false) {
       this.showForm = true;
     } else {

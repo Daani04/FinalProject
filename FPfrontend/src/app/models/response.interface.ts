@@ -34,8 +34,8 @@ export interface User {
 
 export interface Warehouse {
     id: number | null;  
-    userId: User;  
-    warehouseName: string; 
+    user_id: number;  
+    name: string; 
     location: string;
     products?: ProductAllData[] | null;  
     sales?: ProductSold[] | null;  
