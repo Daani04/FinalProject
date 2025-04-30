@@ -1,7 +1,7 @@
 //IMPORTANTE, PUEDEN HABER CAMPOS QUE NO SE LLAMEN IGUAL QUE EN LA BASE DE DATOS LO CUAL DA ERROR A LA HORA DE INSERAR DATOS 
 export interface ProductAllData {
-    id: number;
-    warehouse: Warehouse;
+    id?: number | null;  
+    warehouse: number;
     name: string;
     brand: string;
     price: number;

@@ -30,7 +30,9 @@ export class RequestService {
     return this.http.get<any>(url);
   }
 
-  
+  public insertProductsInWarehouse(url: string, productData: ProductAllData): Observable<any> {
+    return this.http.post<any>(url, productData);
+  }
 
 //API
 private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
