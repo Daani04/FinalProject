@@ -18,8 +18,16 @@
     <div class="row justify-content-center gap-5 custom-row" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
       <div class="col-md-5 p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Mis almacenes</h3>
-      <p class="warehouseP">No tienes ningun almacen</p>
-      @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
+      @if (warehouses.length !== 0) { 
+        @for (warehouse of warehouses; track $index) {
+          <div id="userWarehouses">
+            <img id="warehouseLogo" src="/img/almacen.png" alt="logo">
+            <p>{{warehouse.name}}</p>
+          </div>
+        }
+      } @else {
+        <p class="warehouseP">No tienes ningun almacen</p>
+      }
         @if (cont === 0) {
           <button type="button" class="btn" (click)="toggleForm()">Añadir nuevo almacén</button>
         } @else {
@@ -48,7 +56,6 @@
               <option value="País Vasco">País Vasco</option>
               <option value="Comunidad Valenciana">Comunidad Valenciana</option>
             </select>
-            
 
             <label for="city" class="form-label">Ciudad</label>
             <input type="text" id="city" name="city" class="form-control my-2" placeholder="Introduzca la ciudad" required formControlName="locationWarehouseCity">
@@ -59,27 +66,40 @@
           </form>
             <p class="close" (click)="closeWarehouse()">Cerrar</p>
         }
-      } @else {
-        <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
-      }
+
 
     </div>
 
     <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Mis productos</h3>
-      <p class="warehouseP">No tienes ningun producto</p>
-      @if (true) { <!--Temporal, la condicion tiene que se existen o no almacenes-->
-        @if (contInsertionData === 1) {
-          <button class="btn" (click)="changeShowForm()">Añadir manualmente</button> 
-          <button class="btn" (click)="openModal()">Escanear productos</button> 
-            <app-modal-scanner (closeModal)="closeModal()"></app-modal-scanner>
-          
-        } @else {
-          <button class="btn" (click)="insertionMethod()">Añadir productos</button> 
-        }       
+      @if (warehouses.length !== 0) { 
       } @else {
-        <p>Almacenes ==></p> <!--Temporal, aqui se tienen que mostrar los almacenes-->
+        <p class="warehouseP">No tienes ningun productos</p>
       }
+        @if (contInsertionData === 1) {
+          <form [formGroup]="selectWarehouseForInsertProducts" id="selectWarehouseForm" class="text-center">
+            <label for="com" class="form-label">Seleccionar almacen</label>
+            <select id="com" name="com" class="form-control my-2" required formControlName="selectWarehouse">
+              @if (warehouses.length !== 0) {
+                <option value="" disabled selected>Todos los almacenes</option>
+                @for (warehouse of warehouses; track $index) {
+                  <option value="{{warehouse.name}}">{{warehouse.name}}</option>
+                }
+              } @else {
+                <option value="" disabled selected>No tienes almacenes</option>
+              }
+            </select>
+            <button class="btn" (click)="showOptionForInsertData()">Seleccionar</button>
+          </form>
+          @if (selectedWarehouse === true) {
+            <button class="btn" (click)="changeShowForm()">Añadir manualmente</button> 
+            <button class="btn" (click)="openModal()">Escanear productos</button> 
+              <app-modal-scanner (closeModal)="closeModal()"></app-modal-scanner>
+          }
+        } @else {
+          <button class="btn" (click)="insertionMethod()">Añadir productos</button>
+        }       
+
       @if ( showForm === true) {
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
           <div class="form-group mb-3">

@@ -28,8 +28,12 @@ export class HomeComponent {
   public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
 
+  public warehouses: Warehouse[] = [];
+
   public cont: number = 0;
   public cont2: number = 0; 
+
+  public selectedWarehouse: boolean = false;
 
   public showForm: boolean = false;
 
@@ -82,17 +86,27 @@ export class HomeComponent {
     locationWarehouseCommunity: new FormControl('')
   });
 
+  selectWarehouseForInsertProducts = new FormGroup({
+    selectWarehouse: new FormControl('')
+  });
+
+  public showOptionForInsertData(): void{
+    this.selectedWarehouse = true;
+    console.log(this.selectWarehouseForInsertProducts.value.selectWarehouse);
+  }
+
   public toggleForm(): void {
     this.cont = 1;
   }
 
   public getStreetForm(): void {
-    this.getLocation();
+    //this.getLocation();
     //this.newWarehouse();
     this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
 
+  /*
   public getLocation(): void {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
@@ -119,12 +133,11 @@ export class HomeComponent {
       console.error(this.userLocation);
     }
   }
-
+*/
   getLocationCoordinates(city: any, street: any, comunity: any ) {
     this.service.getLocationCoordinates(city, street, comunity).subscribe(
       (res) => {
         let coordinates = res.choices[0].message.content;
-        //let notifications = notificationContent.split('!');
         console.log(coordinates);
         this.newWarehouse(coordinates);
         
@@ -133,6 +146,10 @@ export class HomeComponent {
         console.error('Error al generar notificación:', error);
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.checkWarehouses();
   }
 
   public newWarehouse(coordinates: any): void {
@@ -144,7 +161,7 @@ export class HomeComponent {
         return;
     }
 
-    const userId = parseInt(userIdString, 10); // Convierte userId a número
+    let userId = parseInt(userIdString, 10); // Convierte userId a número
 
     if (isNaN(userId)) {
         console.error('Error: userId en localStorage no es un número válido');
@@ -167,6 +184,31 @@ export class HomeComponent {
         (response) => console.log('Almacén creado con éxito:', response),
         (error) => console.error('Error al crear almacén:', error)
     );
+}
+
+public checkWarehouses(): void {
+  let userIdString = localStorage.getItem('userId');
+
+  if (!userIdString) {
+    console.error('Error: No se encontró userId en localStorage');
+    return;
+  }
+
+  let userId = parseInt(userIdString, 10);
+
+  let apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
+
+  this.service.takeWarehouse(apiUrl).subscribe({
+    next: (response) => {
+      this.warehouses = response;
+      for (let i = 0; i < this.warehouses.length; i++) {
+        console.log(this.warehouses[i].name);
+      }
+    },
+    error: (error) => {
+      console.error('Error fetching warehouses:', error);
+    }
+  });
 }
 
 public changeShowForm(): void {

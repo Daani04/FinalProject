@@ -31,6 +31,32 @@ class ApiWarehouseController extends AbstractController
         return $this->json($data);
     }
 
+    //Mostrar los almacenes de un usuario especifico basandose en su id 
+    #[Route('/user/{userId}', name: 'by_user', methods: ['GET'])]
+    public function getByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $entityManager->getRepository(User::class)->find($userId);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], 404);
+        }
+
+        $warehouses = $entityManager->getRepository(Warehouse::class)->findBy(['user' => $user]);
+
+        $data = [];
+        foreach ($warehouses as $warehouse) {
+            $data[] = [
+                'id' => $warehouse->getId(),
+                'user_id' => $warehouse->getUser()->getId(),
+                'name' => $warehouse->getName(),
+                'location' => $warehouse->getLocation(),
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {

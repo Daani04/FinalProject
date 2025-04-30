@@ -50,6 +50,37 @@ h1 {
   font-size: 0.8em;
 }
 
+#userWarehouses {
+  display: flex;
+  align-items: center; 
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 0.1px solid rgba(181, 181, 182, 0.2);
+  border-radius: 20px;
+  width: auto;
+  margin: 0 auto;
+  margin-bottom: 15px;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+#userWarehouses:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#selectWarehouseForm {
+  margin-bottom: 15px;
+}
+
+#warehouseLogo {
+  width: 60px;
+}
+
+#userWarehouses p {
+  margin: 0; 
+}
+
+
 #addAndRemove {
   margin-top: 10px;
   width: 70px;

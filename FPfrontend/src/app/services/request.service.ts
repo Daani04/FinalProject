@@ -24,7 +24,13 @@ export class RequestService {
 
   public createWarehouse(url: string, warehouseData: Warehouse): Observable<any> {
     return this.http.post<any>(url, warehouseData);
-}
+  }
+
+  public takeWarehouse(url: string): Observable<any> {
+    return this.http.get<any>(url);
+  }
+
+  
 
 //API
 private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
