@@ -4,6 +4,7 @@ import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { data } from 'jquery';
+import { ProductAllData } from '../../models/response.interface';
 
 @Component({
   selector: 'app-graphics',
@@ -14,6 +15,10 @@ import { data } from 'jquery';
 export class GraphicsComponent implements OnInit {
 
   constructor(public service: RequestService) { }
+
+  public apiProductsUrl: string = "http://localhost:8000/api/data";
+
+  public products: ProductAllData [] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -60,6 +65,7 @@ export class GraphicsComponent implements OnInit {
       check3: this.cont3 === 1
     });
     this.checkAndLoadGraphics();
+    this.getProducts();
   }
 
   onSubmitGraphics(): void {
@@ -96,6 +102,7 @@ export class GraphicsComponent implements OnInit {
     this.showFormIa = true
   }
 
+  
   createGraphics(prompt: any) {
     let promptbbdd = this.createPromptFromProducts();
     this.loading = true; 
@@ -131,8 +138,6 @@ export class GraphicsComponent implements OnInit {
       this.generateGraphics();
     }
   }
-  
-  
   
   public generateGraphics(): void {
     if (this.dataNewGraphics.length > 0) {
@@ -179,17 +184,16 @@ export class GraphicsComponent implements OnInit {
     let promptbbdd = '';
     this.products.forEach(product => {
       promptbbdd += `
-        Producto: ${product.Name} (${product.Brand})
-        Precio: ${product.Price}
-        Stock: ${product.Stock}
-        Tipo: ${product.Product_Type}
-        Fecha de Entrada: ${product.Entry_Date}
-        Fecha de Venta: ${product.Sale_Date} 
-        Garantía: ${product.Warranty_Period}
-        Cantidad Vendida: ${product.Quantity}
-        Expiración: ${product.Expiration_Date}
-        Peso: ${product.Weight}
-        Dimensiones: ${product.Dimensions}
+        Producto: ${product.name} (${product.brand})
+        Precio Venta: ${product.price}
+        Precio Compra: ${product.purchase_price}
+        Stock: ${product.stock}
+        Tipo: ${product.product_type}
+        Fecha de Entrada: ${product.entry_date}
+        Fecha de caducidad: ${product.expiration_date} 
+        Expiración: ${product.expiration_date}
+        Peso: ${product.weight}
+        Dimensiones: ${product.dimensions}
 
         -----------------------------------
       `;
@@ -200,6 +204,19 @@ export class GraphicsComponent implements OnInit {
   public deleteCustomGraphic(): void {
     localStorage.removeItem('Customgraphic');
     location.reload();//Recarga la pagina para aplicar los cambios
+  }
+
+   public getProducts(): void {
+    
+    this.service.takeProducts(this.apiProductsUrl).subscribe({
+      next: (response) => {
+        this.products = response as ProductAllData[]; 
+        console.log('Productos:', this.products);
+      },
+      error: (error) => {
+        console.error('Error al seleccionar el producto:', error);
+      }
+    });
   }
 
   //GRAFICOS PREDEFINIDOS
@@ -339,96 +356,5 @@ export class GraphicsComponent implements OnInit {
       borderWidth: 2
     }]
   };
-
-
-  //Simulacro de conexion a base de datos 
-  public products = [
-    {
-      "ID": 1001,
-      "Warehouse_ID": "WH-001",
-      "Name": "Ultra HD Smart TV",
-      "Brand": "Samsung",
-      "Price": "$12,99",
-      "Stock": 5,
-      "Product_Type": "Electronics",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "2 years",
-      "Weight": "15.2 kg",
-      "Dimensions": "48\" x 28\" x 4\"",
-      "Entry_Date": "2023-05-15",
-      "Sale_Date": "2021-06-01",  // Agregado
-      "Quantity": 5,              // Agregado
-      "Product_Photo": "Smart TV"
-    },
-    {
-      "ID": 1002,
-      "Warehouse_ID": "WH-002",
-      "Name": "Wireless Earbuds",
-      "Brand": "Apple",
-      "Price": "$199.99",
-      "Stock": 120,
-      "Product_Type": "Electronics",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "1 year",
-      "Weight": "0.05 kg",
-      "Dimensions": "2.5\" x 2\" x 1\"",
-      "Entry_Date": "2023-06-01",
-      "Sale_Date": "2022-06-05",  // Agregado
-      "Quantity": 4,               // Agregado
-      "Product_Photo": "Wireless Earbuds"
-    },
-    {
-      "ID": 1003,
-      "Warehouse_ID": "WH-003",
-      "Name": "Gaming Laptop",
-      "Brand": "Delll",
-      "Price": "$1,499.99",
-      "Stock": 25,
-      "Product_Type": "Electronics",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "2 years",
-      "Weight": "2.5 kg",
-      "Dimensions": "15.6\" x 10\" x 0.7\"",
-      "Entry_Date": "2023-07-12",
-      "Sale_Date": "2023-07-15",  // Agregado
-      "Quantity": 3,              // Agregado
-      "Product_Photo": "Gaming Laptop"
-    },
-    {
-      "ID": 1004,
-      "Warehouse_ID": "WH-004",
-      "Name": "Air Fryer",
-      "Brand": "Philips",
-      "Price": "$129.99",
-      "Stock": 60,
-      "Product_Type": "Home Appliances",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "100 year",
-      "Weight": "4.5 kg",
-      "Dimensions": "12\" x 12\" x 14\"",
-      "Entry_Date": "2023-08-03",
-      "Sale_Date": "2024-08-10",  // Agregado
-      "Quantity": 10,              // Agregado
-      "Product_Photo": "Air Fryer"
-    },
-    {
-      "ID": 1005,
-      "Warehouse_ID": "WH-005",
-      "Name": "4K Action Camera",
-      "Brand": "GoPro",
-      "Price": "$399.99",
-      "Stock": 90,
-      "Product_Type": "Electronics",
-      "Expiration_Date": "N/A",
-      "Warranty_Period": "2 years",
-      "Weight": "0.4 kg",
-      "Dimensions": "3.5\" x 2.5\" x 1.5\"",
-      "Entry_Date": "2023-09-20",
-      "Sale_Date": "2025-09-25",  // Agregado
-      "Quantity": 4,              // Agregado
-      "Product_Photo": "Action Camera"
-    }
-  ];
-  
  
 }  
