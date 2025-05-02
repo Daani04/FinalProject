@@ -5,10 +5,11 @@ import { FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule } fro
 import { ActivatedRoute } from '@angular/router';
 import { RequestService } from '../../services/request.service';
 import { HttpClient } from '@angular/common/http';
+import { ProductAllData } from '../../models/response.interface';
 
 @Component({
   selector: 'app-product-data',
-  imports: [FooterComponent, NgStyle, FormsModule, ReactiveFormsModule],
+  imports: [FooterComponent, NgStyle, FormsModule, ReactiveFormsModule, NgStyle],
   templateUrl: './product-data.component.html',
   styleUrl: './product-data.component.css'
 })
@@ -16,6 +17,9 @@ export class ProductDataComponent {
 
   //FALTA HACE LA PARTE DE LOS FILTROS, DE MOMENTO SOLO SE HAN DEFINIDO
   constructor(private route: ActivatedRoute, public service: RequestService, private http: HttpClient) {}
+
+  public productId: number = 0;
+  public warehouseId: number = 0;
 
   public apiProductsUrl: string = "http://localhost:8000/api/data";
 
@@ -28,6 +32,10 @@ export class ProductDataComponent {
 
   public viewMenu: boolean = false;
   public widthMenu: string = "60px";
+
+  public viewFormModifyData: boolean = false;
+
+  public selectedProduct: ProductAllData | null = null;
 
   public searchQuery: string = '';
   public minPrice: number | null = null;
@@ -95,6 +103,20 @@ export class ProductDataComponent {
     entryDate: new FormControl('')  
   });     
 
+  productForm = new FormGroup({
+    name: new FormControl(''),
+    brand: new FormControl(''),
+    price: new FormControl(''),
+    stock: new FormControl(''),
+    productType: new FormControl(''),
+    expirationDate: new FormControl(''),
+    weight: new FormControl(''),
+    dimensions: new FormControl(''),
+    entryDate: new FormControl(''),
+    productPhoto: new FormControl(''),
+    purchasePrice: new FormControl('')
+  });
+
   public takeWarehouseProducts(warehouse_id: any): void {
     let userIdString = localStorage.getItem('userId');
     
@@ -128,4 +150,91 @@ export class ProductDataComponent {
     });
   }
   
+  public deleteProduct(id: number): void {
+    console.log('deleteID', id);
+
+    let deleteProductUrl = `${this.apiProductsUrl}/${id}`;
+
+    this.service.deleteProduct(deleteProductUrl).subscribe({
+      next: (response) => {
+        console.log('Producto eliminado:', this.selectedProduct);
+      },
+      error: (error) => {
+        console.error('Error al eliminar el producto:', error);
+      }
+    });
+  }
+
+  public dataSelectedProduct(productId: number, warehouseId: number): void {
+  this.productId = productId;
+  this.warehouseId = warehouseId;
+  this.viewFormModifyData = !this.viewFormModifyData;
+
+  const selectOneProductUrl = `${this.apiProductsUrl}/${this.productId}`;
+
+  this.service.takeProducts(selectOneProductUrl).subscribe({
+    next: (response) => {
+      this.selectedProduct = response as ProductAllData; //Se tiene que iniciar como objeto ya que si no despues no se puede acceder a sus datos en el productForm 
+      console.log('Producto encontrado:', this.selectedProduct);
+      
+      //Permite editar el formulario de forma que podemos meter vamores predeterminados
+      this.productForm.patchValue({
+        name: this.selectedProduct.name,
+        brand: this.selectedProduct.brand,
+        price: this.selectedProduct.price.toString(), 
+        stock: this.selectedProduct.stock.toString(),
+        productType: this.selectedProduct.product_type,
+        expirationDate: this.selectedProduct.expiration_date?.split(' ')[0] || '', 
+        weight: this.selectedProduct.weight.toString(),
+        dimensions: this.selectedProduct.dimensions.toString(),
+        entryDate: this.selectedProduct.entry_date.split(' ')[0], 
+        productPhoto: '',
+        purchasePrice: this.selectedProduct.purchase_price.toString()
+      });
+    },
+    error: (error) => {
+      console.error('Error al seleccionar el producto:', error);
+    }
+  });
+}
+  public closeModal(): void {
+    this.viewFormModifyData = false;
+  }
+
+  public editProduct(): void {
+
+    let selectOneProductUrl = `${this.apiProductsUrl}/${this.productId}`;
+
+    let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
+    let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
+    let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
+    let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
+    let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
+
+    const products: ProductAllData = {
+      id: null,
+      warehouse: this.warehouseId,
+      name: this.productForm.value.name ?? '',
+      brand: this.productForm.value.brand ?? '',
+      price: priceToNumber,
+      stock: stockToNumber,
+      product_type: this.productForm.value.productType ?? '',
+      entry_date: this.productForm.value.entryDate ?? '', 
+      expiration_date: this.productForm.value.expirationDate || null,
+      weight:  wigthToNumber,
+      dimensions:  dimensionsToNumber,
+      product_photo: this.productForm.value.productPhoto || null,
+      purchase_price: purchasePriceToNumber
+    };
+
+    this.service.editProduct(selectOneProductUrl, products).subscribe({
+      next: (response) => {
+        console.log('Producto modificado:', response);
+      },
+      error: (error) => {
+        console.error('Error al modificar el producto:', error);
+      }
+    });
+  }
+    
 }

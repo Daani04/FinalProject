@@ -27,6 +27,11 @@ h1 {
     margin-top: 40px;
 }
 
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
 img {
     width: 50px;
     height: 50px;
@@ -140,6 +145,72 @@ img {
     color: rgb(182, 180, 180);
 }
 
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+  }
+  
+  .modal-content {
+    background-color: rgb(34, 31, 31);
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+  
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  
+  .product-form .form-group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-form label {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    text-align: left;
+  }
+  
+  .product-form .form-control {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    width: 100%;
+  }
+  
+  .product-form .btn {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  #closeModal {
+    padding: 7px;
+    transition: background-color 0.5s ease, transform 0.5s ease;
+    margin-bottom: 0;
+  }
+  
+  #closeModal:hover {
+    background-color: #343a40;
+    color: wheat;
+    border-radius: 5px;
+  }
 
   @media (max-width: 850px) {
     .search-bar {

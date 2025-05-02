@@ -82,8 +82,8 @@
                     <td>{{product.entry_date}}</td>
                     <td>{{product.product_photo}}</td>
 
-                    <td><img src="/img/editar.png"  alt="editar"></td>
-                    <td><img src="/img/papelera.png"  alt="eliminar"></td>
+                    <td><img src="/img/editar.png"  alt="editar" (click)="dataSelectedProduct(product.id, product.warehouse)"></td>
+                    <td><img src="/img/papelera.png"  alt="eliminar" (click)="deleteProduct(product.id)"></td>
                 </tr>
                 }
         </tbody>
@@ -97,5 +97,87 @@
     
     <img id="rigArrow" src="/img/rigArrow.png" alt="flecha derecha" (click)="nextPage()" class="pagination-arrow">
 </div>
+
+<div class="modal-overlay" [ngStyle]="{
+    'visibility': viewFormModifyData ? 'visible' : 'hidden',
+    'opacity': viewFormModifyData ? '1' : '0',
+    'pointer-events': viewFormModifyData ? 'auto' : 'none'
+  }">
+      <div class="modal-content">
+        <h2>Modificacion producto</h2>
+      <div class="container">
+        <form [formGroup]="productForm" class="product-form">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-group mb-3">
+                <label for="name">Nombre</label>
+                <input id="name" formControlName="name" type="text" class="form-control"/>
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="brand">Marca</label>
+                <input id="brand" formControlName="brand" type="text" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="price">Precio de venta</label>
+                <input id="price" formControlName="price" type="number" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="form-group mb-3">
+                <label for="purchasePrice">Precio de compra</label>
+                <input id="purchasePrice" formControlName="purchasePrice" type="number" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="stock">Stock</label>
+                <input id="stock" formControlName="stock" type="number" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="productType">Tipo de Producto</label>
+                <input id="productType" formControlName="productType" type="text" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="form-group mb-3">
+                <label for="entryDate">Fecha de Entrada</label>
+                <input id="entryDate" formControlName="entryDate" type="date" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="expirationDate">Fecha de Expiración</label>
+                <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="weight">Peso</label>
+                <input id="weight" formControlName="weight" type="number" class="form-control" />
+              </div>
+            </div>
+  
+            <div class="col-md-3">
+              <div class="form-group mb-3">
+                <label for="dimensions">Dimensiones</label>
+                <input id="dimensions" formControlName="dimensions" type="text" class="form-control" />
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="productPhoto">Foto del Producto</label>
+                <input id="productPhoto" formControlName="productPhoto" type="file" class="form-control" accept="image/*" />
+              </div>
+            </div>
+          </div>
+  
+          <button type="submit" class="btn btn-success mt-3" (click)="editProduct()">Enviar</button>
+          <p id="closeModal" (click)="closeModal()">Cerrar</p>
+        </form>
+      </div>
+    </div>
+  </div>
+  
 
 <app-footer></app-footer>

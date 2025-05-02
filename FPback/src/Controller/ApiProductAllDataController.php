@@ -39,6 +39,39 @@ class ApiProductAllDataController extends AbstractController {
         return $this->json($data);
     }
 
+    #[Route('/{id}', name: 'get_product_by_id', methods: ['GET'])]
+    public function getProductById(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Buscar el producto por ID
+        $productData = $entityManager->getRepository(ProductAllData::class)->find($id);
+
+        // Si no se encuentra el producto, devolver un error
+        if (!$productData) {
+            return $this->json(['error' => 'Product not found'], 404);
+        }
+
+        // Preparar los datos del producto
+        $data = [
+            'id' => $productData->getId(),
+            'warehouse' => $productData->getWarehouse()->getId(),
+            'name' => $productData->getName(),
+            'brand' => $productData->getBrand(),
+            'price' => $productData->getPrice(),
+            'purchase_price' => $productData->getPurchasePrice(),
+            'stock' => $productData->getStock(),
+            'product_type' => $productData->getProductType(),
+            'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
+            'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
+            'weight' => $productData->getWeight(),
+            'dimensions' => $productData->getDimensions(),
+            'product_photo' => $productData->getProductPhoto(),
+        ];
+
+        // Devolver los datos del producto en formato JSON
+        return $this->json($data);
+    }
+
+
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -83,46 +116,46 @@ class ApiProductAllDataController extends AbstractController {
     }
 
     #[Route('/user/{userId}', name: 'get_products_by_user', methods: ['GET'])]
-public function getProductsByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
-{
-    // Obtener todos los almacenes asociados al usuario
-    $warehouses = $entityManager->getRepository(Warehouse::class)
-        ->findBy(['user' => $userId]);  // Obtenemos todos los almacenes del usuario
+    public function getProductsByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Obtener todos los almacenes asociados al usuario
+        $warehouses = $entityManager->getRepository(Warehouse::class)
+            ->findBy(['user' => $userId]);  // Obtenemos todos los almacenes del usuario
 
-    if (!$warehouses) {
-        return $this->json(['error' => 'No warehouses found for this user'], 404);
+        if (!$warehouses) {
+            return $this->json(['error' => 'No warehouses found for this user'], 404);
+        }
+
+        // Obtener los productos asociados a todos los almacenes
+        $products = $entityManager->getRepository(ProductAllData::class)
+            ->findBy(['warehouse' => $warehouses]);  // Buscar productos en todos los almacenes del usuario
+
+        if (!$products) {
+            return $this->json(['message' => 'No products found for this user'], 404);
+        }
+
+        // Preparar los datos de los productos
+        $data = [];
+        foreach ($products as $productData) {
+            $data[] = [
+                'id' => $productData->getId(),
+                'warehouse' => $productData->getWarehouse()->getId(),
+                'name' => $productData->getName(),
+                'brand' => $productData->getBrand(),
+                'price' => $productData->getPrice(),
+                'purchase_price' => $productData->getPurchasePrice(),
+                'stock' => $productData->getStock(),
+                'product_type' => $productData->getProductType(),
+                'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
+                'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
+                'weight' => $productData->getWeight(),
+                'dimensions' => $productData->getDimensions(),
+                'product_photo' => $productData->getProductPhoto(),
+            ];
+        }
+
+        return $this->json($data);
     }
-
-    // Obtener los productos asociados a todos los almacenes
-    $products = $entityManager->getRepository(ProductAllData::class)
-        ->findBy(['warehouse' => $warehouses]);  // Buscar productos en todos los almacenes del usuario
-
-    if (!$products) {
-        return $this->json(['message' => 'No products found for this user'], 404);
-    }
-
-    // Preparar los datos de los productos
-    $data = [];
-    foreach ($products as $productData) {
-        $data[] = [
-            'id' => $productData->getId(),
-            'warehouse' => $productData->getWarehouse()->getId(),
-            'name' => $productData->getName(),
-            'brand' => $productData->getBrand(),
-            'price' => $productData->getPrice(),
-            'purchase_price' => $productData->getPurchasePrice(),
-            'stock' => $productData->getStock(),
-            'product_type' => $productData->getProductType(),
-            'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
-            'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-            'weight' => $productData->getWeight(),
-            'dimensions' => $productData->getDimensions(),
-            'product_photo' => $productData->getProductPhoto(),
-        ];
-    }
-
-    return $this->json($data);
-}
 
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
@@ -136,4 +169,44 @@ public function getProductsByUser(int $userId, EntityManagerInterface $entityMan
         $entityManager->flush();
         return $this->json(['message' => 'User deleted successfully'], 200);
     }
+
+    #[Route('/{id}', name: 'update', methods: ['PUT'])]
+    public function update(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $product = $entityManager->getRepository(ProductAllData::class)->find($id);
+
+        if (!$product) {
+            return $this->json(['error' => 'Product not found'], 404);
+        }
+
+        if (isset($data['warehouse'])) {
+            $warehouse = $entityManager->getRepository(Warehouse::class)->find($data['warehouse']);
+            if (!$warehouse) {
+                return $this->json(['error' => 'Warehouse not found'], 404);
+            }
+            $product->setWarehouse($warehouse);
+        }
+
+        $product->setName($data['name'] ?? $product->getName());
+        $product->setBrand($data['brand'] ?? $product->getBrand());
+        $product->setPrice($data['price'] ?? $product->getPrice());
+        $product->setPurchasePrice($data['purchase_price'] ?? $product->getPurchasePrice());
+        $product->setStock($data['stock'] ?? $product->getStock());
+        $product->setProductType($data['product_type'] ?? $product->getProductType());
+        if (isset($data['entry_date'])) {
+            $product->setEntryDate(new \DateTime($data['entry_date']));
+        }
+        if (isset($data['expiration_date'])) {
+            $product->setExpirationDate(new \DateTime($data['expiration_date']));
+        }
+        $product->setWeight($data['weight'] ?? $product->getWeight());
+        $product->setDimensions($data['dimensions'] ?? $product->getDimensions());
+        $product->setProductPhoto($data['product_photo'] ?? $product->getProductPhoto());
+
+        $entityManager->flush();
+
+        return $this->json(['message' => 'Product updated successfully'], 200);
+    }
+
 }

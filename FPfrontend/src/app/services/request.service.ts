@@ -38,6 +38,14 @@ export class RequestService {
     return this.http.get<any>(url);
   }
 
+  public deleteProduct(url: string): Observable<any> {
+    return this.http.delete<any>(url);
+  }
+
+  public editProduct(url: string, productData: ProductAllData): Observable<any> {
+    return this.http.put<any>(url, productData);
+  }
+
 //API
 private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
 private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  
