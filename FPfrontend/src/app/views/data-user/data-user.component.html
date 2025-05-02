@@ -16,7 +16,7 @@
         <div class="col-md-3 mx-4 mb-4">
             <p>Información de la cuenta</p>
         </div>
-        <div class="col-md-3 mx-4 mb-4">
+        <div class="col-md-3 mx-4 mb-4"  (click)="closeSesion()">
             <p>Cerrar sesion</p>
         </div>
         <div (click)="openModal()" class="col-md-3 mx-4 mb-4" style="background-color: rgb(195, 58, 58);">
@@ -24,5 +24,5 @@
         </div>
     </div>
 </div>
-<app-modal [isOpen]="isModalOpen" (closeModal)="closeModal()"></app-modal>
+<app-modal [isOpen]="isModalOpen" (closeModal)="closeModal()" (confirmAction)="confirmDelete()"></app-modal>
 <app-footer></app-footer>
