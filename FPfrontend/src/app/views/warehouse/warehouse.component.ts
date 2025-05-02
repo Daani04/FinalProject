@@ -3,13 +3,15 @@ import { FooterComponent } from "../../component/footer/footer.component";
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { Warehouse } from '../../models/response.interface';
+import { ProductAllData } from '../../models/response.interface';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/response.interface';
+import { RouterLink } from '@angular/router';
 
 
 @Component({
   selector: 'app-warehouse',
-  imports: [FooterComponent, ReactiveFormsModule],
+  imports: [FooterComponent, ReactiveFormsModule, RouterLink],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.css'
 })
@@ -18,12 +20,18 @@ export class WarehouseComponent {
   constructor(public service: RequestService, private http: HttpClient) { }
   
   public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
+  public apiProductsUrl: string = "http://localhost:8000/api/data";
 
+  public warehouses: Warehouse[] = [];
+  public products: ProductAllData[] = [];
+
+  public netProfitPerWarehouse: number[] = []; 
+  public totalInventoryValue: number[] = [];    
+  public numOfArticles:string[] = [];
+  public idUserWarehouses: number[] = [];
 
   public formWarehouse: boolean = false;
   public userLocation: string = '';
-
-
 
   public controlForm(): void {
     if (this.formWarehouse === false) {
@@ -40,6 +48,11 @@ export class WarehouseComponent {
     locationWarehouseStreet: new FormControl(''),
     locationWarehouseCommunity: new FormControl('')
   });
+
+  ngOnInit(): void {
+    this.checkWarehouses();
+    this.checkProducts();
+  }
 
   public getStreetForm(): void {
     //this.newWarehouse();
@@ -94,5 +107,77 @@ export class WarehouseComponent {
         (response) => console.log('Almacén creado con éxito:', response),
         (error) => console.error('Error al crear almacén:', error)
     );
-}
+  }
+
+  public checkWarehouses(): void {
+    let userIdString = localStorage.getItem('userId');
+  
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+  
+    let userId = parseInt(userIdString, 10);
+  
+    let apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
+  
+    this.service.takeWarehouse(apiUrl).subscribe({
+      next: (response) => {
+        this.warehouses = response;
+        for (let i = 0; i < this.warehouses.length; i++) {
+          this.idUserWarehouses.push(this.warehouses[i].id?? 0);
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching warehouses:', error);
+      }
+    });
+  }
+
+  public checkProducts(): void {
+    let userIdString = localStorage.getItem('userId');
+    
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+    
+    let userId = parseInt(userIdString, 10);
+    
+    let apiUrl = `${this.apiProductsUrl}/user/${userId}`;
+    
+    this.service.takeProducts(apiUrl).subscribe({
+      next: (response) => {
+        this.products = response;
+  
+        this.numOfArticles = [];
+        this.netProfitPerWarehouse = [];
+        this.totalInventoryValue = [];
+  
+        for (let i = 0; i < this.idUserWarehouses.length; i++) { 
+          let warehouseId = this.idUserWarehouses[i];
+          let count = 0;
+          let totalProfit = 0;
+          let totalValue = 0;
+  
+          for (let j = 0; j < this.products.length; j++) {
+            let product = this.products[j];
+            if (product.warehouse === warehouseId) {
+              count++;
+              totalProfit += (product.price - product.purchase_price);
+              totalValue += product.price;
+            }
+          } 
+          
+          this.numOfArticles[i] = count.toString();
+          this.netProfitPerWarehouse[i] = totalProfit;
+          this.totalInventoryValue[i] = totalValue;
+        }
+      },
+      error: (error) => {
+        console.error('Error al sacar los productos:', error);
+      }
+    });
+  }
+  
 }

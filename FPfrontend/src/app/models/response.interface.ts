@@ -5,11 +5,11 @@ export interface ProductAllData {
     name: string;
     brand: string;
     price: number;
+    purchase_price: number;
     stock: number;
     product_type: string;
     entry_date: string;  
     expiration_date: string | null;  
-    warranty_period: string | null;  
     weight: number;
     dimensions: number;
     product_photo: string | null;  

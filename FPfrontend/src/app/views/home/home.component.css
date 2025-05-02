@@ -80,6 +80,9 @@ h1 {
   margin: 0; 
 }
 
+#userProducts {
+  
+}
 
 #addAndRemove {
   margin-top: 10px;
@@ -132,4 +135,23 @@ form {
   padding: 20px;
 }
 
+.product-table {
+  width: 100%;
+  border-collapse: collapse; 
+  margin: 20px 0;
+}
+
+.product-table th, .product-table td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #aeacac; 
+}
+
+.product-table tr:nth-child(even) {
+  background-color: #5f5d5d; 
+}
+
+.product-table th {
+  font-weight: bold; 
+}
 

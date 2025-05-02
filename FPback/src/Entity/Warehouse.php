@@ -133,5 +133,4 @@ class Warehouse
         $this->sales = $sales;
     }
 
-
 }

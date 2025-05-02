@@ -34,6 +34,10 @@ export class RequestService {
     return this.http.post<any>(url, productData);
   }
 
+  public takeProducts(url: string): Observable<any> {
+    return this.http.get<any>(url);
+  }
+
 //API
 private apiUrl = 'https://api.deepseek.com/v1/chat/completions';  
 private apiKey = 'sk-5d63c70259c44663a0b30b554d62c2bd';  

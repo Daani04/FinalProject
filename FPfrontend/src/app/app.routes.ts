@@ -20,7 +20,7 @@ export const routes: Routes = [
     { path: 'register', component: RegisterComponent},
     { path: 'warehouse', component: WarehouseComponent, canActivate: [AuthGuard] },
     { path: 'graphics', component: GraphicsComponent, canActivate: [AuthGuard] },
-    { path: 'product_data', component: ProductDataComponent, canActivate: [AuthGuard] },
+    { path: 'product_data/:id', component: ProductDataComponent, canActivate: [AuthGuard] }, // se coge con el id del almacen
     { path: 'data_user', component: DataUserComponent, canActivate: [AuthGuard] },
     { path: 'data_map', component: DataMapComponent, canActivate: [AuthGuard] },
     { path: 'chat_ia', component: ChatIAComponent, canActivate: [AuthGuard] }

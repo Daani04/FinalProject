@@ -47,6 +47,9 @@ class ProductAllData
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $product_photo = null;
 
+    #[ORM\Column]
+    private ?float $purchasePrice = null;
+
     /**
      * @return int|null
      */
@@ -237,6 +240,18 @@ class ProductAllData
     public function setWarehouse($warehouse)
     {
         $this->warehouse = $warehouse;
+    }
+
+    public function getPurchasePrice(): ?float
+    {
+        return $this->purchasePrice;
+    }
+
+    public function setPurchasePrice(float $purchasePrice): static
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
     }
 
 

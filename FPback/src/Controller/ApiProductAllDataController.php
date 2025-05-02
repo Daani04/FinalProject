@@ -25,6 +25,7 @@ class ApiProductAllDataController extends AbstractController {
                 'name' => $productData->getName(),
                 'brand' => $productData->getBrand(),
                 'price' => $productData->getPrice(),
+                'purchase_price' => $productData->getPurchasePrice(),
                 'stock' => $productData->getStock(),
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
@@ -51,7 +52,6 @@ class ApiProductAllDataController extends AbstractController {
             $data['stock'],
             $data['product_type'],
             $data['entry_date'],
-            $data['expiration_date'],
             $data['weight'],
             $data['dimensions']
         )) {
@@ -68,6 +68,7 @@ class ApiProductAllDataController extends AbstractController {
         $productData->setName($data['name']);
         $productData->setBrand($data['brand']);
         $productData->setPrice($data['price']);
+        $productData->setPurchasePrice($data['purchase_price']);
         $productData->setStock($data['stock']);
         $productData->setProductType($data['product_type']);
         $productData->setEntryDate(new \DateTime($data['entry_date']));
@@ -80,6 +81,49 @@ class ApiProductAllDataController extends AbstractController {
 
         return $this->json(['message' => 'User created successfully'], 201);
     }
+
+    #[Route('/user/{userId}', name: 'get_products_by_user', methods: ['GET'])]
+public function getProductsByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
+{
+    // Obtener todos los almacenes asociados al usuario
+    $warehouses = $entityManager->getRepository(Warehouse::class)
+        ->findBy(['user' => $userId]);  // Obtenemos todos los almacenes del usuario
+
+    if (!$warehouses) {
+        return $this->json(['error' => 'No warehouses found for this user'], 404);
+    }
+
+    // Obtener los productos asociados a todos los almacenes
+    $products = $entityManager->getRepository(ProductAllData::class)
+        ->findBy(['warehouse' => $warehouses]);  // Buscar productos en todos los almacenes del usuario
+
+    if (!$products) {
+        return $this->json(['message' => 'No products found for this user'], 404);
+    }
+
+    // Preparar los datos de los productos
+    $data = [];
+    foreach ($products as $productData) {
+        $data[] = [
+            'id' => $productData->getId(),
+            'warehouse' => $productData->getWarehouse()->getId(),
+            'name' => $productData->getName(),
+            'brand' => $productData->getBrand(),
+            'price' => $productData->getPrice(),
+            'purchase_price' => $productData->getPurchasePrice(),
+            'stock' => $productData->getStock(),
+            'product_type' => $productData->getProductType(),
+            'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
+            'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
+            'weight' => $productData->getWeight(),
+            'dimensions' => $productData->getDimensions(),
+            'product_photo' => $productData->getProductPhoto(),
+        ];
+    }
+
+    return $this->json($data);
+}
+
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse {

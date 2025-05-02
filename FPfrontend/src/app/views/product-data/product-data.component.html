@@ -50,17 +50,17 @@
             <tr>
                 <th>ID</th>
                 <th>Warehouse ID</th>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>Price</th>
+                <th>Nombre</th>
+                <th>Marca</th>
+                <th>Precio de compra</th>
+                <th>Precio de venta</th>
                 <th>Stock</th>
-                <th>Product Type</th>
-                <th>Expiration Date</th>
-                <th>Warranty Period</th>
-                <th>Weight</th>
-                <th>Dimensions</th>
-                <th>Entry Date</th>
-                <th>Product Photo</th>
+                <th>Categoria</th>
+                <th>Fecha de caducidad</th>
+                <th>Peso</th>
+                <th>Dimensiones</th>
+                <th>Fecha de entrada</th>
+                <th>Foto</th>
                 <th>Modificar</th>
                 <th>Eliminar</th>
             </tr>
@@ -68,19 +68,19 @@
         <tbody>
                 @for (product of products; track $index) {
                 <tr>
-                    <td>{{product.ID}}</td>
-                    <td>{{product.WarehouseID}}</td>
-                    <td>{{product.Name}}</td>
-                    <td>{{product.Brand}}</td>
-                    <td>{{product.Price}}</td>
-                    <td>{{product.Stock}}</td>
-                    <td>{{product.ProductType}}</td>
-                    <td>{{product.ExpirationDate}}</td>
-                    <td>{{product.WarrantyPerios}}</td> 
-                    <td>{{product.Weight}}</td>
-                    <td>{{product.Dimensions}}</td>
-                    <td>{{product.EntryDate}}</td>
-                    <td>{{product.ProductPhoto}}</td>
+                    <td>{{product.id}}</td>
+                    <td>{{product.warehouse}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.brand}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.purchase_price}}</td>
+                    <td>{{product.stock}}</td>
+                    <td>{{product.product_type}}</td>
+                    <td>{{product.expiration_date}}</td>
+                    <td>{{product.weight}}</td>
+                    <td>{{product.dimensions}}</td>
+                    <td>{{product.entry_date}}</td>
+                    <td>{{product.product_photo}}</td>
 
                     <td><img src="/img/editar.png"  alt="editar"></td>
                     <td><img src="/img/papelera.png"  alt="eliminar"></td>

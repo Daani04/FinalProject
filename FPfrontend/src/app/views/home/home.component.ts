@@ -30,6 +30,7 @@ export class HomeComponent {
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
 
   public warehouses: Warehouse[] = [];
+  public products: ProductAllData[] = [];
   public selectedWarehouseId: number = 0;
 
   public cont: number = 0;
@@ -60,7 +61,8 @@ export class HomeComponent {
     weight: new FormControl(''),
     dimensions: new FormControl(''),
     entryDate: new FormControl(''),
-    productPhoto: new FormControl('')
+    productPhoto: new FormControl(''),
+    purchasePrice: new FormControl('')
   });
 
   onSubmit(): void {
@@ -163,6 +165,7 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.checkWarehouses();
+    this.checkProducts();
   }
 
   public newWarehouse(coordinates: any): void {
@@ -233,6 +236,7 @@ public insertProductsWarehouse(): void {
   let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
   let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
   let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
+  let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
 
 
   const products: ProductAllData = {
@@ -245,19 +249,44 @@ public insertProductsWarehouse(): void {
     product_type: this.productForm.value.productType ?? '',
     entry_date: this.productForm.value.entryDate ?? '', 
     expiration_date: this.productForm.value.expirationDate || null,
-    warranty_period: this.productForm.value.warrantyPeriod || null,
     weight:  wigthToNumber,
     dimensions:  dimensionsToNumber,
-    product_photo: this.productForm.value.productPhoto || null
+    product_photo: this.productForm.value.productPhoto || null,
+    purchase_price: purchasePriceToNumber
   };
 
   this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
-    (response) => console.log('Almacén creado con éxito:', response),
-    (error) => console.error('Error al crear almacén:', error)
-);
-  
+    (response) => console.log('Producto añadido con exito:', response),
+    (error) => console.error('Error al añadir producto:', error)
+  );
 }
 
+public checkProducts(): void {
+  let userIdString = localStorage.getItem('userId');
+
+  if (!userIdString) {
+    console.error('Error: No se encontró userId en localStorage');
+    return;
+  }
+
+  let userId = parseInt(userIdString, 10);
+
+  let apiUrl = `${this.apiProductsUrl}/user/${userId}`;
+
+  this.service.takeProducts(apiUrl).subscribe({
+    next: (response) => {
+      this.products = response;
+      
+      for (let i = 0; i < this.products.length; i++) {
+        console.log(this.products[i].name);
+      }
+        
+    },
+    error: (error) => {
+      console.error('Error al sacar los productos:', error);
+    }
+  });
+}
 
 public changeShowForm(): void {
     if (this.showForm === false) {

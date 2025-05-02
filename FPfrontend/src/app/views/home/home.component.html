@@ -66,13 +66,31 @@
           </form>
             <p class="close" (click)="closeWarehouse()">Cerrar</p>
         }
-
-
     </div>
-
+    
     <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Mis productos</h3>
-      @if (warehouses.length !== 0) { 
+      @if (products.length !== 0) {
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Fecha de Entrada</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (product of products; track $index) {
+            <tr>
+              <td>{{ product.name }}</td>
+              <td>{{ product.price }}</td>
+              <td>{{ product.stock }}</td>
+              <td>{{ product.entry_date }}</td>
+            </tr>
+            }
+          </tbody>
+        </table>
       } @else {
         <p class="warehouseP">No tienes ningun productos</p>
       }
@@ -113,8 +131,13 @@
           </div>
           
           <div class="form-group mb-3">
-            <label for="price">Precio</label>
+            <label for="price">Precio de venta</label>
             <input id="price" formControlName="price" type="number" class="form-control" />
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="price">Precio de compra</label>
+            <input id="price" formControlName="purchasePrice" type="number" class="form-control" />
           </div>
           
           <div class="form-group mb-3">
@@ -126,15 +149,15 @@
             <label for="productType">Tipo de Producto</label>
             <input id="productType" formControlName="productType" type="text" class="form-control" />
           </div>
-          
+
           <div class="form-group mb-3">
-            <label for="expirationDate">Fecha de Expiración</label>
-            <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
+            <label for="entryDate">Fecha de Entrada</label>
+            <input id="entryDate" formControlName="entryDate" type="date" class="form-control" />
           </div>
           
           <div class="form-group mb-3">
-            <label for="warrantyPeriod">Período de Garantía</label>
-            <input id="warrantyPeriod" formControlName="warrantyPeriod" type="date" class="form-control" />
+            <label for="expirationDate">Fecha de Expiración(alimenticios)</label>
+            <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
           </div>
           
           <div class="form-group mb-3">
@@ -145,11 +168,6 @@
           <div class="form-group mb-3">
             <label for="dimensions">Dimensiones</label>
             <input id="dimensions" formControlName="dimensions" type="text" class="form-control" />
-          </div>
-          
-          <div class="form-group mb-3">
-            <label for="entryDate">Fecha de Entrada</label>
-            <input id="entryDate" formControlName="entryDate" type="date" class="form-control" />
           </div>
           
           <div class="form-group mb-3">

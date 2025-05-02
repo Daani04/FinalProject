@@ -1,20 +1,25 @@
 <div class="container">
   <h1>MIS ALMACENES</h1>
+  
   <div class="row">
-    <div class="col-12 col-sm-6 col-md-4 mb-4 mt-4 d-flex justify-content-center">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">NOMBRE ALMACEN</h4>
-          <div id="warehouseImgCont">
-            <img id="logo" src="/img/almacen.png" alt="logo">
+    @for (warehouse of warehouses; track $index) {
+      <div class="col-12 col-sm-6 col-md-4 mb-4 mt-4 d-flex justify-content-center">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title"> {{warehouse.name}} </h4>
+            <div id="warehouseImgCont">
+              <img id="logo" src="/img/almacen.png" alt="logo">
+            </div>
+            <p class="card-text">Numero de articulos: {{numOfArticles[$index]}} </p>
+            <p class="card-text">Ganancias estimadas: {{netProfitPerWarehouse[$index]}}€ </p>
+            <p class="card-text">Valor total: {{totalInventoryValue[$index]}}€ </p>
+            <!--Envia el id del almacen-->
+            <a [routerLink]="['/product_data', warehouse.id]" class="card-link">Ver artículos</a> 
           </div>
-          <p class="card-text">Numero de articulos: </p>
-          <p class="card-text">Capacidad: </p>
-          <p class="card-text">??</p>
-          <a href="#" class="card-link">Ver articulos</a>
         </div>
       </div>
-    </div>
+    }
+
 
     <!-- Revisar bien el formulario ya que en la pagina de inicio pide mas datos para crar el almacen -->
     <div class="col-12 col-sm-6 col-md-4 mb-4 mt-4 d-flex justify-content-center">

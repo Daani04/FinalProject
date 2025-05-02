@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductSoldRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductSoldRepository::class)]
@@ -26,6 +27,36 @@ class ProductSold
 
     #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $sale_date = null;
+
+    #[ORM\Column]
+    private ?float $purchasePrice = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $brand = null;
+
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $product_type = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $expiration_date = null;
+
+    #[ORM\Column]
+    private ?float $weight = null;
+
+    #[ORM\Column]
+    private ?float $dimensions = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $entry_date = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $productPhoto = null;
 
     /**
      * @return int|null
@@ -105,6 +136,126 @@ class ProductSold
     public function setProductData($productData)
     {
         $this->productData = $productData;
+    }
+
+    public function getPurchasePrice(): ?float
+    {
+        return $this->purchasePrice;
+    }
+
+    public function setPurchasePrice(float $purchasePrice): static
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getBrand(): ?string
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(string $brand): static
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getProductType(): ?string
+    {
+        return $this->product_type;
+    }
+
+    public function setProductType(string $product_type): static
+    {
+        $this->product_type = $product_type;
+
+        return $this;
+    }
+
+    public function getExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->expiration_date;
+    }
+
+    public function setExpirationDate(\DateTimeInterface $expiration_date): static
+    {
+        $this->expiration_date = $expiration_date;
+
+        return $this;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(float $weight): static
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
+    public function getDimensions(): ?float
+    {
+        return $this->dimensions;
+    }
+
+    public function setDimensions(float $dimensions): static
+    {
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
+    public function getEntryDate(): ?\DateTimeInterface
+    {
+        return $this->entry_date;
+    }
+
+    public function setEntryDate(\DateTimeInterface $entry_date): static
+    {
+        $this->entry_date = $entry_date;
+
+        return $this;
+    }
+
+    public function getProductPhoto(): ?string
+    {
+        return $this->productPhoto;
+    }
+
+    public function setProductPhoto(string $productPhoto): static
+    {
+        $this->productPhoto = $productPhoto;
+
+        return $this;
     }
 
 }
