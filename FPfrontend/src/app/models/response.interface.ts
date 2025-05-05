@@ -21,7 +21,7 @@ export interface ProductSold {
     quantity: number;
     sale_date: string;  
 }
-//COMPROBADO/CORRECTO
+
 export interface User {
     id?: number | null;  
     username: string;

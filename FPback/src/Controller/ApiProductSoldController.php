@@ -142,8 +142,49 @@ class ApiProductSoldController extends AbstractController {
     
         return $this->json(['message' => 'Sale recorded successfully'], Response::HTTP_CREATED);
     }
-    
 
+    #[Route('/user/{userId}', name: 'sales_by_user', methods: ['GET'])]
+    public function getSalesByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Obtener todos los almacenes asociados al usuario
+        $warehouses = $entityManager->getRepository(Warehouse::class)
+            ->findBy(['user' => $userId]);
+
+        if (!$warehouses) {
+            return $this->json(['error' => 'No warehouses found for this user'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Obtener todas las ventas asociadas a los almacenes del usuario
+        $sales = $entityManager->getRepository(ProductSold::class)
+            ->findBy(['warehouse' => $warehouses]);
+
+        if (!$sales) {
+            return $this->json(['message' => 'No sales found for this user'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Preparar los datos de las ventas
+        $data = [];
+        foreach ($sales as $sale) {
+            $data[] = [
+                'id' => $sale->getId(),
+                'product' => $sale->getProductData()->getId(),
+                'warehouse' => $sale->getWarehouse()->getId(),
+                'quantity' => $sale->getQuantity(),
+                'sale_date' => $sale->getSaleDate()->format('Y-m-d H:i:s'),
+                'name' => $sale->getName(),
+                'brand' => $sale->getBrand(),
+                'price' => $sale->getPrice(),
+                'purchase_price' => $sale->getPurchasePrice(),
+                'product_type' => $sale->getProductType(),
+                'entry_date' => $sale->getEntryDate()?->format('Y-m-d H:i:s'),
+                'expiration_date' => $sale->getExpirationDate()?->format('Y-m-d H:i:s'),
+                'product_photo' => $sale->getProductPhoto(),
+                'barcode' => $sale->getBarcode(),
+            ];
+        }
+
+        return $this->json($data);
+    }
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse

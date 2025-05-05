@@ -4,7 +4,7 @@ import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { data } from 'jquery';
-import { ProductAllData } from '../../models/response.interface';
+import { ProductAllData, ProductSold } from '../../models/response.interface';
 
 @Component({
   selector: 'app-graphics',
@@ -17,8 +17,10 @@ export class GraphicsComponent implements OnInit {
   constructor(public service: RequestService) { }
 
   public apiProductsUrl: string = "http://localhost:8000/api/data";
+  public apiSalesUrl: string = "http://localhost:8000/api/sales";
 
   public products: ProductAllData [] = [];
+  public productsSold: ProductSold [] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -66,6 +68,7 @@ export class GraphicsComponent implements OnInit {
     });
     this.checkAndLoadGraphics();
     this.checkProducts();
+    this.getProductsSold();
   }
 
   onSubmitGraphics(): void {
@@ -219,9 +222,31 @@ export class GraphicsComponent implements OnInit {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.products = response;
+      },
+      error: (error) => {
+        console.error('Error al sacar los productos:', error);
+      }
+    });
+  }
+
+  public getProductsSold(): void {
+    let userIdString = localStorage.getItem('userId');
+  
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+  
+    let userId = parseInt(userIdString, 10);
+  
+    let apiUrl = `${this.apiSalesUrl}/user/${userId}`;
+
+    this.service.takeProducts(apiUrl).subscribe({
+      next: (response) => {
+        this.productsSold = response;
         
-        for (let i = 0; i < this.products.length; i++) {
-          console.log(this.products[i].name);
+        for (let i = 0; i < this.productsSold.length; i++) {
+          console.log('Productos vendidos: ', this.productsSold[i]);
         }
           
       },
