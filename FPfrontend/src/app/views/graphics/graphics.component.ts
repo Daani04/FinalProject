@@ -65,7 +65,7 @@ export class GraphicsComponent implements OnInit {
       check3: this.cont3 === 1
     });
     this.checkAndLoadGraphics();
-    this.getProducts();
+    this.checkProducts();
   }
 
   onSubmitGraphics(): void {
@@ -206,15 +206,29 @@ export class GraphicsComponent implements OnInit {
     location.reload();//Recarga la pagina para aplicar los cambios
   }
 
-   public getProducts(): void {
-    
-    this.service.takeProducts(this.apiProductsUrl).subscribe({
+  public checkProducts(): void {
+    let userIdString = localStorage.getItem('userId');
+  
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+  
+    let userId = parseInt(userIdString, 10);
+  
+    let apiUrl = `${this.apiProductsUrl}/user/${userId}`;
+  
+    this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
-        this.products = response as ProductAllData[]; 
-        console.log('Productos:', this.products);
+        this.products = response;
+        
+        for (let i = 0; i < this.products.length; i++) {
+          console.log(this.products[i].name);
+        }
+          
       },
       error: (error) => {
-        console.error('Error al seleccionar el producto:', error);
+        console.error('Error al sacar los productos:', error);
       }
     });
   }
