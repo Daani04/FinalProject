@@ -69,6 +69,28 @@ export class GraphicsComponent implements OnInit {
     this.checkAndLoadGraphics();
     this.checkProducts();
     this.getProductsSold();
+    //REVISAR LA FUNCION DE MODIFICAR PRODUCTOS, HAY QUE AÑADIR UNA BARRA LATERAL DE DESPLAZAMIENTO
+    //NO FUNCIONA LA FUNCION DE ELIMINAR PRODUCTOS
+    //REVISAR GRAFICO GENERADO POR IA, NO COLAPSA BIEN
+    //REVISAR PANTALLAS DE CARGA, NO FUNCIONAN BIEN
+
+    /* REVISAR BIEN, NO FUNCIONA
+    let interval = setInterval(() => {
+      if (this.productsSold.length > 0) {
+        const data: number[] = [];
+  
+        for (let i = 0; i < this.productsSold.length; i++) {
+          data.push(this.productsSold[i].quantity);
+        }
+  
+        this.barSale.datasets[0].data = data;
+        console.log('Datos de productos vendidos:', this.productsSold);
+        console.log('Datos para gráfico:', this.barSale.datasets[0].data);
+        
+        clearInterval(interval);
+      }
+    }, 100);
+    */  
   }
 
   onSubmitGraphics(): void {
@@ -243,25 +265,21 @@ export class GraphicsComponent implements OnInit {
 
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
-        this.productsSold = response;
+        this.productsSold = response;  
         
-        for (let i = 0; i < this.productsSold.length; i++) {
-          console.log('Productos vendidos: ', this.productsSold[i]);
-        }
-          
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
       }
     });
-  }
+  } 
 
   //GRAFICOS PREDEFINIDOS
-  public barSale = {  
+  public barSale: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ventas anuales',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+      data: [],  
       backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA'],
       borderColor: '#5B3F7C', 
       borderWidth: 1
