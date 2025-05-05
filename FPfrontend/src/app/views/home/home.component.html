@@ -70,6 +70,7 @@
     
     <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Mis productos</h3>
+      <h5> {{randomWarehouseName}} </h5>
       @if (products.length !== 0) {
         <table class="product-table">
           <thead>
@@ -94,6 +95,15 @@
       } @else {
         <p class="warehouseP">No tienes ningun productos</p>
       }
+
+      <div class="pagination-container">
+        <img id="lefArrow" src="/img/lefArrow.png" alt="flecha izquierda" (click)="beforePage()" class="pagination-arrow">
+        
+        <p class="pagination-text">Página {{actualPage}} de {{totalPages}}</p>
+        
+        <img id="rigArrow" src="/img/rigArrow.png" alt="flecha derecha" (click)="nextPage()" class="pagination-arrow">
+      </div>
+
         @if (contInsertionData === 1) {
           <form [formGroup]="selectWarehouseForInsertProducts" id="selectWarehouseForm" class="text-center">
             <label for="com" class="form-label">Seleccionar almacen</label>

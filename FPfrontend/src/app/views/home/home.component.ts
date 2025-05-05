@@ -21,7 +21,7 @@ import { ModalScannerComponent } from "../../component/modal-scanner/modal-scann
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  
+
 
   constructor(public service: RequestService, private http: HttpClient) { }
 
@@ -34,7 +34,7 @@ export class HomeComponent {
   public selectedWarehouseId: number = 0;
 
   public cont: number = 0;
-  public cont2: number = 0; 
+  public cont2: number = 0;
 
   public selectedWarehouse: boolean = false;
 
@@ -46,6 +46,16 @@ export class HomeComponent {
 
   public openModalScanner: boolean = false;
 
+  public filtratedProductsforWarehouseId: any[] = [];
+  public productsUser: any[] = [];
+
+  public page: number = 0;
+  public itemsPerPage: number = 4;
+  public totalPages: number = 0;
+  public actualPage: number = 1;
+
+  public randomWarehouseName: string = '';
+    
   public insertionMethod(): void {
     this.contInsertionData = 1;
   }
@@ -66,18 +76,18 @@ export class HomeComponent {
   });
 
   onSubmit(): void {
-      console.log('Formulario enviado', this.productForm.value);
+    console.log('Formulario enviado', this.productForm.value);
   }
 
 
   getStreet(lat: number, lon: number): Observable<string> {
     const url = `${this.apiLocationUrl}&lat=${lat}&lon=${lon}`;
     return this.http.get<any>(url).pipe(
-      map(response => 
-        response.address?.village || 
-        response.address?.town || 
-        response.address?.city || 
-        'Localidad no encontrada' 
+      map(response =>
+        response.address?.village ||
+        response.address?.town ||
+        response.address?.city ||
+        'Localidad no encontrada'
       )
     );
   }
@@ -94,14 +104,14 @@ export class HomeComponent {
     selectWarehouse: new FormControl('')
   });
 
-  public showOptionForInsertData(): void{
+  public showOptionForInsertData(): void {
     this.selectedWarehouse = true;
     console.log(this.selectWarehouseForInsertProducts.value.selectWarehouse);
 
     for (let i = 0; i < this.warehouses.length; i++) {
       if (this.warehouses[i].name === this.selectWarehouseForInsertProducts.value.selectWarehouse) {
         this.selectedWarehouseId = this.warehouses[i].id ?? 0;
-        break; 
+        break;
       }
     }
   }
@@ -115,47 +125,46 @@ export class HomeComponent {
   }
 
   public getStreetForm(): void {
-    //this.getLocation();
     //this.newWarehouse();
     this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
 
-  /*
-  public getLocation(): void {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          console.log("Ubicación obtenida:", position.coords);
-          this.getStreet(position.coords.latitude, position.coords.longitude).subscribe(
-            (pueblo) => {
-              this.userLocation = pueblo;
-              console.log("Localidad obtenida:", this.userLocation);  
-            },
-            (error) => {
-              console.error("Error obteniendo la localidad:", error);
-              this.userLocation = "Error obteniendo la localidad";
-            }
-          );
-        },
-        (error) => {
-          this.userLocation = `Error: ${error.message}`;
-          console.error("No se pudo obtener la ubicación:", this.userLocation);
-        }
-      );
-    } else {
-      this.userLocation = "Error: Geolocalización no soportada";
-      console.error(this.userLocation);
+  public showProducts(): void {
+    this.products = this.filtratedProductsforWarehouseId.slice(this.page, this.page + this.itemsPerPage);
+  }
+
+  public takePage(): void {
+    const takeActualPage = Math.floor(this.page / this.itemsPerPage) + 1;
+    const totalPages = Math.ceil(this.filtratedProductsforWarehouseId.length / this.itemsPerPage);
+
+    this.actualPage = takeActualPage;
+    this.totalPages = totalPages;
+  }
+
+  public nextPage(): void {
+    if (this.page + this.itemsPerPage < this.filtratedProductsforWarehouseId.length) {
+      this.page += this.itemsPerPage;
+      this.showProducts();
+    }
+    this.takePage();
+  }
+
+  public beforePage(): void {
+    if (this.page > 0) {
+      this.page -= this.itemsPerPage;
+      this.showProducts();
+      this.takePage();
     }
   }
-*/
-  getLocationCoordinates(city: any, street: any, comunity: any ) {
+
+  getLocationCoordinates(city: any, street: any, comunity: any) {
     this.service.getLocationCoordinates(city, street, comunity).subscribe(
       (res) => {
         let coordinates = res.choices[0].message.content;
         console.log(coordinates);
         this.newWarehouse(coordinates);
-        
+
       },
       (error) => {
         console.error('Error al generar notificación:', error);
@@ -165,130 +174,134 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.checkWarehouses();
-    this.checkProducts();
   }
 
   public newWarehouse(coordinates: any): void {
     let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
-    let coordinatesString = String(coordinates); 
+    let coordinatesString = String(coordinates);
 
     if (!userIdString) {
-        console.error('Error: No se encontró userId en localStorage');
-        return;
+      console.error('Error: No se encontró userId en localStorage');
+      return;
     }
 
     let userId = parseInt(userIdString, 10); // Convierte userId a número
 
     if (isNaN(userId)) {
-        console.error('Error: userId en localStorage no es un número válido');
-        return;
+      console.error('Error: userId en localStorage no es un número válido');
+      return;
     }
     console.log('Id del usuario', userId);
     console.log('Nombre del almacen', this.reactiveForm.value.warehouseName);
     console.log('Coordenadas del almacen', coordinatesString);
 
     const warehouseData: Warehouse = {
-      id: null,  
-      user_id: userId,  
-      name: this.reactiveForm.value.warehouseName ?? '',  
-      location: coordinatesString ?? '',  
+      id: null,
+      user_id: userId,
+      name: this.reactiveForm.value.warehouseName ?? '',
+      location: coordinatesString ?? '',
     };
 
     console.log('Datos enviados al servidor:', warehouseData);
 
     this.service.createWarehouse(this.apiWarehouseUrl, warehouseData).subscribe(
-        (response) => console.log('Almacén creado con éxito:', response),
-        (error) => console.error('Error al crear almacén:', error)
+      (response) => console.log('Almacén creado con éxito:', response),
+      (error) => console.error('Error al crear almacén:', error)
     );
-}
-
-public checkWarehouses(): void {
-  let userIdString = localStorage.getItem('userId');
-
-  if (!userIdString) {
-    console.error('Error: No se encontró userId en localStorage');
-    return;
   }
 
-  let userId = parseInt(userIdString, 10);
+  public checkWarehouses(): void {
+    let userIdString = localStorage.getItem('userId');
 
-  let apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
-
-  this.service.takeWarehouse(apiUrl).subscribe({
-    next: (response) => {
-      this.warehouses = response;
-      /*
-      for (let i = 0; i < this.warehouses.length; i++) {
-        console.log(this.warehouses[i].name);
-      }
-        */
-    },
-    error: (error) => {
-      console.error('Error fetching warehouses:', error);
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
     }
-  });
-}
 
+    let userId = parseInt(userIdString, 10);
 
-public insertProductsWarehouse(): void {
+    let apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
 
-  let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
-  let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
-  let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
-  let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
-  let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
+    this.service.takeWarehouse(apiUrl).subscribe({
+      next: (response) => {
+        this.warehouses = response;
 
-
-  const products: ProductAllData = {
-    id: null,
-    warehouse: this.selectedWarehouseId,
-    name: this.productForm.value.name ?? '',
-    brand: this.productForm.value.brand ?? '',
-    price: priceToNumber,
-    stock: stockToNumber,
-    product_type: this.productForm.value.productType ?? '',
-    entry_date: this.productForm.value.entryDate ?? '', 
-    expiration_date: this.productForm.value.expirationDate || null,
-    weight:  wigthToNumber,
-    dimensions:  dimensionsToNumber,
-    product_photo: this.productForm.value.productPhoto || null,
-    purchase_price: purchasePriceToNumber
-  };
-
-  this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
-    (response) => console.log('Producto añadido con exito:', response),
-    (error) => console.error('Error al añadir producto:', error)
-  );
-}
-
-public checkProducts(): void {
-  let userIdString = localStorage.getItem('userId');
-
-  if (!userIdString) {
-    console.error('Error: No se encontró userId en localStorage');
-    return;
+        let randomIndex = Math.floor(Math.random() * this.warehouses.length);
+        let randomWarehouse = this.warehouses[randomIndex];
+        this.takeWarehouseProducts(randomWarehouse.id);
+        this.randomWarehouseName = randomWarehouse.name ?? '';
+      },
+      error: (error) => {
+        console.error('Error fetching warehouses:', error);
+      }
+    });
   }
 
-  let userId = parseInt(userIdString, 10);
+  public insertProductsWarehouse(): void {
 
-  let apiUrl = `${this.apiProductsUrl}/user/${userId}`;
+    let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
+    let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
+    let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
+    let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
+    let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
 
-  this.service.takeProducts(apiUrl).subscribe({
-    next: (response) => {
-      this.products = response;
-      
-      for (let i = 0; i < this.products.length; i++) {
-        console.log(this.products[i].name);
-      }
-        
-    },
-    error: (error) => {
-      console.error('Error al sacar los productos:', error);
+
+    const products: ProductAllData = {
+      id: null,
+      warehouse: this.selectedWarehouseId,
+      name: this.productForm.value.name ?? '',
+      brand: this.productForm.value.brand ?? '',
+      price: priceToNumber,
+      stock: stockToNumber,
+      product_type: this.productForm.value.productType ?? '',
+      entry_date: this.productForm.value.entryDate ?? '',
+      expiration_date: this.productForm.value.expirationDate || null,
+      weight: wigthToNumber,
+      dimensions: dimensionsToNumber,
+      product_photo: this.productForm.value.productPhoto || null,
+      purchase_price: purchasePriceToNumber
+    };
+
+    this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
+      (response) => console.log('Producto añadido con exito:', response),
+      (error) => console.error('Error al añadir producto:', error)
+    );
+  }
+
+  public takeWarehouseProducts(warehouse_id: any): void {
+    let userIdString = localStorage.getItem('userId');
+
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
     }
-  });
-}
 
-public changeShowForm(): void {
+    let userId = parseInt(userIdString, 10);
+    let apiUrl = `${this.apiProductsUrl}/user/${userId}`;
+
+    this.service.takeProducts(apiUrl).subscribe({
+      next: (response) => {
+        this.productsUser = response;
+        this.filtratedProductsforWarehouseId = [];
+
+        for (let i = 0; i < this.productsUser.length; i++) {
+          if (this.productsUser[i].warehouse == warehouse_id) {
+            this.filtratedProductsforWarehouseId.push(this.productsUser[i]);
+          }
+        }
+
+        this.page = 0; // 👈 Solución clave aquí
+        this.showProducts();
+        this.takePage();
+      },
+      error: (error) => {
+        console.error('Error al sacar los productos:', error);
+      }
+    });
+  }
+
+
+  public changeShowForm(): void {
     if (this.showForm === false) {
       this.showForm = true;
     } else {
@@ -312,23 +325,23 @@ public changeShowForm(): void {
     this.openModalScanner = false;
   }
 
-  public lineExitProducts = {  
+  public lineExitProducts = {
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
       label: 'Entrada de productos',
       data: [5, 15, 10, 20, 18],
-      borderColor: '#8F5B8C', 
+      borderColor: '#8F5B8C',
       borderWidth: 2,
       fill: false
     }]
   };
-  
-  public lineEntrateProducts = {  
+
+  public lineEntrateProducts = {
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
     datasets: [{
       label: 'Salida de productos',
       data: [5, 15, 10, 20, 18],
-      borderColor: '#6F4D94', 
+      borderColor: '#6F4D94',
       borderWidth: 2,
       fill: false
     }]

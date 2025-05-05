@@ -112,7 +112,7 @@ class ApiProductAllDataController extends AbstractController {
         $entityManager->persist($productData);
         $entityManager->flush();
 
-        return $this->json(['message' => 'User created successfully'], 201);
+        return $this->json(['message' => 'Product added successfully'], 201);
     }
 
     #[Route('/user/{userId}', name: 'get_products_by_user', methods: ['GET'])]
