@@ -26,6 +26,8 @@ export class HomeComponent {
   public apiProductsUrl: string = "http://localhost:8000/api/data";
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
 
+  public userName = localStorage.getItem('username');
+
   public warehouses: Warehouse[] = [];
   public products: ProductAllData[] = [];
   public selectedWarehouseId: number = 0;

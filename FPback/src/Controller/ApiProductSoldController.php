@@ -47,6 +47,13 @@ class ApiProductSoldController extends AbstractController {
             return $this->json(['error' => 'Invalid quantity'], Response::HTTP_BAD_REQUEST);
         }
     
+        // Validación de fecha de venta
+        try {
+            $saleDate = new \DateTime($data['sale_date']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Invalid sale date'], Response::HTTP_BAD_REQUEST);
+        }
+    
         // Buscar el producto y el almacén
         $product = $entityManager->getRepository(ProductAllData::class)->find($data['product']);
         $warehouse = $entityManager->getRepository(Warehouse::class)->find($data['warehouse']);
@@ -79,7 +86,7 @@ class ApiProductSoldController extends AbstractController {
         if ($existingSale) {
             // Si ya existe una venta, sumamos la cantidad a la venta existente
             $existingSale->setQuantity($existingSale->getQuantity() + $data['quantity']);
-            $entityManager->persist($existingSale); 
+            $entityManager->persist($existingSale);  // Persistimos la venta actualizada
         } else {
             // Si no existe una venta, creamos una nueva
             $sale = new ProductSold();
@@ -125,15 +132,19 @@ class ApiProductSoldController extends AbstractController {
                 $sale->setBarcode($product->getBarcode());
             }
     
+            // Persistimos la nueva venta
             $entityManager->persist($sale);
         }
     
+        // Persistimos el producto con el stock actualizado
         $entityManager->persist($product);
         $entityManager->flush();
     
         return $this->json(['message' => 'Sale recorded successfully'], Response::HTTP_CREATED);
     }
     
+
+
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse
     {

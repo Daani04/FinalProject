@@ -162,8 +162,9 @@ img {
     background-color: rgb(34, 31, 31);
     padding: 2rem;
     border-radius: 10px;
-    width: 90%;
+    width: 80%;
     max-width: 1200px;
+    height: 700px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     color: white;
   }
@@ -172,7 +173,6 @@ img {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.2rem;
   }
   
   .product-form .form-group {
@@ -188,7 +188,7 @@ img {
   }
   
   .product-form .form-control {
-    padding: 0.8rem;
+    padding: 0.7rem;
     font-size: 1rem;
     border-radius: 6px;
     border: none;
@@ -203,7 +203,6 @@ img {
   #closeModal {
     padding: 7px;
     transition: background-color 0.5s ease, transform 0.5s ease;
-    margin-bottom: 0;
   }
   
   #closeModal:hover {

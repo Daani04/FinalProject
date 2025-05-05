@@ -207,6 +207,7 @@ export class ProductDataComponent {
   }
 
   public editProduct(): void {
+    window.location.reload();
 
     let selectOneProductUrl = `${this.apiProductsUrl}/${this.productId}`;
 

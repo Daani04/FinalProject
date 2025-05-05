@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';  
 import { Router } from '@angular/router';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
 
   constructor(public service: RequestService, private router: Router) { }
 
-  public apiUrlUser: string = 'http://127.0.0.1:8000/api/user/login';  
+  public apiUrlUser: string = 'http://127.0.0.1:8000/api/user/login'; 
 
   public errorMessaje: string = "Usuario o contraseña incorrectos";
   public cont: number = 0;
@@ -28,6 +29,7 @@ export class LoginComponent {
   }
 
   public loginUser(): void {
+
     let email = this.reactiveForm.value.email ?? '';
     let password = this.reactiveForm.value.password ?? '';
 

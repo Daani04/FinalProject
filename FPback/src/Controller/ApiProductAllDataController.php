@@ -111,6 +111,58 @@ class ApiProductAllDataController extends AbstractController {
         return $this->json(['message' => 'Product added successfully'], 201);
     }
 
+    #[Route('/bulk', name: 'bulk_create', methods: ['POST'])]
+    public function bulkCreate(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $productsData = json_decode($request->getContent(), true);
+
+        if (!is_array($productsData)) {
+            return $this->json(['error' => 'Invalid JSON data, expected an array of products'], 400);
+        }
+
+        $createdCount = 0;
+        foreach ($productsData as $data) {
+            if (!isset(
+                $data['warehouse'],
+                $data['name'],
+                $data['brand'],
+                $data['price'],
+                $data['stock'],
+                $data['barcode'],
+                $data['product_type'],
+                $data['entry_date']
+            )) {
+                continue; // Saltar si faltan campos obligatorios
+            }
+
+            $warehouse = $entityManager->getRepository(Warehouse::class)->find($data['warehouse']);
+            if (!$warehouse) {
+                continue; // Saltar si el almacén no existe
+            }
+
+            $productData = new ProductAllData();
+            $productData->setWarehouse($warehouse);
+            $productData->setName($data['name']);
+            $productData->setBrand($data['brand']);
+            $productData->setPrice($data['price']);
+            $productData->setPurchasePrice($data['purchase_price'] ?? null);
+            $productData->setStock($data['stock']);
+            $productData->setBarcode($data['barcode']);
+            $productData->setProductType($data['product_type']);
+            $productData->setEntryDate(new \DateTime($data['entry_date']));
+            $productData->setExpirationDate(isset($data['expiration_date']) ? new \DateTime($data['expiration_date']) : null);
+            $productData->setProductPhoto($data['product_photo'] ?? null);
+
+            $entityManager->persist($productData);
+            $createdCount++;
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['message' => "$createdCount products added successfully"], 201);
+    }
+
+
     #[Route('/user/{userId}', name: 'get_products_by_user', methods: ['GET'])]
     public function getProductsByUser(int $userId, EntityManagerInterface $entityManager): JsonResponse
     {
