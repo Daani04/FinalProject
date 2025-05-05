@@ -46,17 +46,14 @@ class ProductSold
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $expiration_date = null;
 
-    #[ORM\Column]
-    private ?float $weight = null;
-
-    #[ORM\Column]
-    private ?float $dimensions = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entry_date = null;
 
     #[ORM\Column(length: 255)]
     private ?string $productPhoto = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $barcode = null;
 
     /**
      * @return int|null
@@ -210,30 +207,6 @@ class ProductSold
         return $this;
     }
 
-    public function getWeight(): ?float
-    {
-        return $this->weight;
-    }
-
-    public function setWeight(float $weight): static
-    {
-        $this->weight = $weight;
-
-        return $this;
-    }
-
-    public function getDimensions(): ?float
-    {
-        return $this->dimensions;
-    }
-
-    public function setDimensions(float $dimensions): static
-    {
-        $this->dimensions = $dimensions;
-
-        return $this;
-    }
-
     public function getEntryDate(): ?\DateTimeInterface
     {
         return $this->entry_date;
@@ -254,6 +227,18 @@ class ProductSold
     public function setProductPhoto(string $productPhoto): static
     {
         $this->productPhoto = $productPhoto;
+
+        return $this;
+    }
+
+    public function getBarcode(): ?int
+    {
+        return $this->barcode;
+    }
+
+    public function setBarcode(?int $barcode): static
+    {
+        $this->barcode = $barcode;
 
         return $this;
     }

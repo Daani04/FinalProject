@@ -88,10 +88,7 @@ export class HeaderComponent {
           Tipo: ${product.product_type}
           Fecha de Entrada: ${product.entry_date}
           Fecha de caducidad: ${product.expiration_date} 
-          Expiración: ${product.expiration_date}
-          Peso: ${product.weight}
-          Dimensiones: ${product.dimensions}
-  
+          Codigo de barras: ${product.barcode}          
           -----------------------------------
         `;
       });

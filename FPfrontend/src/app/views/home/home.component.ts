@@ -65,11 +65,9 @@ export class HomeComponent {
     brand: new FormControl(''),
     price: new FormControl(''),
     stock: new FormControl(''),
+    barcode: new FormControl(''),
     productType: new FormControl(''),
     expirationDate: new FormControl(''),
-    warrantyPeriod: new FormControl(''),
-    weight: new FormControl(''),
-    dimensions: new FormControl(''),
     entryDate: new FormControl(''),
     productPhoto: new FormControl(''),
     purchasePrice: new FormControl('')
@@ -241,8 +239,7 @@ export class HomeComponent {
 
     let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
     let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
-    let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
-    let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
+    let barcodeToNumber = parseInt(this.productForm.value.barcode ?? '0');
     let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
 
 
@@ -253,11 +250,10 @@ export class HomeComponent {
       brand: this.productForm.value.brand ?? '',
       price: priceToNumber,
       stock: stockToNumber,
+      barcode: barcodeToNumber,
       product_type: this.productForm.value.productType ?? '',
       entry_date: this.productForm.value.entryDate ?? '',
       expiration_date: this.productForm.value.expirationDate || null,
-      weight: wigthToNumber,
-      dimensions: dimensionsToNumber,
       product_photo: this.productForm.value.productPhoto || null,
       purchase_price: purchasePriceToNumber
     };

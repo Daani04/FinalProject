@@ -27,11 +27,10 @@ class ApiProductAllDataController extends AbstractController {
                 'price' => $productData->getPrice(),
                 'purchase_price' => $productData->getPurchasePrice(),
                 'stock' => $productData->getStock(),
+                'barcode' => $productData->getBarcode(),
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
                 'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'weight' => $productData->getWeight(),
-                'dimensions' => $productData->getDimensions(),
                 'product_photo' => $productData->getProductPhoto(),
             ];
         }
@@ -59,11 +58,10 @@ class ApiProductAllDataController extends AbstractController {
             'price' => $productData->getPrice(),
             'purchase_price' => $productData->getPurchasePrice(),
             'stock' => $productData->getStock(),
+            'barcode' => $productData->getBarcode(),
             'product_type' => $productData->getProductType(),
             'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
             'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-            'weight' => $productData->getWeight(),
-            'dimensions' => $productData->getDimensions(),
             'product_photo' => $productData->getProductPhoto(),
         ];
 
@@ -83,10 +81,9 @@ class ApiProductAllDataController extends AbstractController {
             $data['brand'],
             $data['price'],
             $data['stock'],
+            $data['barcode'],
             $data['product_type'],
             $data['entry_date'],
-            $data['weight'],
-            $data['dimensions']
         )) {
             return $this->json(['error' => 'Missing required fields'], 400);
         }
@@ -103,11 +100,10 @@ class ApiProductAllDataController extends AbstractController {
         $productData->setPrice($data['price']);
         $productData->setPurchasePrice($data['purchase_price']);
         $productData->setStock($data['stock']);
+        $productData->setBarcode($data['barcode']);
         $productData->setProductType($data['product_type']);
         $productData->setEntryDate(new \DateTime($data['entry_date']));
         $productData->setExpirationDate(new \DateTime($data['expiration_date']));
-        $productData->setWeight($data['weight']);
-        $productData->setDimensions($data['dimensions']);
 
         $entityManager->persist($productData);
         $entityManager->flush();
@@ -145,11 +141,10 @@ class ApiProductAllDataController extends AbstractController {
                 'price' => $productData->getPrice(),
                 'purchase_price' => $productData->getPurchasePrice(),
                 'stock' => $productData->getStock(),
+                'barcode' => $productData->getBarcode(),
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
                 'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'weight' => $productData->getWeight(),
-                'dimensions' => $productData->getDimensions(),
                 'product_photo' => $productData->getProductPhoto(),
             ];
         }
@@ -193,6 +188,7 @@ class ApiProductAllDataController extends AbstractController {
         $product->setPrice($data['price'] ?? $product->getPrice());
         $product->setPurchasePrice($data['purchase_price'] ?? $product->getPurchasePrice());
         $product->setStock($data['stock'] ?? $product->getStock());
+        $product->setBarcode($data['barcode'] ?? $product->getBarcode());
         $product->setProductType($data['product_type'] ?? $product->getProductType());
         if (isset($data['entry_date'])) {
             $product->setEntryDate(new \DateTime($data['entry_date']));
@@ -200,8 +196,6 @@ class ApiProductAllDataController extends AbstractController {
         if (isset($data['expiration_date'])) {
             $product->setExpirationDate(new \DateTime($data['expiration_date']));
         }
-        $product->setWeight($data['weight'] ?? $product->getWeight());
-        $product->setDimensions($data['dimensions'] ?? $product->getDimensions());
         $product->setProductPhoto($data['product_photo'] ?? $product->getProductPhoto());
 
         $entityManager->flush();

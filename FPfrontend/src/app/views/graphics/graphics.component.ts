@@ -192,9 +192,7 @@ export class GraphicsComponent implements OnInit {
         Fecha de Entrada: ${product.entry_date}
         Fecha de caducidad: ${product.expiration_date} 
         Expiración: ${product.expiration_date}
-        Peso: ${product.weight}
-        Dimensiones: ${product.dimensions}
-
+        IdAlmacen: ${product.warehouse}
         -----------------------------------
       `;
     });

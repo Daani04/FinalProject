@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductAllDataRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductAllDataRepository::class)]
@@ -38,17 +39,14 @@ class ProductAllData
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $expiration_date = null;
 
-    #[ORM\Column]
-    private ?int $weight = null;
-
-    #[ORM\Column]
-    private ?int $dimensions = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $product_photo = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $purchasePrice = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $barcode = null;  
 
     /**
      * @return int|null
@@ -85,33 +83,9 @@ class ProductAllData
     /**
      * @return int|null
      */
-    public function getDimensions()
-    {
-        return $this->dimensions;
-    }
-
-    /**
-     * @param int|null $dimensions
-     */
-    public function setDimensions($dimensions)
-    {
-        $this->dimensions = $dimensions;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getWeight()
     {
         return $this->weight;
-    }
-
-    /**
-     * @param int|null $weight
-     */
-    public function setWeight($weight)
-    {
-        $this->weight = $weight;
     }
 
     /**
@@ -247,12 +221,21 @@ class ProductAllData
         return $this->purchasePrice;
     }
 
-    public function setPurchasePrice(float $purchasePrice): static
+    public function setPurchasePrice(?float $purchasePrice): static
     {
         $this->purchasePrice = $purchasePrice;
-
         return $this;
     }
 
+    public function getBarcode(): ?int
+    {
+        return $this->barcode;
+    }
 
+    public function setBarcode(?int $barcode): static
+    {
+        $this->barcode = $barcode;
+
+        return $this;
+    }
 }

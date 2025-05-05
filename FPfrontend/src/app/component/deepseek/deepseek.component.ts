@@ -90,9 +90,8 @@ export class DeepseekComponent {
         Fecha de Entrada: ${product.entry_date}
         Fecha de caducidad: ${product.expiration_date} 
         Expiración: ${product.expiration_date}
-        Peso: ${product.weight}
-        Dimensiones: ${product.dimensions}
-
+        Código de Barras: ${product.barcode}
+        IdAlmacen: ${product.warehouse}
         -----------------------------------
       `;
     });

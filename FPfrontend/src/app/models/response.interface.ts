@@ -7,11 +7,10 @@ export interface ProductAllData {
     price: number;
     purchase_price: number;
     stock: number;
+    barcode: number | null;
     product_type: string;
     entry_date: string;  
     expiration_date: string | null;  
-    weight: number;
-    dimensions: number;
     product_photo: string | null;  
 }
 

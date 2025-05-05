@@ -108,10 +108,9 @@ export class ProductDataComponent {
     brand: new FormControl(''),
     price: new FormControl(''),
     stock: new FormControl(''),
+    barcode: new FormControl(''),
     productType: new FormControl(''),
     expirationDate: new FormControl(''),
-    weight: new FormControl(''),
-    dimensions: new FormControl(''),
     entryDate: new FormControl(''),
     productPhoto: new FormControl(''),
     purchasePrice: new FormControl('')
@@ -183,10 +182,9 @@ export class ProductDataComponent {
         brand: this.selectedProduct.brand,
         price: this.selectedProduct.price.toString(), 
         stock: this.selectedProduct.stock.toString(),
+        barcode: this.selectedProduct.barcode?.toString() || '',
         productType: this.selectedProduct.product_type,
         expirationDate: this.selectedProduct.expiration_date?.split(' ')[0] || '', 
-        weight: this.selectedProduct.weight.toString(),
-        dimensions: this.selectedProduct.dimensions.toString(),
         entryDate: this.selectedProduct.entry_date.split(' ')[0], 
         productPhoto: '',
         purchasePrice: this.selectedProduct.purchase_price.toString()
@@ -207,8 +205,7 @@ export class ProductDataComponent {
 
     let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
     let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
-    let wigthToNumber = parseFloat(this.productForm.value.weight ?? '0');
-    let dimensionsToNumber = parseFloat(this.productForm.value.dimensions ?? '0');
+    let barcodeToNumber = parseInt(this.productForm.value.barcode ?? '0');
     let purchasePriceToNumber = parseFloat(this.productForm.value.purchasePrice ?? '0');
 
     const products: ProductAllData = {
@@ -218,11 +215,10 @@ export class ProductDataComponent {
       brand: this.productForm.value.brand ?? '',
       price: priceToNumber,
       stock: stockToNumber,
+      barcode: barcodeToNumber,
       product_type: this.productForm.value.productType ?? '',
       entry_date: this.productForm.value.entryDate ?? '', 
       expiration_date: this.productForm.value.expirationDate || null,
-      weight:  wigthToNumber,
-      dimensions:  dimensionsToNumber,
       product_photo: this.productForm.value.productPhoto || null,
       purchase_price: purchasePriceToNumber
     };
