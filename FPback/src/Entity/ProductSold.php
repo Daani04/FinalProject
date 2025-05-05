@@ -49,9 +49,9 @@ class ProductSold
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entry_date = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $productPhoto = null;
-
+    
     #[ORM\Column(nullable: true)]
     private ?int $barcode = null;
 
