@@ -33,6 +33,9 @@ export class ProductDataComponent {
   public viewMenu: boolean = false;
   public widthMenu: string = "60px";
 
+  public loading: boolean = false;
+  public changueScreen: boolean = false;
+
   public viewFormModifyData: boolean = false;
 
   public selectedProduct: ProductAllData | null = null;
@@ -117,6 +120,8 @@ export class ProductDataComponent {
   });
 
   public takeWarehouseProducts(warehouse_id: any): void {
+    this.loading = true;
+    this.changueScreen = true;
     let userIdString = localStorage.getItem('userId');
     
     if (!userIdString) {
@@ -130,6 +135,8 @@ export class ProductDataComponent {
     
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
         this.productsUser = response;
         
         for (let i = 0; i < this.productsUser.length; i++) {

@@ -4,19 +4,16 @@ import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { ProductAllData, Warehouse } from '../../models/response.interface';
-import { User } from '../../models/response.interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
-import { BarcodeScannerComponent } from "../../component/barcode-scanner/barcode-scanner.component";
-import { DeepseekComponent } from "../../component/deepseek/deepseek.component";
-import { Overrides } from 'chart.js';
+import { RouterModule } from '@angular/router';
 import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent, NgStyle],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -35,6 +32,9 @@ export class HomeComponent {
 
   public cont: number = 0;
   public cont2: number = 0;
+
+  public loading: boolean = false;
+  public changueScreen: boolean = false;
 
   public selectedWarehouse: boolean = false;
 
@@ -265,6 +265,9 @@ export class HomeComponent {
   }
 
   public takeWarehouseProducts(warehouse_id: any): void {
+    this.loading = true;
+    this.changueScreen = true;
+
     let userIdString = localStorage.getItem('userId');
 
     if (!userIdString) {
@@ -277,6 +280,8 @@ export class HomeComponent {
 
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
         this.productsUser = response;
         this.filtratedProductsforWarehouseId = [];
 

@@ -1,4 +1,18 @@
 <h1>INVENTARIO</h1>
+
+@if (loading === true) {
+  <div class="spinner-background" [ngStyle]="{
+    'visibility': changueScreen ? 'visible' : 'hidden',
+    'opacity': changueScreen ? '1' : '0',
+    'pointer-events': changueScreen ? 'auto' : 'none'
+  }">
+    <div class="spinner">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </div>
+}
+
 <div id="filter" [ngStyle]="{'width': widthMenu}">
     @if (viewMenu === false) {
         <img id="filterImg" src="/img/filter.png" alt="Filtrar" (click)="deployMenu()">

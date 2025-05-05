@@ -7,11 +7,12 @@ import { ProductAllData } from '../../models/response.interface';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/response.interface';
 import { RouterLink } from '@angular/router';
+import { NgStyle } from '@angular/common';
 
 
 @Component({
   selector: 'app-warehouse',
-  imports: [FooterComponent, ReactiveFormsModule, RouterLink],
+  imports: [FooterComponent, ReactiveFormsModule, RouterLink, NgStyle],
   templateUrl: './warehouse.component.html',
   styleUrl: './warehouse.component.css'
 })
@@ -32,6 +33,9 @@ export class WarehouseComponent {
 
   public formWarehouse: boolean = false;
   public userLocation: string = '';
+
+  public loading: boolean = false;
+  public changueScreen: boolean = false;
 
   public controlForm(): void {
     if (this.formWarehouse === false) {
@@ -135,6 +139,8 @@ export class WarehouseComponent {
   }
 
   public checkProducts(): void {
+    this.loading = true;
+    this.changueScreen = true;
     let userIdString = localStorage.getItem('userId');
     
     if (!userIdString) {
@@ -148,6 +154,8 @@ export class WarehouseComponent {
     
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
         this.products = response;
   
         this.numOfArticles = [];
