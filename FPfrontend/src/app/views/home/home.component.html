@@ -1,7 +1,7 @@
 <h1>BIENVENIDO {{userName}} </h1>
 <div class="container">
 
-  <!--
+  
   @if (loading === true) {
     <div class="spinner-background" [ngStyle]="{
       'visibility': changueScreen ? 'visible' : 'hidden',
@@ -13,7 +13,7 @@
         <div class="double-bounce2"></div>
       </div>
     </div>
-}-->
+}
 
     <div class="row justify-content-center">
       <div class="col-md-12 mb-4">
@@ -111,13 +111,15 @@
         <p class="warehouseP">No tienes ningun productos</p>
       }
 
-      <div class="pagination-container">
-        <img id="lefArrow" src="/img/lefArrow.png" alt="flecha izquierda" (click)="beforePage()" class="pagination-arrow">
-        
-        <p class="pagination-text">Página {{actualPage}} de {{totalPages}}</p>
-        
-        <img id="rigArrow" src="/img/rigArrow.png" alt="flecha derecha" (click)="nextPage()" class="pagination-arrow">
-      </div>
+      @if (products.length !== 0) {
+        <div class="pagination-container">
+          <img id="lefArrow" src="/img/lefArrow.png" alt="flecha izquierda" (click)="beforePage()" class="pagination-arrow">
+          
+          <p class="pagination-text">Página {{actualPage}} de {{totalPages}}</p>
+          
+          <img id="rigArrow" src="/img/rigArrow.png" alt="flecha derecha" (click)="nextPage()" class="pagination-arrow">
+        </div>
+      }
 
         @if (contInsertionData === 1) {
           <form [formGroup]="selectWarehouseForInsertProducts" id="selectWarehouseForm" class="text-center">

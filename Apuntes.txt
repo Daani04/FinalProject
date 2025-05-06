@@ -4,3 +4,8 @@ DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)
 OpenLayers(Revisar dependencias)
 Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-worker --save --force  
+
+
+PROBLEMAS
+No se pueden eliminar los productos que esten tambien en ventas, hay que solucionar esto cambiando las entidades 
+o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacion total

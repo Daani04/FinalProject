@@ -298,6 +298,8 @@ export class HomeComponent {
         this.takePage();
       },
       error: (error) => {
+        this.loading = false;
+        this.changueScreen = false;
         console.error('Error al sacar los productos:', error);
       }
     });

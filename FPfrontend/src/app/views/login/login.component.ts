@@ -6,7 +6,7 @@ import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgStyle],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -19,6 +19,9 @@ export class LoginComponent {
   public errorMessaje: string = "Usuario o contraseña incorrectos";
   public cont: number = 0;
 
+  public loading: boolean = false;
+  public changueScreen: boolean = false;
+
   reactiveForm = new FormGroup({
     email: new FormControl(''),
     password: new FormControl(''),
@@ -29,6 +32,8 @@ export class LoginComponent {
   }
 
   public loginUser(): void {
+    this.loading = true;
+    this.changueScreen = true;
 
     let email = this.reactiveForm.value.email ?? '';
     let password = this.reactiveForm.value.password ?? '';
@@ -36,6 +41,9 @@ export class LoginComponent {
     this.service.loginUser(this.apiUrlUser, email, password).subscribe(
       (response) => {
         if (response && response.user) {
+          this.loading = false;
+          this.changueScreen = false;
+
           let user = response.user;
           this.cont = 0;
           console.log('Login exitoso:', user);
@@ -52,13 +60,19 @@ export class LoginComponent {
             console.log('Redirección exitosa a /home');
           }).catch(err => {
             console.error('Error en la redirección:', err);
+            this.loading = false;
+            this.changueScreen = false;
           });
         } else {
           console.error('Error: La respuesta del servidor no contiene los datos esperados');
+          this.loading = false;
+          this.changueScreen = false;
         }
       },
       (error) => {
         this.cont = 1;
+        this.loading = false;
+        this.changueScreen = false;
         console.error('Error al hacer login:', error);
       }
     );

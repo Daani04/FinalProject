@@ -183,7 +183,7 @@ export class ProductDataComponent {
       this.selectedProduct = response as ProductAllData; //Se tiene que iniciar como objeto ya que si no despues no se puede acceder a sus datos en el productForm 
       console.log('Producto encontrado:', this.selectedProduct);
       
-      //Permite editar el formulario de forma que podemos meter vamores predeterminados
+      //Permite editar el formulario de forma que podemos meter valores predeterminados
       this.productForm.patchValue({
         name: this.selectedProduct.name,
         brand: this.selectedProduct.brand,
@@ -202,6 +202,7 @@ export class ProductDataComponent {
     }
   });
 }
+
   public closeModal(): void {
     this.viewFormModifyData = false;
   }
