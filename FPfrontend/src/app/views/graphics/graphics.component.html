@@ -1,17 +1,14 @@
-<app-chart
-  #chartComponent
-  [type]="'bar'"
-  [data]="barSale">
-</app-chart>
-
 <h1>MIS GRAFICOS</h1>
+
 <div class="container">
   <div class="row justify-content-center mt-4">
     <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
       <div class="stacked-charts h-100">
         <div class="graphics">
           <h3>Ventas de este año</h3>
-          <app-chart [type]="'bar'" [data]="barSale"></app-chart>
+            <app-chart
+            #chartComponent [type]="'bar'" [data]="barSale">
+          </app-chart>
         </div>
         <div class="graphics">
           <h3>Ventas de esta semana</h3>

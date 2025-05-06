@@ -1,13 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  Input,
-  AfterViewInit,
-  OnChanges,
-  SimpleChanges,
-  OnDestroy
-} from '@angular/core';
+import { Component, ViewChild, ElementRef, Input, AfterViewInit, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { ChartType, ChartConfiguration } from 'chart.js';
 import Chart from 'chart.js/auto';
 
@@ -25,6 +16,9 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() type: ChartType = 'bar';
   @Input() data: ChartConfiguration['data'] | null = null;
 
+  // Para mantener las opciones del gráfico
+  private chartOptions: any;
+
   ngAfterViewInit(): void {
     if (this.chartRef && this.data) {
       this.createChart();
@@ -34,9 +28,9 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && !changes['data'].firstChange) {
       if (this.chart) {
-        this.updateChart();
+        this.updateChart();  // Si ya existe el gráfico, lo actualizamos
       } else if (this.chartRef && this.data) {
-        this.createChart();
+        this.createChart();  // Si no existe, creamos uno nuevo
       }
     }
   }
@@ -45,37 +39,62 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
     const ctx = this.chartRef.nativeElement.getContext('2d');
     if (!ctx || !this.data) return;
 
-    this.chart = new Chart(ctx, {
-      type: this.type,
-      data: this.data,
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: this.type === 'doughnut' || this.type === 'pie' ? {} : {
-          y: { beginAtZero: true },
-          x: {}
+    this.chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: this.type === 'doughnut' || this.type === 'pie' ? {} : {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(149, 146, 146, 0.5)',  
+          },
         },
-        plugins: {
-          legend: {
-            labels: {
-              color: 'white'
-            }
+        x: {
+          grid: {
+            color: 'rgba(149, 146, 146, 0.5)',  
+          },
+        },
+        r: {
+          grid: {
+            color: 'rgb(181, 177, 177)',  
+            lineWidth: 1,  
+          },
+          angleLines: {
+            color: 'rgb(181, 177, 177)',  
+            lineWidth: 1,  
+          },
+          ticks: {
+            display: false,  
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: 'white'  // Color del texto
           }
         }
       }
+    };
+
+    // Creamos el gráfico
+    this.chart = new Chart(ctx, {
+      type: this.type,
+      data: this.data,
+      options: this.chartOptions
     });
   }
 
   public updateChart(): void {
     if (this.chart && this.data) {
-      this.chart.data = this.data;
-      this.chart.update();
+      this.chart.data = this.data;  
+      this.chart.update(); 
     }
   }
 
   ngOnDestroy(): void {
     if (this.chart) {
-      this.chart.destroy();
+      this.chart.destroy(); 
       this.chart = null;
     }
   }
