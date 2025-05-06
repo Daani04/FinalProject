@@ -77,7 +77,7 @@ export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     };
 
-    // Creamos el gráfico
+    // Crea el gráfico
     this.chart = new Chart(ctx, {
       type: this.type,
       data: this.data,

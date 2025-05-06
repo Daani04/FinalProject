@@ -10,9 +10,11 @@ PROBLEMAS
 No se pueden eliminar los productos que esten tambien en ventas, hay que solucionar esto cambiando las entidades 
 o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacion total
 
+Cuando vendemos un mismo producto los campos no varias, si hay alguna modificacion en algun campo como puede ser la fecha
+ese producto se guarda con la misma fecha que el primer producto del mismo tipo vendido 
+
 POR TERMINAL
 Filtrado de productos
 Meter productos a traves del scanner
-Mapa con la ubicacion real de los almacenes 
 Graficos que funcionales
 

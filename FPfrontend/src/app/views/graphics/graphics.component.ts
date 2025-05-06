@@ -26,6 +26,7 @@ export class GraphicsComponent implements OnInit {
   public productsSold: ProductSold [] = [];
 
   public productsSoldQuantity: number[] = [];
+  public saleProductsForMonth: number[] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -254,9 +255,10 @@ export class GraphicsComponent implements OnInit {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.productsSold = response;
+
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
-        console.log('Productos vendidos:', this.productsSoldQuantity);  // Verifica que los datos llegan correctamente
-        this.reloadGraphics();  // Actualiza el gráfico después de que los datos sean cargados
+        console.log('Productos vendidos:', this.productsSoldQuantity);  
+        this.getProductsForMonth();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
@@ -264,10 +266,10 @@ export class GraphicsComponent implements OnInit {
     });
   }
   
-
   public reloadGraphics(): void {
     if (this.productsSoldQuantity.length > 0) {
-      this.barSale.datasets[0].data = this.productsSoldQuantity;
+
+      this.barSale.datasets[0].data = this.saleProductsForMonth;
   
       if (this.chartComponent) {
         this.chartComponent.updateChart();  // llama al método del componente hijo
@@ -277,9 +279,31 @@ export class GraphicsComponent implements OnInit {
       console.log('No hay datos disponibles para actualizar el gráfico');
     }
   }
-  
-  
 
+  public getProductsForMonth(): void {
+    let actualYear = new Date().getFullYear(); // Año actual
+    let salesForMonth: number[] = new Array(12).fill(0); // Inicializar array con 12 ceros
+  
+    for (let i = 0; i < this.productsSold.length; i++) {
+      let formattedDate = this.productsSold[i].sale_date.replace(" ", "T"); //Remplaza el espacio por una T y se asegura que Date funcione bien
+      let fecha = new Date(formattedDate); //Combierte la fecha a un objeto Date lo que permite sacar datos por separado como el mes 
+      let productYear = fecha.getFullYear();
+  
+      if (productYear === actualYear) {
+        let mes = fecha.getMonth(); 
+        let quantitySold = this.productsSoldQuantity[i] || 0;
+        salesForMonth[mes] += quantitySold; 
+      }
+    }
+    this.saleProductsForMonth = salesForMonth;
+    this.reloadGraphics(); 
+    console.log('Ventas totales por mes (enero a diciembre):', this.saleProductsForMonth);
+  }
+
+  public getExpensiveProducts(): void {
+    
+  }
+  
   //GRAFICOS PREDEFINIDOS
   public barSale: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
