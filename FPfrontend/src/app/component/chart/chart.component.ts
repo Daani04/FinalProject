@@ -1,5 +1,14 @@
-import { Component, ViewChild, ElementRef, Input, AfterViewInit, OnDestroy } from '@angular/core';
-import { ChartType } from 'chart.js';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  Input,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy
+} from '@angular/core';
+import { ChartType, ChartConfiguration } from 'chart.js';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -8,71 +17,66 @@ import Chart from 'chart.js/auto';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements AfterViewInit, OnDestroy {
-  
-  //Despues se llama en el HTML, y dentro de este se isertan los graficos que se dibujaran en la etiqueta <canvas>
-  @ViewChild('chartCanvas', { static: false }) chartRef!: ElementRef;
-  private chart!: Chart;
+export class ChartComponent implements AfterViewInit, OnChanges, OnDestroy {
 
-  @Input() type: ChartType = 'bar'; 
-  @Input() data: any; 
+  @ViewChild('chartCanvas', { static: false }) chartRef!: ElementRef<HTMLCanvasElement>;
+  private chart: Chart | null = null;
 
-  // ngAfterViewInit, parecido al ngOnInit, se ejecuta sin tener que llamarlo, pero espera a que el <canvas> este listo antes de intentar inicializar los graficos
+  @Input() type: ChartType = 'bar';
+  @Input() data: ChartConfiguration['data'] | null = null;
+
   ngAfterViewInit(): void {
-    if (this.chartRef) {
-      this.chart = new Chart(this.chartRef.nativeElement.getContext('2d'), {
-        type: this.type,  
-        data: this.data, 
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: this.type === 'doughnut' || this.type === 'pie' ? {} : { 
-            //Graficos de barra y linea
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(149, 146, 146, 0.5)',  
-              },
-            },
-            x: {
-              grid: {
-                color: 'rgba(149, 146, 146, 0.5)',  
-              },
-            },
-            // Grafico tipo tipo Radar
-            r: {
-              grid: {
-                color: 'rgb(181, 177, 177)',  
-                lineWidth: 1,  
-              },
-              angleLines: {
-                color: 'rgb(181, 177, 177)',  
-                lineWidth: 1,  
-              },
-              ticks: {
-                display: false,  
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              labels: {
-                color: 'white'  //Color del texto
-              }
-            }
-          }
-        },
-      });
+    if (this.chartRef && this.data) {
+      this.createChart();
     }
   }
-  
-  
 
-  //Sirve para que si no estamos usando los graficos(por ejemplo cambiamos de pagina) se eliminen lo graficos de chart para que deje de ocupar memoria
-  //Se ejecuta automaticamente apra hacer la comprobacion 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && !changes['data'].firstChange) {
+      if (this.chart) {
+        this.updateChart();
+      } else if (this.chartRef && this.data) {
+        this.createChart();
+      }
+    }
+  }
+
+  private createChart(): void {
+    const ctx = this.chartRef.nativeElement.getContext('2d');
+    if (!ctx || !this.data) return;
+
+    this.chart = new Chart(ctx, {
+      type: this.type,
+      data: this.data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: this.type === 'doughnut' || this.type === 'pie' ? {} : {
+          y: { beginAtZero: true },
+          x: {}
+        },
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  public updateChart(): void {
+    if (this.chart && this.data) {
+      this.chart.data = this.data;
+      this.chart.update();
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.chart) {
       this.chart.destroy();
+      this.chart = null;
     }
   }
 }

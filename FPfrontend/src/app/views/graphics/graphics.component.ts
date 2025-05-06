@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
 import { data } from 'jquery';
 import { ProductAllData, ProductSold } from '../../models/response.interface';
+import { ViewChild } from '@angular/core';
+import { ChartComponent } from '../../component/chart/chart.component';
 
 @Component({
   selector: 'app-graphics',
@@ -14,6 +15,8 @@ import { ProductAllData, ProductSold } from '../../models/response.interface';
 })
 export class GraphicsComponent implements OnInit {
 
+  @ViewChild('chartComponent') chartComponent!: ChartComponent;
+
   constructor(public service: RequestService) { }
 
   public apiProductsUrl: string = "http://localhost:8000/api/data";
@@ -21,6 +24,8 @@ export class GraphicsComponent implements OnInit {
 
   public products: ProductAllData [] = [];
   public productsSold: ProductSold [] = [];
+
+  public productsSoldQuantity: number[] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -69,25 +74,11 @@ export class GraphicsComponent implements OnInit {
     this.checkAndLoadGraphics();
     this.checkProducts();
     this.getProductsSold();
-    //REVISAR LA FUNCION DE MODIFICAR PRODUCTOS, HAY QUE AÑADIR UNA BARRA LATERAL DE DESPLAZAMIENTO
 
-    /* REVISAR BIEN, NO FUNCIONA
-    let interval = setInterval(() => {
-      if (this.productsSold.length > 0) {
-        const data: number[] = [];
-  
-        for (let i = 0; i < this.productsSold.length; i++) {
-          data.push(this.productsSold[i].quantity);
-        }
-  
-        this.barSale.datasets[0].data = data;
-        console.log('Datos de productos vendidos:', this.productsSold);
-        console.log('Datos para gráfico:', this.barSale.datasets[0].data);
-        
-        clearInterval(interval);
-      }
-    }, 100);
-    */  
+    /*
+    let dataNewGraphics: number[] = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200];
+    this.barSale.datasets[0].data = dataNewGraphics;
+    */
   }
 
   onSubmitGraphics(): void {
@@ -259,17 +250,35 @@ export class GraphicsComponent implements OnInit {
     let userId = parseInt(userIdString, 10);
   
     let apiUrl = `${this.apiSalesUrl}/user/${userId}`;
-
+  
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
-        this.productsSold = response;  
-        
+        this.productsSold = response;
+        this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
+        console.log('Productos vendidos:', this.productsSoldQuantity);  // Verifica que los datos llegan correctamente
+        this.reloadGraphics();  // Actualiza el gráfico después de que los datos sean cargados
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
       }
     });
-  } 
+  }
+  
+
+  public reloadGraphics(): void {
+    if (this.productsSoldQuantity.length > 0) {
+      this.barSale.datasets[0].data = this.productsSoldQuantity;
+  
+      if (this.chartComponent) {
+        this.chartComponent.updateChart();  // llama al método del componente hijo
+        console.log('Gráfico actualizado');
+      }
+    } else {
+      console.log('No hay datos disponibles para actualizar el gráfico');
+    }
+  }
+  
+  
 
   //GRAFICOS PREDEFINIDOS
   public barSale: any = {  
