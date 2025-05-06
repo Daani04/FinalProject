@@ -6,10 +6,12 @@ import { data } from 'jquery';
 import { ProductAllData, ProductSold } from '../../models/response.interface';
 import { ViewChild } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
+import { NgStyle } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-graphics',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, NgStyle, RouterLink],
   templateUrl: './graphics.component.html',
   styleUrl: './graphics.component.css'
 })
@@ -37,6 +39,9 @@ export class GraphicsComponent implements OnInit {
   public response: string = '';
 
   public loading: boolean = false;
+
+  public loadingAllPage: boolean = false;
+  public changueScreen: boolean = false;
 
   public showFormIa: boolean = false;
   public GraphicIA: any;
@@ -76,13 +81,10 @@ export class GraphicsComponent implements OnInit {
     this.checkProducts();
     this.getProductsSold();
 
-    /*
-    let dataNewGraphics: number[] = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200];
-    this.barSale.datasets[0].data = dataNewGraphics;
-    */
+
   }
 
-  onSubmitGraphics(): void {
+  public onSubmitGraphics(): void {
     console.log( this.reactiveFormGraphics.value.graphicInstructions);
     this.createGraphics(this.reactiveFormGraphics.value.graphicInstructions);
   }
@@ -255,13 +257,14 @@ export class GraphicsComponent implements OnInit {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.productsSold = response;
-
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
-        console.log('Productos vendidos:', this.productsSoldQuantity);  
         this.getProductsForMonth();
+        this.checkProductsData();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
+        this.checkProductsData();
+
       }
     });
   }
@@ -301,7 +304,19 @@ export class GraphicsComponent implements OnInit {
   }
 
   public getExpensiveProducts(): void {
-    
+
+  }
+
+  public checkProductsData():void {
+    if (this.products.length > 0 && this.productsSold.length > 0) {
+      this.loadingAllPage = false; 
+      this.changueScreen = false; 
+      console.log('datos', this.products.length, this.productsSold.length);
+    } else {
+      this.loadingAllPage = true; 
+      this.changueScreen = true; 
+      console.log('No hay datos disponibles para mostrar');
+    }
   }
   
   //GRAFICOS PREDEFINIDOS

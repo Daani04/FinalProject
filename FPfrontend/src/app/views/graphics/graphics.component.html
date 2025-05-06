@@ -1,5 +1,17 @@
-<h1>MIS GRAFICOS</h1>
+@if (loadingAllPage === true) {
+  <div class="spinner-background" [ngStyle]="{
+    'visibility': changueScreen ? 'visible' : 'hidden',
+    'opacity': changueScreen ? '1' : '0',
+    'pointer-events': changueScreen ? 'auto' : 'none'
+  }">
+    <div class="no-products-container">
+      <h3 id="noProductsAlert">Para poder entrara a la pagina de graficos añade algun producto</h3>
+      <a id="redirectHomeButton" [routerLink]="['/home']" class="card-link">Añadir productos</a> 
+    </div>
+  </div>
+}
 
+<h1>MIS GRAFICOS</h1>
 <div class="container">
   <div class="row justify-content-center mt-4">
     <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
@@ -180,7 +192,6 @@
         <button id="closeButton" type="submit" class="btn btn-primary"  (click)="modifyContButton()">Cerrar</button>
     }
   </div>
-
-
 </div>
+
 <app-footer></app-footer>
