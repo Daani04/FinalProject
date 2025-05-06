@@ -79,6 +79,10 @@ export class WarehouseComponent {
     );
   }
 
+  public alertNoData(): void {
+    alert("No tienes productos en este almacen");
+  }
+
   public newWarehouse(coordinates: any): void {
     let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
     let coordinatesString = String(coordinates); 
@@ -179,8 +183,8 @@ export class WarehouseComponent {
           
           this.numOfArticles[i] = count.toString();
           this.netProfitPerWarehouse[i] = totalProfit;
-          this.totalInventoryValue[i] = totalValue;
-        }
+          this.totalInventoryValue[i] = Math.round(totalValue); 
+          }
       },
       error: (error) => {
         this.loading = false;

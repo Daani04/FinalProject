@@ -29,6 +29,8 @@ export class GraphicsComponent implements OnInit {
 
   public productsSoldQuantity: number[] = [];
   public saleProductsForMonth: number[] = [];
+  public mostSoldProductsNames: string[] = [];
+  public mostSoldProductsQuantity: number[] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -260,6 +262,7 @@ export class GraphicsComponent implements OnInit {
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
         this.getProductsForMonth();
         this.checkProductsData();
+        //this.getMoreSoldProducts();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
@@ -303,12 +306,23 @@ export class GraphicsComponent implements OnInit {
     console.log('Ventas totales por mes (enero a diciembre):', this.saleProductsForMonth);
   }
 
-  public getExpensiveProducts(): void {
-
+  /*
+  public getMoreSoldProducts(): void {
+    const idsMasVendidos: number[] = this.products
+      .map((producto, index) => ({
+        id: producto.id,
+        cantidad: this.productsSoldQuantity[index] || 0 // Aseguramos que sea un número, si no es, asignamos 0
+      }))
+      .sort((a, b) => b.cantidad - a.cantidad) // Ordenamos de mayor a menor por cantidad
+      .slice(0, 3) // Seleccionamos los 3 productos más vendidos
+      .map(item => item.id); // Extraemos los ids de los tres productos más vendidos
+  
+    console.log('IDs de los 3 productos más vendidos:', idsMasVendidos);
   }
-
+  */
+  
   public checkProductsData():void {
-    if (this.products.length > 0 && this.productsSold.length > 0) {
+    if (this.products.length > 0 || this.productsSold.length > 0) {
       this.loadingAllPage = false; 
       this.changueScreen = false; 
       console.log('datos', this.products.length, this.productsSold.length);

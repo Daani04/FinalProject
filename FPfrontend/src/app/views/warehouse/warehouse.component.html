@@ -23,11 +23,21 @@
             <div id="warehouseImgCont">
               <img id="logo" src="/img/almacen.png" alt="logo">
             </div>
-            <p class="card-text">Numero de articulos: {{numOfArticles[$index]}} </p>
-            <p class="card-text">Ganancias estimadas: {{netProfitPerWarehouse[$index]}}€ </p>
-            <p class="card-text">Valor total: {{totalInventoryValue[$index]}}€ </p>
+            @if (numOfArticles.length !== 0) {
+              <p class="card-text">Numero de articulos: {{numOfArticles[$index]}} </p>
+              <p class="card-text">Ganancias estimadas: {{netProfitPerWarehouse[$index]}}€ </p>
+              <p class="card-text">Valor total: {{totalInventoryValue[$index]}}€ </p>
+            } @else {
+              <p class="card-text">Numero de articulos: N/a </p>
+              <p class="card-text">Ganancias estimadas: N/a </p>
+              <p class="card-text">Valor total: N/a </p>
+            }
             <!--Envia el id del almacen-->
-            <a [routerLink]="['/product_data', warehouse.id]" class="card-link">Ver artículos</a> 
+            @if (numOfArticles.length !== 0) {
+              <a [routerLink]="['/product_data', warehouse.id]" class="card-link">Ver artículos</a> 
+            } @else {
+              <a (click)="alertNoData()" class="card-link">Ver artículos</a> 
+            }
           </div>
         </div>
       </div>
