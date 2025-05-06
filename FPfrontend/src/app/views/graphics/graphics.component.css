@@ -206,6 +206,23 @@ h3 {
   }
 }
 
+@media (max-width: 1200px) {
+  #customGraphic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; 
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  #deleteCustonGraphic {
+    margin-top: 30px;
+  }
+}
+
 /*CSS para la imagen de carga*/
 .spinner {
   width: 40px;

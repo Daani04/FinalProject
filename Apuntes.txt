@@ -9,3 +9,10 @@ Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-wo
 PROBLEMAS
 No se pueden eliminar los productos que esten tambien en ventas, hay que solucionar esto cambiando las entidades 
 o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacion total
+
+POR TERMINAL
+Filtrado de productos
+Meter productos a traves del scanner
+Mapa con la ubicacion real de los almacenes 
+Graficos que funcionales
+

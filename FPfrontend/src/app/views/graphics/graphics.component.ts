@@ -70,9 +70,6 @@ export class GraphicsComponent implements OnInit {
     this.checkProducts();
     this.getProductsSold();
     //REVISAR LA FUNCION DE MODIFICAR PRODUCTOS, HAY QUE AÑADIR UNA BARRA LATERAL DE DESPLAZAMIENTO
-    //NO FUNCIONA LA FUNCION DE ELIMINAR PRODUCTOS
-    //REVISAR GRAFICO GENERADO POR IA, NO COLAPSA BIEN
-    //REVISAR PANTALLAS DE CARGA, NO FUNCIONAN BIEN
 
     /* REVISAR BIEN, NO FUNCIONA
     let interval = setInterval(() => {

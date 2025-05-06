@@ -9,55 +9,74 @@ import { Point } from 'ol/geom.js';
 import { Feature } from 'ol';
 import { Vector as VectorSource } from 'ol/source.js'; 
 import { Style, Fill, Stroke, Circle } from 'ol/style.js'; 
+import { HttpClient } from '@angular/common/http';
+import { RequestService } from '../../services/request.service';
+import { Warehouse } from '../../models/response.interface';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-leaflet-map',
   templateUrl: './leaflet-map.component.html',
+  imports: [NgStyle],
   styleUrls: ['./leaflet-map.component.css']
 })
 export class LeafletMapComponent {
 
+  constructor(public service: RequestService, private http: HttpClient) { }
+
+  public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
+
+  public warehouses: Warehouse[] = [];
+  public coordinates: number[][] = [];
+  public loginUserCoordinates: number[][] = [];
+
+  public loading: boolean = false;
+  public changueScreen: boolean = false;
+
   ngOnInit(): void {
-    this.iniciarMapa();
+    this.checkWarehouses();
   }
 
-  iniciarMapa() {
-    const coordinates = [
-      [-0.4156, 39.3975],
-      [-0.4014, 39.5667],
-      [-0.4106, 39.3825],
-      [-0.4125, 39.3975],
-      [-0.4156, 39.3970]
-    ];
-
+  public startMap(): void {
     const vectorSource = new VectorSource();
-
-    coordinates.forEach(coord => {
+  
+    this.coordinates.forEach(coord => {
+      let isLoginUser = false; 
+    
+      for (let i = 0; i < this.loginUserCoordinates.length; i++) {
+        if (this.loginUserCoordinates[i][0] === coord[0] && this.loginUserCoordinates[i][1] === coord[1]) {
+          isLoginUser = true;
+          break; 
+        }
+      }
+  
       const feature = new Feature({
-        geometry: new Point(fromLonLat(coord)), 
+        geometry: new Point(fromLonLat(coord)),
       });
-
-      vectorSource.addFeature(feature);
-    });
-
-    const vectorLayer = new VectorLayer({
-      source: vectorSource,
-      style: new Style({
+  
+      const style = new Style({
         image: new Circle({
           radius: 25, 
           fill: new Fill({
-            color: 'rgba(78, 35, 148, 0.8)', 
+            color: isLoginUser ? 'rgba(255, 0, 0, 0.8)' : 'rgba(78, 35, 148, 0.8)', // Rojo para el usuario logeado, morado para los demás
           }),
           stroke: new Stroke({
-            color: '#DBC9F5', 
+            color: '#DBC9F5',
             width: 3
           })
         })
-      })
+      });
+  
+      feature.setStyle(style);
+      vectorSource.addFeature(feature);
     });
-
+  
+    const vectorLayer = new VectorLayer({
+      source: vectorSource,
+    });
+  
     const map = new Map({
-      target: 'mapa', 
+      target: 'mapa',
       layers: [
         new TileLayer({
           source: new StadiaMaps({
@@ -65,13 +84,51 @@ export class LeafletMapComponent {
             retina: true,  
           }),
         }),
-        vectorLayer 
+        vectorLayer
       ],
       view: new View({
-        center: fromLonLat([-0.3763, 39.4699]), 
-        zoom: 11,  
+        center: fromLonLat([-0.3763, 39.4699]),
+        zoom: 11,
       }),
       controls: [] 
     });
   }
+
+  public checkWarehouses(): void {
+    this.loading = true;
+    this.changueScreen = true;
+
+    let userIdString = localStorage.getItem('userId');
+
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+
+    let userId = parseInt(userIdString, 10); 
+
+    this.service.takeWarehouse(this.apiWarehouseUrl).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
+        this.warehouses = response;
+        for (let i = 0; i < this.warehouses.length; i++) {
+          let [lat, lng] = this.warehouses[i].location.split(',').map(Number);
+            if (this.warehouses[i].user_id == userId) {
+              this.loginUserCoordinates.push([lng, lat]);
+            } 
+          this.coordinates.push([lng, lat]);
+        }
+        console.log('Warehouses:', this.coordinates);
+        console.log('User login Warehouses:', this.loginUserCoordinates);
+        this.startMap();
+      },
+      error: (error) => {
+        this.loading = false;
+        this.changueScreen = false;
+        console.error('Error fetching warehouses:', error);
+      }
+    });
+  }
+  
 }
