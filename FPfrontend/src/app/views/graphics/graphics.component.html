@@ -18,13 +18,12 @@
       <div class="stacked-charts h-100">
         <div class="graphics">
           <h3>Ventas de este año</h3>
-            <app-chart
-            #chartComponent [type]="'bar'" [data]="barSale">
-          </app-chart>
+            <app-chart #chartComponent [type]="'bar'" [data]="barSale"> </app-chart>
         </div>
         <div class="graphics">
           <h3>Ventas de esta semana</h3>
           <app-chart [type]="'line'" [data]="lineSale"></app-chart>
+          <app-chart #chartComponent [type]="'line'" [data]="lineSale"> </app-chart>
         </div>
       </div>
     </div>
@@ -32,7 +31,7 @@
     <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
       <div class="single-chart h-100">
         <h3>Productos mas vendidos</h3>
-        <app-chart [type]="'pie'" [data]="circularMostSale"></app-chart>
+        <app-chart #chartComponent [type]="'pie'" [data]="circularMostSale"> </app-chart>
       </div>
     </div>
   </div>
@@ -42,11 +41,11 @@
       <div class="double-chart h-100">
         <div class="graphics">
           <h3>Entrada de productos</h3>
-          <app-chart [type]="'line'" [data]="lineExitProducts"></app-chart>
+          <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
         </div>
         <div class="graphics">
           <h3>Salida de productos</h3>
-          <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
+          <app-chart #chartComponent [type]="'line'" [data]="lineExitProducts"> </app-chart>
         </div>
       </div>
     </div>
@@ -72,12 +71,12 @@
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
-            <h3>Comparación de ventas por mes</h3>
+            <h3>Productos mas caros</h3>
             <app-chart [type]="'radar'" [data]="monthlySalesComparison"></app-chart>
           </div>
           <div class="graphics">
-            <h3>Retornos de productos</h3>
-            <app-chart [type]="'polarArea'" [data]="productReturns"></app-chart>
+            <h3>Productos mas baratos</h3>
+            <app-chart [type]="'radar'" [data]="productReturns"></app-chart>
           </div>
         </div>
       </div>
@@ -89,12 +88,12 @@
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
-            <h3>Descuentos aplicados</h3>
-            <app-chart [type]="'bar'" [data]="discountsApplied"></app-chart>
+            <h3>Stock de los productos</h3>
+            <app-chart [type]="'polarArea'" [data]="discountsApplied"></app-chart>
           </div>
           <div class="graphics">
-            <h3>Costos de productos</h3>
-            <app-chart [type]="'bar'" [data]="productCosts"></app-chart>
+            <h3>Productos mas costosos</h3>
+            <app-chart [type]="'polarArea'" [data]="productCosts"></app-chart>
           </div>
         </div>
       </div>

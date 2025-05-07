@@ -29,8 +29,13 @@ export class GraphicsComponent implements OnInit {
 
   public productsSoldQuantity: number[] = [];
   public saleProductsForMonth: number[] = [];
-  public mostSoldProductsNames: string[] = [];
-  public mostSoldProductsQuantity: number[] = [];
+
+  public saleProductsForWeek: number[] = []
+  public entrateProductsForMonth: number[] = [];
+
+  public moreSoldProductsName: string[] = [];
+  public moreSoldProductsQuantity: number[] = [];
+
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -262,7 +267,8 @@ export class GraphicsComponent implements OnInit {
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
         this.getProductsForMonth();
         this.checkProductsData();
-        //this.getMoreSoldProducts();
+        this.getMoreSoldProducts();
+        this.getProductsForWeek();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
@@ -274,11 +280,19 @@ export class GraphicsComponent implements OnInit {
   
   public reloadGraphics(): void {
     if (this.productsSoldQuantity.length > 0) {
-
       this.barSale.datasets[0].data = this.saleProductsForMonth;
   
+      this.circularMostSale.labels = this.moreSoldProductsName;
+      this.circularMostSale.datasets[0].data = this.moreSoldProductsQuantity;
+
+      this.lineSale.datasets[0].data = this.saleProductsForWeek;
+
+      this.lineExitProducts.datasets[0].data = this.saleProductsForMonth;
+      this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
+
+  
       if (this.chartComponent) {
-        this.chartComponent.updateChart();  // llama al método del componente hijo
+        this.chartComponent.updateChart();
         console.log('Gráfico actualizado');
       }
     } else {
@@ -286,46 +300,95 @@ export class GraphicsComponent implements OnInit {
     }
   }
 
-  public getProductsForMonth(): void {
-    let actualYear = new Date().getFullYear(); // Año actual
-    let salesForMonth: number[] = new Array(12).fill(0); // Inicializar array con 12 ceros
-  
+  public getProductsForMonth(): void { 
+    let actualYear = new Date().getFullYear();
+    let salesForMonth = new Array(12).fill(0);
+    let stockForMonth = new Array(12).fill(0); // Inicializar el array para contar los productos no vendidos
+    
+    // Contamos las ventas para cada mes
     for (let i = 0; i < this.productsSold.length; i++) {
-      let formattedDate = this.productsSold[i].sale_date.replace(" ", "T"); //Remplaza el espacio por una T y se asegura que Date funcione bien
-      let fecha = new Date(formattedDate); //Combierte la fecha a un objeto Date lo que permite sacar datos por separado como el mes 
-      let productYear = fecha.getFullYear();
-  
-      if (productYear === actualYear) {
-        let mes = fecha.getMonth(); 
-        let quantitySold = this.productsSoldQuantity[i] || 0;
-        salesForMonth[mes] += quantitySold; 
+      let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
+      if (fecha.getFullYear() === actualYear) {
+        let month = fecha.getMonth();
+        salesForMonth[month] += this.productsSoldQuantity[i] || 0;
       }
     }
-    this.saleProductsForMonth = salesForMonth;
-    this.reloadGraphics(); 
-    console.log('Ventas totales por mes (enero a diciembre):', this.saleProductsForMonth);
-  }
-
-  /*
-  public getMoreSoldProducts(): void {
-    const idsMasVendidos: number[] = this.products
-      .map((producto, index) => ({
-        id: producto.id,
-        cantidad: this.productsSoldQuantity[index] || 0 // Aseguramos que sea un número, si no es, asignamos 0
-      }))
-      .sort((a, b) => b.cantidad - a.cantidad) // Ordenamos de mayor a menor por cantidad
-      .slice(0, 3) // Seleccionamos los 3 productos más vendidos
-      .map(item => item.id); // Extraemos los ids de los tres productos más vendidos
   
-    console.log('IDs de los 3 productos más vendidos:', idsMasVendidos);
+    // Ahora, contamos los productos en el almacén que no fueron vendidos durante el mes
+    for (let i = 0; i < this.products.length; i++) {
+      let product = this.products[i];
+      let month = new Date(product.entry_date).getMonth(); // Suponiendo que tienes una fecha de cuando se añadió al almacén
+      stockForMonth[month] += product.stock; // Producto en el almacén
+    }
+  
+    // Calculamos los productos no vendidos restando las ventas de los productos en stock
+    let unsoldProductsForMonth = stockForMonth.map((stock, index) => stock - salesForMonth[index]);
+    
+    // Llenamos las propiedades de la clase
+    this.saleProductsForMonth = salesForMonth;
+    this.entrateProductsForMonth = unsoldProductsForMonth; // Nueva propiedad para los productos no vendidos
+    console.log('Productos entrada almacen:', unsoldProductsForMonth);
+    this.reloadGraphics();
   }
-  */
+  
+  
+  public getProductsForWeek(): void {
+    let actualYear = new Date().getFullYear();
+    let currentWeekNumber = this.getWeekNumber(new Date());
+    let salesForWeek = new Array(7).fill(0); // Inicializar array de 7 días
+  
+    for (let i = 0; i < this.productsSold.length; i++) {
+      let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
+      if (fecha.getFullYear() === actualYear && this.getWeekNumber(fecha) === currentWeekNumber) {
+        let dayOfWeek = fecha.getDay(); 
+        let correctedDayOfWeek = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;  //Ajuste para que las posiciones de los dias sean correctas
+        salesForWeek[correctedDayOfWeek] += this.productsSoldQuantity[i] || 0;      }
+    }
+  
+    this.saleProductsForWeek = salesForWeek; 
+    console.log('Ventas semanales', this.saleProductsForWeek);
+    this.reloadGraphics();
+  }
+  
+  private getWeekNumber(date: Date): number {
+    let startDate = new Date(date.getFullYear(), 0, 1);
+    return Math.ceil(((date.valueOf() - startDate.valueOf()) / 86400000 + 1) / 7);
+  }
+  
+  
+
+  public getMoreSoldProducts(): void {  
+    for (let i = 0; i < this.productsSold.length; i++) {
+      let quantity = this.productsSold[i].quantity;
+      let name = this.productsSold[i].name;
+  
+      if (this.moreSoldProductsQuantity.length < 4) {
+        this.moreSoldProductsQuantity.push(quantity);
+        this.moreSoldProductsName.push(name);
+      } else {
+        let minIndex = 0;
+        for (let j = 1; j < this.moreSoldProductsQuantity.length; j++) {
+          if (this.moreSoldProductsQuantity[j] < this.moreSoldProductsQuantity[minIndex]) {
+            minIndex = j;
+          }
+        }
+  
+        // Si el nuevo producto tiene mayor cantidad, lo reemplazamos
+        if (quantity > this.moreSoldProductsQuantity[minIndex]) {
+          this.moreSoldProductsQuantity[minIndex] = quantity;
+          this.moreSoldProductsName[minIndex] = name;
+        }
+      }
+    }
+    console.log('Cantidad', this.moreSoldProductsQuantity);
+    console.log('MoreSoldProductsName', this.moreSoldProductsName);
+  }
+  
   
   public checkProductsData():void {
     if (this.products.length > 0 || this.productsSold.length > 0) {
       this.loadingAllPage = false; 
       this.changueScreen = false; 
-      console.log('datos', this.products.length, this.productsSold.length);
     } else {
       this.loadingAllPage = true; 
       this.changueScreen = true; 
@@ -345,12 +408,12 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public lineSale = {
-    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6'],
+  public lineSale: any = {
+    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
     datasets: [
       {
         label: 'Ventas semanales',
-        data: [12, 19, 3, 5, 2, 3],
+        data: [],
         borderColor: '#8F5B8C',
         fill: false,
         stepped: true,
@@ -358,38 +421,38 @@ export class GraphicsComponent implements OnInit {
     ]
   };
   
-  public circularMostSale = {
-    labels: ['Producto A', 'Producto B', 'Producto C'],
+  public circularMostSale: any = {
+    labels: [],
     datasets: [{
       label: 'Distribución de Ventas',
-      data: [40, 30, 30],
-      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA'] 
+      data: [],
+      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94'] 
     }]
   };
   
-  public lineExitProducts = {  
+  public lineExitProducts: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
-      label: 'Entrada de productos',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+      label: 'Salida de productos',
+      data: [],  
       borderColor: '#6F4D94', 
       borderWidth: 2,
       fill: false
     }]
   };
   
-  public lineEntrateProducts = {  
+  public lineEntrateProducts: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
-      label: 'Salida de productos',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+      label: 'Entrada de productos',
+      data: [],  
       borderColor: '#9A8BCA', 
       borderWidth: 2,
       fill: false
     }]
   };
   
-  public lineGrossProfits  = {  
+  public lineGrossProfits: any  = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ingresos brutos',
@@ -401,7 +464,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public lineNetProfits  = {  
+  public lineNetProfits: any  = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ingresos netos',
@@ -414,7 +477,7 @@ export class GraphicsComponent implements OnInit {
   };
   
   //GRAFICOS EXTRA
-  public stockAvailable = {  
+  public stockAvailable: any = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       data: [30, 40, 30],
@@ -422,7 +485,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public discountsApplied = {  
+  public discountsApplied: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Descuentos aplicados',
@@ -433,7 +496,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public monthlySalesComparison = {  
+  public monthlySalesComparison: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Comparación de ventas por mes',
@@ -444,7 +507,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public productReturns = {  
+  public productReturns: any = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       data: [100, 150, 200],
@@ -452,7 +515,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public categorySales = {  
+  public categorySales: any = {  
     labels: ['Electrónica', 'Ropa', 'Alimentos', 'Hogar'],
     datasets: [{
       data: [5000, 3000, 4000, 2000],
@@ -460,7 +523,7 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
-  public productCosts = {  
+  public productCosts: any = {  
     labels: ['Producto A', 'Producto B', 'Producto C'],
     datasets: [{
       label: 'Costos de productos',
