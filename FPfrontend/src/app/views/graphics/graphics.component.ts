@@ -6,7 +6,7 @@ import { data } from 'jquery';
 import { ProductAllData, ProductSold } from '../../models/response.interface';
 import { ViewChild } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
-import { NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -87,8 +87,6 @@ export class GraphicsComponent implements OnInit {
     this.checkAndLoadGraphics();
     this.checkProducts();
     this.getProductsSold();
-
-
   }
 
   public onSubmitGraphics(): void {
@@ -279,31 +277,39 @@ export class GraphicsComponent implements OnInit {
   }
   
   public reloadGraphics(): void {
-    if (this.productsSoldQuantity.length > 0) {
-      this.barSale.datasets[0].data = this.saleProductsForMonth;
-  
-      this.circularMostSale.labels = this.moreSoldProductsName;
-      this.circularMostSale.datasets[0].data = this.moreSoldProductsQuantity;
-
-      this.lineSale.datasets[0].data = this.saleProductsForWeek;
-
-      this.lineExitProducts.datasets[0].data = this.saleProductsForMonth;
-      this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
-
-  
-      if (this.chartComponent) {
-        this.chartComponent.updateChart();
-        console.log('Gráfico actualizado');
-      }
-    } else {
-      console.log('No hay datos disponibles para actualizar el gráfico');
+    if (this.saleProductsForMonth.length > 0) {
+        this.barSale.datasets[0].data = this.saleProductsForMonth;
     }
-  }
+ 
+    if (this.moreSoldProductsName.length > 0 && this.moreSoldProductsQuantity.length > 0) {
+        this.circularMostSale.labels = this.moreSoldProductsName;
+        this.circularMostSale.datasets[0].data = this.moreSoldProductsQuantity;
+    }
+ 
+    if (this.saleProductsForWeek.length > 0) {
+        this.lineSale.datasets[0].data = this.saleProductsForWeek;
+    }
+ 
+    if (this.saleProductsForMonth.length > 0) {
+        this.lineExitProducts.datasets[0].data = this.saleProductsForMonth;
+    }
+ 
+    if (this.entrateProductsForMonth.length > 0) {
+        this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
+    }
+ 
+    if (this.chartComponent) {
+        this.chartComponent.updateChart();
+    }
+ }
+ 
 
   public getProductsForMonth(): void { 
     let actualYear = new Date().getFullYear();
     let salesForMonth = new Array(12).fill(0);
-    let stockForMonth = new Array(12).fill(0); // Inicializar el array para contar los productos no vendidos
+    let stockForMonth = new Array(12).fill(0);
+    
+    let grossIncome = new Array(12).fill(0);
     
     // Contamos las ventas para cada mes
     for (let i = 0; i < this.productsSold.length; i++) {
@@ -314,21 +320,22 @@ export class GraphicsComponent implements OnInit {
       }
     }
   
-    // Ahora, contamos los productos en el almacén que no fueron vendidos durante el mes
     for (let i = 0; i < this.products.length; i++) {
       let product = this.products[i];
-      let month = new Date(product.entry_date).getMonth(); // Suponiendo que tienes una fecha de cuando se añadió al almacén
-      stockForMonth[month] += product.stock; // Producto en el almacén
+      let month = new Date(product.entry_date).getMonth(); 
+      stockForMonth[month] += product.stock; 
+      grossIncome[month] += product.price;
     }
   
-    // Calculamos los productos no vendidos restando las ventas de los productos en stock
     let unsoldProductsForMonth = stockForMonth.map((stock, index) => stock - salesForMonth[index]);
     
-    // Llenamos las propiedades de la clase
     this.saleProductsForMonth = salesForMonth;
-    this.entrateProductsForMonth = unsoldProductsForMonth; // Nueva propiedad para los productos no vendidos
-    console.log('Productos entrada almacen:', unsoldProductsForMonth);
+    this.entrateProductsForMonth = unsoldProductsForMonth; 
+
     this.reloadGraphics();
+
+    console.log('Productos vendidos cada mes:', stockForMonth);
+    console.log('Precio de compra de los productos:', grossIncome);
   }
   
   
@@ -346,7 +353,7 @@ export class GraphicsComponent implements OnInit {
     }
   
     this.saleProductsForWeek = salesForWeek; 
-    console.log('Ventas semanales', this.saleProductsForWeek);
+    //console.log('Ventas semanales', this.saleProductsForWeek);
     this.reloadGraphics();
   }
   
@@ -354,8 +361,6 @@ export class GraphicsComponent implements OnInit {
     let startDate = new Date(date.getFullYear(), 0, 1);
     return Math.ceil(((date.valueOf() - startDate.valueOf()) / 86400000 + 1) / 7);
   }
-  
-  
 
   public getMoreSoldProducts(): void {  
     for (let i = 0; i < this.productsSold.length; i++) {
@@ -380,8 +385,9 @@ export class GraphicsComponent implements OnInit {
         }
       }
     }
-    console.log('Cantidad', this.moreSoldProductsQuantity);
-    console.log('MoreSoldProductsName', this.moreSoldProductsName);
+    this.reloadGraphics();
+    //console.log('Cantidad', this.moreSoldProductsQuantity);
+    //console.log('MoreSoldProductsName', this.moreSoldProductsName);
   }
   
   
