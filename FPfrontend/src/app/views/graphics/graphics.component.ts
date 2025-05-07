@@ -36,6 +36,8 @@ export class GraphicsComponent implements OnInit {
   public moreSoldProductsName: string[] = [];
   public moreSoldProductsQuantity: number[] = [];
 
+  public grossIncome: number[] = [];
+  public netIncome: number[] = [];//lfjkd
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -297,6 +299,11 @@ export class GraphicsComponent implements OnInit {
     if (this.entrateProductsForMonth.length > 0) {
         this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
     }
+
+    this.lineGrossProfits.datasets[0].data = this.grossIncome;
+    this.lineNetProfits.datasets[0].data = this.netIncome;
+
+    
  
     if (this.chartComponent) {
         this.chartComponent.updateChart();
@@ -309,9 +316,10 @@ export class GraphicsComponent implements OnInit {
     let salesForMonth = new Array(12).fill(0);
     let stockForMonth = new Array(12).fill(0);
     
-    let grossIncome = new Array(12).fill(0);
+    let grossIncomeMony = new Array(12).fill(0);
+    let netIncomeMoney = new Array(12).fill(0);
     
-    // Contamos las ventas para cada mes
+    // Ventas de cada mes
     for (let i = 0; i < this.productsSold.length; i++) {
       let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
       if (fecha.getFullYear() === actualYear) {
@@ -324,7 +332,9 @@ export class GraphicsComponent implements OnInit {
       let product = this.products[i];
       let month = new Date(product.entry_date).getMonth(); 
       stockForMonth[month] += product.stock; 
-      grossIncome[month] += product.price;
+      //Se han intercambiado el valro de los precios de compra y venta po que los cogia al reves del a base de datos 
+      grossIncomeMony[month] += product.purchase_price;
+      netIncomeMoney[month] += product.price
     }
   
     let unsoldProductsForMonth = stockForMonth.map((stock, index) => stock - salesForMonth[index]);
@@ -332,10 +342,18 @@ export class GraphicsComponent implements OnInit {
     this.saleProductsForMonth = salesForMonth;
     this.entrateProductsForMonth = unsoldProductsForMonth; 
 
-    this.reloadGraphics();
+    let estimatedBenefit = grossIncomeMony.map((gross, i) => netIncomeMoney[i] - gross);
 
+    this.grossIncome = grossIncomeMony;
+    this.netIncome = estimatedBenefit;
+
+
+    this.reloadGraphics();
     console.log('Productos vendidos cada mes:', stockForMonth);
-    console.log('Precio de compra de los productos:', grossIncome);
+    console.log('COMPRA:', this.grossIncome);
+    console.log('VENTA: ',  netIncomeMoney);
+    console.log('BENEFICIO: ',  this.netIncome);
+
   }
   
   
@@ -415,7 +433,7 @@ export class GraphicsComponent implements OnInit {
   };
   
   public lineSale: any = {
-    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+    labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
     datasets: [
       {
         label: 'Ventas semanales',
@@ -462,7 +480,7 @@ export class GraphicsComponent implements OnInit {
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ingresos brutos',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
+      data: [],  
       borderColor: '#6F4D94', 
       backgroundColor: 'rgba(145, 112, 188, 0.3)', 
       borderWidth: 2,

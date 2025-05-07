@@ -20,21 +20,11 @@ Graficos que funcionales
 
 GRAFICOS:
 
-1. Ventas año y ventas semana
-2. Producto mas vendido
-3. Entrada y salida de productos 
+1. Ventas año(De vez en cuando no funciona bien) y ventas semana OK
+2. Producto mas vendido OK
+3. Entrada(Hay veces que se invierten los valores y los saca en negativo) y salida de productos OK
 4. Ingresos Brutos y netos 
 
 5.Productos mas y menos caros 
 6.Stock de los productos y productos mas costosos 
-
-POSTMAN
-
-Venta:
-{
-  "product": 22,
-  "warehouse": 2,
-  "quantity": 13,
-  "sale_date": "2025-02-10 14:30:00"
-}
 

@@ -54,12 +54,12 @@
     <div class="col-md-12 mb-4">
       <div class="double-chart h-100">
         <div class="graphics">
-          <h3>Ingresos brutos</h3>
-          <app-chart [type]="'line'" [data]="lineGrossProfits"></app-chart>
+          <h3>Gastos en productos</h3>
+          <app-chart #chartComponent [type]="'line'" [data]="lineGrossProfits"> </app-chart>
         </div>
         <div class="graphics">
-          <h3>Ingresos netos</h3>
-          <app-chart [type]="'line'" [data]="lineNetProfits"></app-chart>
+          <h3>Beneficio estimado</h3>
+          <app-chart #chartComponent [type]="'line'" [data]="lineNetProfits"> </app-chart>
         </div>
       </div>
     </div>
