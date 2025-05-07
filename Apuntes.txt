@@ -10,6 +10,10 @@ PROBLEMAS
 No se pueden eliminar los productos que esten tambien en ventas, hay que solucionar esto cambiando las entidades 
 o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacion total
 
+Revisar graficos, el de productos mas caros no se genera, teniendo todos los datos
+
+Revisar generacino de graficos por IA, ha dejado de funcionar
+
 Cuando vendemos un mismo producto los campos no varias, si hay alguna modificacion en algun campo como puede ser la fecha
 ese producto se guarda con la misma fecha que el primer producto del mismo tipo vendido 
 
@@ -24,10 +28,6 @@ GRAFICOS:
 2. Producto mas vendido OK
 3. Entrada(Hay veces que se invierten los valores y los saca en negativo) y salida de productos OK
 4. Ingresos Brutos y netos 
-
 5.Productos mas y menos caros 
 6.Stock de los productos y productos mas costosos 
-
-FALTA
-Revisar graficos, el de productos mas caros no se genera, teniendo todos los datos
 
