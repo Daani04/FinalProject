@@ -28,3 +28,6 @@ GRAFICOS:
 5.Productos mas y menos caros 
 6.Stock de los productos y productos mas costosos 
 
+FALTA
+Revisar graficos, el de productos mas caros no se genera, teniendo todos los datos
+

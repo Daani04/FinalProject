@@ -65,17 +65,18 @@
     </div>
   </div>
   
+  <!--GRAFICOS EXTRA-->
   @if (cont2 === 1) {
     <div class="row justify-content-center">
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
             <h3>Productos mas caros</h3>
-            <app-chart [type]="'radar'" [data]="monthlySalesComparison"></app-chart>
+            <app-chart #chartComponent [type]="'radar'" [data]="mostExpensiveProducts"> </app-chart>
           </div>
           <div class="graphics">
             <h3>Productos mas baratos</h3>
-            <app-chart [type]="'radar'" [data]="productReturns"></app-chart>
+            <app-chart [type]="'radar'" [data]="mostCheapProducts"></app-chart>
           </div>
         </div>
       </div>
@@ -87,12 +88,12 @@
       <div class="col-md-12 mb-4">
         <div class="double-chart h-100">
           <div class="graphics">
-            <h3>Stock de los productos</h3>
-            <app-chart [type]="'polarArea'" [data]="discountsApplied"></app-chart>
+            <h3>Productos con mas stock</h3>
+            <app-chart [type]="'polarArea'" [data]="productsStock"></app-chart>
           </div>
           <div class="graphics">
-            <h3>Productos mas costosos</h3>
-            <app-chart [type]="'polarArea'" [data]="productCosts"></app-chart>
+            <h3>Productos con menos stock</h3>
+            <app-chart [type]="'polarArea'" [data]="littleStockProducts"></app-chart>
           </div>
         </div>
       </div>
@@ -150,21 +151,16 @@
           <div id="newGraphics">
             <h3>Añadir nuevas graficas</h3>
             <form (ngSubmit)="onSubmit()" [formGroup]="reactiveForm">
+    
               <div class="form-check mb-3">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check1"> Stock y ventas por categoria
+                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check2"> Productos mas caros y mas baratos 
                 </label>
               </div>
     
               <div class="form-check mb-3">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check2"> Ventas por mes y retorno productos
-                </label>
-              </div>
-    
-              <div class="form-check mb-3">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check3"> Costo de los productos y descuentos 
+                  <input class="form-check-input" type="checkbox" name="remember" formControlName="check3"> Stock de los productos y Productos mas caros
                 </label>
               </div>
     
