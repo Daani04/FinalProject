@@ -20,14 +20,9 @@ ese producto se guarda con la misma fecha que el primer producto del mismo tipo 
 POR TERMINAL
 Filtrado de productos
 Meter productos a traves del scanner
-Graficos que funcionales
 
 GRAFICOS:
-
-1. Ventas año(De vez en cuando no funciona bien) y ventas semana OK
-2. Producto mas vendido OK
-3. Entrada(Hay veces que se invierten los valores y los saca en negativo) y salida de productos OK
-4. Ingresos Brutos y netos 
-5.Productos mas y menos caros 
-6.Stock de los productos y productos mas costosos 
+Todos => OK
+Revisar funcionamiengo graficos IA, si no eres especifico o hay muchos datos no funciona
+Revisar carga de graficos, no cargan todos de primeras 
 

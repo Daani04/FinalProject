@@ -27,6 +27,8 @@ export class ProductDataComponent {
   public page: number = 0;
   public itemsPerPage: number = 5;
 
+  public allProductType: string[] = [];
+
   public totalPages: number = 0;
   public actualPage: number = 1;
 
@@ -35,6 +37,8 @@ export class ProductDataComponent {
 
   public loading: boolean = false;
   public changueScreen: boolean = false;
+
+  public filtratedProductsActivated = false;
 
   public viewFormModifyData: boolean = false;
 
@@ -55,9 +59,16 @@ export class ProductDataComponent {
   
   ngOnInit(): void {
     let warehouse_id = this.route.snapshot.paramMap.get('id'); // Obtener el ID pasado a traves de la URL
-    console.log('ID recibido:', warehouse_id);
 
     this.takeWarehouseProducts(warehouse_id); 
+  }
+
+  public getProductTypes(): void {  
+    this.productsUser.forEach(product => {
+      if (!this.allProductType.includes(product.product_type)) { //includes => comprueba si el valro de encuentra en el array, devolviendo true o false
+        this.allProductType.push(product.product_type);
+      }
+    });
   }
 
   public takePage(): void {
@@ -95,7 +106,7 @@ export class ProductDataComponent {
   }
   
   public onSearch(): void {
-    console.log(this.reactiveForm.value);
+      this.filtratedProducts();
   }
 
   reactiveForm = new FormGroup({
@@ -148,12 +159,60 @@ export class ProductDataComponent {
 
         this.showProducts();
         this.takePage();
-        console.log('Productos', this.products);
+        this.getProductTypes();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
       }
     });
+  }
+
+  public filtratedProducts():void {
+    let productName = this.reactiveForm.value.searchQuery ?? '';
+    let maxPrice = this.reactiveForm.value.maxPrice ?? 1000;
+    let minPrice = this.reactiveForm.value.minPrice ?? 0;
+    let productType = this.reactiveForm.value.productType ?? '';
+    let entryDate = this.reactiveForm.value.entryDate ?? '';
+
+    let productNameFilterWords = productName.trim().split(' ');
+
+  // Comprobar si al menos un campo es válido para ejecutar el filtrado
+  if (productName || minPrice !== 0 || maxPrice !== 1000 || productType || entryDate) {
+    this.filtratedProductsActivated = true;
+    // Filtrar productos por nombre
+    if (productName !== '') {
+      this.productsUser = this.productsUser.filter(product =>
+        productNameFilterWords.some(word =>
+          product.name.toLowerCase().includes(word.toLowerCase())
+        )
+      );
+    }
+
+    // Filtrar productos por precio
+    this.productsUser = this.productsUser.filter(product =>
+      product.price >= minPrice && product.price <= maxPrice
+    );
+
+    // Filtrar productos por tipo
+    if (productType !== '') {
+      this.productsUser = this.productsUser.filter(product =>
+        product.product_type && product.product_type.toLowerCase().includes(productType.toLowerCase())
+      );
+    }
+
+    //PROBLEMA!!! SOLO PUEDE FILTRAR LAS FECHAS DE LO PRODUCTOS INSERTADOS DESDE POSTMAN, SI ES DESDE LA APLICACOIN NO LOS SACA
+    // Filtrar productos por fecha de entrada
+    if (entryDate !== '') {
+      this.productsUser = this.productsUser.filter(product => {
+        const productDate = new Date(product.entry_date).toISOString().split('T')[0];
+        return productDate === entryDate;
+      });
+    }
+
+  } else {
+    window.location.reload();
+  }
+    console.log(productName, maxPrice, minPrice, productType, entryDate)
   }
   
   public deleteProduct(id: number): void {
