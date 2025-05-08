@@ -370,7 +370,6 @@ export class GraphicsComponent implements OnInit {
       this.chartComponentCircularMostSale.updateChart();
     }
 
-    //NO
     if (this.lineEntrateProducts.datasets[0].data.length > 0 && this.chartComponentLineEntrateProducts) {
       this.chartComponentLineEntrateProducts.updateChart();
     }
@@ -398,8 +397,6 @@ export class GraphicsComponent implements OnInit {
     if (this.littleStockProducts.datasets[0].data.length > 0 && this.chartComponentLittleStockProducts) {
       this.chartComponentLittleStockProducts.updateChart();
     }
-
-    
  }
 
  //-------------------------------CALCULOS DE DATOS PARA LOS GRAFICOS-------------------------------------------//
@@ -427,6 +424,9 @@ export class GraphicsComponent implements OnInit {
     this.saleProductsForMonth = salesForMonth;
     this.entrateProductsForMonth = unsoldProducts;
     this.reloadGraphics();
+
+    console.log('Salida de productos OK', this.saleProductsForMonth);
+    console.log('Entrada de productos OK', this.entrateProductsForMonth);
   }
 
   public calculateProductPrices(): void {

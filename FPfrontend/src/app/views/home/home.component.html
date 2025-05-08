@@ -15,20 +15,20 @@
     </div>
 }
 
-    <div class="row justify-content-center">
-      <div class="col-md-12 mb-4">
-        <div class="double-chart h-100">
-          <div class="graphics">
-            <h3>Entrada de productos</h3>
-            <app-chart [type]="'line'" [data]="lineExitProducts"></app-chart> 
-          </div>
-          <div class="graphics">
-            <h3>Salida de productos</h3>
-            <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
-          </div>
+  <div class="row justify-content-center">
+    <div class="col-md-12 mb-4">
+      <div class="double-chart h-100">
+        <div class="graphics">
+          <h3>Entrada de productos</h3>
+          <app-chart #chartComponentLineEntrateProducts [type]="'line'" [data]="lineEntrateProducts"></app-chart>
         </div>
-      </div>     
+        <div class="graphics">
+          <h3>Salida de productos</h3>
+          <app-chart #chartComponentLineExitProducts [type]="'line'" [data]="lineExitProducts"> </app-chart>
+        </div>
+      </div>
     </div>
+  </div>
 
     <div class="row justify-content-center gap-5 custom-row" style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
       <div class="col-md-5 p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">

@@ -28,3 +28,6 @@ Revisar carga de graficos, no cargan todos de primeras
 FILTRADO:
 Las fechas solo se filtran bien si se insertan desde postman, si se inserta desde el formulario no se filtran
 
+HOME:
+Los graficos no se generan pero se cogen los datos bien
+

@@ -3,13 +3,14 @@ import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
-import { ProductAllData, Warehouse } from '../../models/response.interface';
+import { ProductAllData, ProductSold, Warehouse } from '../../models/response.interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
 import { NgStyle } from '@angular/common';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -19,18 +20,24 @@ import { NgStyle } from '@angular/common';
 })
 export class HomeComponent {
 
-
   constructor(public service: RequestService, private http: HttpClient) { }
+
+  @ViewChild('chartComponentLineEntrateProducts') chartComponentLineEntrateProducts!: ChartComponent;
+  @ViewChild('chartComponentLineExitProducts') chartComponentLineExitProducts!: ChartComponent;
 
   public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
   public apiProductsUrl: string = "http://localhost:8000/api/data";
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
+  public apiSalesUrl: string = "http://localhost:8000/api/sales";
 
   public userName = localStorage.getItem('username');
 
   public warehouses: Warehouse[] = [];
   public products: ProductAllData[] = [];
   public selectedWarehouseId: number = 0;
+
+  public productsSold: ProductSold[] = [];
+  public productsSoldQuantity: number[] = [];
 
   public cont: number = 0;
   public cont2: number = 0;
@@ -57,6 +64,9 @@ export class HomeComponent {
   public actualPage: number = 1;
 
   public randomWarehouseName: string = '';
+
+  public saleProductsForMonth: number[] = [];
+  public entrateProductsForMonth: number[] = [];
     
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -293,9 +303,11 @@ export class HomeComponent {
           }
         }
 
-        this.page = 0; // 👈 Solución clave aquí
+        this.page = 0;
         this.showProducts();
         this.takePage();
+        this.getProductsSold();
+        console.log('Productos(P): ', this.productsUser);
       },
       error: (error) => {
         this.loading = false;
@@ -304,8 +316,32 @@ export class HomeComponent {
       }
     });
   }
-
-
+//-----------------------------------------------GENERAR GRAFICOS(Saca los productos vendidos, pero solo se usan en los graficos)------//
+  public getProductsSold(): void {
+    let userIdString = localStorage.getItem('userId');
+  
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+  
+    let userId = parseInt(userIdString, 10);
+  
+    let apiUrl = `${this.apiSalesUrl}/user/${userId}`;
+  
+    this.service.takeProducts(apiUrl).subscribe({
+      next: (response) => {
+        this.productsSold = response;
+        this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
+        console.log(this.productsSold);
+        this.calculateMonthlySalesAndStock();
+      },
+      error: (error) => {
+        console.error('Error al sacar los productos:', error);
+      }
+    });
+  }
+//--------------------------------------------------------------------------------------------------------//
   public changeShowForm(): void {
     if (this.showForm === false) {
       this.showForm = true;
@@ -329,27 +365,77 @@ export class HomeComponent {
   public closeModal(): void {
     this.openModalScanner = false;
   }
+  //------------------------------------------------GENERAR GRAFICOS CON DATOS BBDD-------------------------------//
+  public calculateMonthlySalesAndStock(): void {
+    console.log('Productos(OP)', this.productsUser); 
+    let actualYear = new Date().getFullYear();
+    let salesForMonth = new Array(12).fill(0);
+    let stockForMonth = new Array(12).fill(0);
+  
+    for (let i = 0; i < this.productsSold.length; i++) {
+      let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
+      if (fecha.getFullYear() === actualYear) {
+        let month = fecha.getMonth();
+        salesForMonth[month] += this.productsSoldQuantity[i] || 0;
+      }
+    }
+  
+    for (let i = 0; i < this.productsUser.length; i++) {
+      let product = this.productsUser[i];
+      if (product.entry_date) {
+        let month = new Date(product.entry_date).getMonth();
+        stockForMonth[month] += product.stock;
+      }
+    }
+  
+    let unsoldProducts = stockForMonth.map((stock, i) => stock - salesForMonth[i]);
+  
+    this.saleProductsForMonth = salesForMonth;
+    this.entrateProductsForMonth = unsoldProducts;
+  
+    this.reloadGraphics();
+  }
 
-  public lineExitProducts = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-    datasets: [{
-      label: 'Entrada de productos',
-      data: [5, 15, 10, 20, 18],
-      borderColor: '#8F5B8C',
-      borderWidth: 2,
-      fill: false
-    }]
-  };
+  
+  public reloadGraphics(): void {
+  if (this.saleProductsForMonth.length > 0) {
+      this.lineExitProducts.datasets[0].data = this.saleProductsForMonth;
+  }
+  if (this.entrateProductsForMonth.length > 0) {
+      this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
+  }
 
-  public lineEntrateProducts = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
-    datasets: [{
-      label: 'Salida de productos',
-      data: [5, 15, 10, 20, 18],
-      borderColor: '#6F4D94',
-      borderWidth: 2,
-      fill: false
-    }]
-  };
+  if (this.lineEntrateProducts.datasets[0].data.length > 0 && this.chartComponentLineEntrateProducts) {
+    this.chartComponentLineEntrateProducts.updateChart();
+  }
+  if (this.lineExitProducts.datasets[0].data.length > 0 && this.chartComponentLineExitProducts) {
+    this.chartComponentLineExitProducts.updateChart();
+  }
+  console.log('Salida de productos', this.saleProductsForMonth);
+  console.log('Entrada de productos', this.entrateProductsForMonth);
+ }
+ //------------------------------------------------------------------------------------------------------//
+
+ public lineExitProducts: any = {  
+  labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+  datasets: [{
+    label: 'Salida de productos',
+    data: [],  
+    borderColor: '#6F4D94', 
+    borderWidth: 2,
+    fill: false
+  }]
+};
+
+public lineEntrateProducts: any = {  
+  labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+  datasets: [{
+    label: 'Entrada de productos',
+    data: [],  
+    borderColor: '#9A8BCA', 
+    borderWidth: 2,
+    fill: false
+  }]
+};
 
 }
