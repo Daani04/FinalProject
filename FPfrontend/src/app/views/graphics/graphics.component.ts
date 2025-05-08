@@ -317,8 +317,10 @@ export class GraphicsComponent implements OnInit {
         this.lineEntrateProducts.datasets[0].data = this.entrateProductsForMonth;
     }
 
-    this.lineGrossProfits.datasets[0].data = this.grossIncome;
-    this.lineNetProfits.datasets[0].data = this.netIncome;
+    if (this.grossIncome.length > 0 && this.netIncome.length > 0) {
+      this.lineGrossProfits.datasets[0].data = this.grossIncome;
+      this.lineNetProfits.datasets[0].data = this.netIncome;
+    }
 
     if (this.mostExpensiveProductsName.length > 0 && this.mostExpensiveProductsPrice.length > 0) {
       this.mostExpensiveProducts.labels = this.mostExpensiveProductsName;
@@ -330,7 +332,15 @@ export class GraphicsComponent implements OnInit {
       this.mostCheapProducts.datasets[0].data = this.mostCheapProductPrice;
     } 
 
-    
+    if (this.mostStockProductsName.length > 0 && this.mostStockProductsValue.length > 0) {
+      this.moreStockProducts.labels = this.mostStockProductsName;
+      this.moreStockProducts.datasets[0].data = this.mostStockProductsValue;
+    }
+
+    if (this.lessStockProductsName.length > 0 && this.lessStockProductsValue.length > 0) {
+      this.littleStockProducts.labels = this.lessStockProductsName;
+      this.littleStockProducts.datasets[0].data = this.lessStockProductsValue;
+    }
 
     if (this.chartComponent?.updateChart) {
       this.chartComponent.updateChart();
@@ -471,7 +481,7 @@ export class GraphicsComponent implements OnInit {
 //--------------------------------------------------------------------------------------------------//
   
   public checkProductsData():void {
-    if (this.products.length > 0 || this.productsSold.length > 0) {
+    if (this.products.length > 0 && this.productsSold.length > 0) {
       this.loadingAllPage = false; 
       this.changueScreen = false; 
     } else {
@@ -562,18 +572,6 @@ export class GraphicsComponent implements OnInit {
   };
   
   //GRAFICOS EXTRA
-  
-  public productsStock: any = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    datasets: [{
-      label: 'Descuentos aplicados',
-      data: [200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750],  
-      backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA'], 
-      borderColor: 'rgb(159, 94, 148)', 
-      borderWidth: 2
-    }]
-  };
-  
   public mostExpensiveProducts: any = {  
     labels: [],
     datasets: [{
@@ -597,14 +595,26 @@ export class GraphicsComponent implements OnInit {
   };
 
   public littleStockProducts: any = {  
-    labels: ['Producto A', 'Producto B', 'Producto C'],
+    labels: [],
     datasets: [{
       label: 'Costos de productos',
-      data: [150, 200, 250],
+      data: [],
       backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#7A6DA7', '#9A8BCA'], 
       borderColor: 'rgb(159, 94, 148)',
       borderWidth: 2
     }]
   };
+
+  public moreStockProducts: any = {  
+    labels: [],
+    datasets: [{
+      label: 'Descuentos aplicados',
+      data: [],  
+      backgroundColor: ['#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94'], 
+      borderColor: 'rgb(159, 94, 148)', 
+      borderWidth: 2
+    }]
+  };
+  
  
 }  
