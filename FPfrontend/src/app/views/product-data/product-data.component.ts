@@ -196,10 +196,10 @@ export class ProductDataComponent {
     // Filtrar productos por tipo
     if (productType !== '') {
       this.productsUser = this.productsUser.filter(product =>
-        product.product_type && product.product_type.toLowerCase().includes(productType.toLowerCase())
+        product.product_type && product.product_type.toLowerCase() === productType.toLowerCase()
       );
     }
-
+    
     //PROBLEMA!!! SOLO PUEDE FILTRAR LAS FECHAS DE LO PRODUCTOS INSERTADOS DESDE POSTMAN, SI ES DESDE LA APLICACOIN NO LOS SACA
     // Filtrar productos por fecha de entrada
     if (entryDate !== '') {

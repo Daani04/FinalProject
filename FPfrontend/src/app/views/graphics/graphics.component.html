@@ -22,11 +22,11 @@
       <div class="stacked-charts h-100">
         <div class="graphics">
           <h3>Ventas de este año</h3>
-            <app-chart #chartComponent [type]="'bar'" [data]="barSale"> </app-chart>
+            <app-chart #chartComponentBarSale [type]="'bar'" [data]="barSale"> </app-chart>
         </div>
         <div class="graphics">
           <h3>Ventas de esta semana</h3>
-          <app-chart #chartComponent [type]="'line'" [data]="lineSale"> </app-chart>
+          <app-chart #chartComponentLineSale [type]="'line'" [data]="lineSale"> </app-chart>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="col-md-5 mb-4 d-flex flex-column flex-grow-1">
       <div class="single-chart h-100">
         <h3>Productos mas vendidos</h3>
-        <app-chart #chartComponent [type]="'pie'" [data]="circularMostSale"> </app-chart>
+          <app-chart #chartComponentCircularMostSale [type]="'pie'" [data]="circularMostSale"> </app-chart>
       </div>
     </div>
   </div>
@@ -44,11 +44,11 @@
       <div class="double-chart h-100">
         <div class="graphics">
           <h3>Entrada de productos</h3>
-          <app-chart [type]="'line'" [data]="lineEntrateProducts"></app-chart>
+          <app-chart #chartComponentLineEntrateProducts [type]="'line'" [data]="lineEntrateProducts"></app-chart>
         </div>
         <div class="graphics">
           <h3>Salida de productos</h3>
-          <app-chart #chartComponent [type]="'line'" [data]="lineExitProducts"> </app-chart>
+          <app-chart #chartComponentLineExitProducts [type]="'line'" [data]="lineExitProducts"> </app-chart>
         </div>
       </div>
     </div>
@@ -59,11 +59,11 @@
       <div class="double-chart h-100">
         <div class="graphics">
           <h3>Gastos en productos</h3>
-          <app-chart #chartComponent [type]="'line'" [data]="lineGrossProfits"> </app-chart>
+          <app-chart #chartComponentLineGrossProfits [type]="'line'" [data]="lineGrossProfits"> </app-chart>
         </div>
         <div class="graphics">
           <h3>Beneficio estimado</h3>
-          <app-chart #chartComponent [type]="'line'" [data]="lineNetProfits"> </app-chart>
+          <app-chart #chartComponentLineNetProfits [type]="'line'" [data]="lineNetProfits"> </app-chart>
         </div>
       </div>
     </div>
@@ -76,11 +76,11 @@
         <div class="double-chart h-100">
           <div class="graphics">
             <h3>Productos mas caros</h3>
-            <app-chart #chartComponent [type]="'radar'" [data]="mostExpensiveProducts"> </app-chart>
+            <app-chart #chartComponentMostExpensiveProducts [type]="'radar'" [data]="mostExpensiveProducts"> </app-chart>
           </div>
           <div class="graphics">
             <h3>Productos mas baratos</h3>
-            <app-chart #chartComponent [type]="'radar'" [data]="mostCheapProducts"> </app-chart>
+            <app-chart #chartComponentMostCheapProducts [type]="'radar'" [data]="mostCheapProducts"> </app-chart>
           </div>
         </div>
       </div>
@@ -93,12 +93,12 @@
         <div class="double-chart h-100">
           <div class="graphics">
             <h3>Productos con mas stock</h3>
-            <app-chart #chartComponent [type]="'polarArea'" [data]="moreStockProducts"> </app-chart>
+            <app-chart #chartComponentMoreStockProducts [type]="'polarArea'" [data]="moreStockProducts"> </app-chart>
 
           </div>
           <div class="graphics">
             <h3>Productos con menos stock</h3>
-            <app-chart #chartComponent [type]="'polarArea'" [data]="littleStockProducts"> </app-chart>
+            <app-chart #chartComponentLittleStockProducts [type]="'polarArea'" [data]="littleStockProducts"> </app-chart>
           </div>
         </div>
       </div>

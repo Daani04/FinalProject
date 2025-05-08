@@ -17,7 +17,23 @@ import { RouterLink } from '@angular/router';
 })
 export class GraphicsComponent implements OnInit {
 
-  @ViewChild('chartComponent') chartComponent!: ChartComponent;
+@ViewChild('chartComponentBarSale') chartComponentBarSale!: ChartComponent;
+@ViewChild('chartComponentLineSale') chartComponentLineSale!: ChartComponent;
+
+@ViewChild('chartComponentCircularMostSale') chartComponentCircularMostSale!: ChartComponent;
+
+@ViewChild('chartComponentLineEntrateProducts') chartComponentLineEntrateProducts!: ChartComponent;
+@ViewChild('chartComponentLineExitProducts') chartComponentLineExitProducts!: ChartComponent;
+
+@ViewChild('chartComponentLineGrossProfits') chartComponentLineGrossProfits!: ChartComponent;
+@ViewChild('chartComponentLineNetProfits') chartComponentLineNetProfits!: ChartComponent;
+
+//Extra
+@ViewChild('chartComponentMostExpensiveProducts') chartComponentMostExpensiveProducts!: ChartComponent;
+@ViewChild('chartComponentMostCheapProducts') chartComponentMostCheapProducts!: ChartComponent;
+
+@ViewChild('chartComponentMoreStockProducts') chartComponentMoreStockProducts!: ChartComponent;
+@ViewChild('chartComponentLittleStockProducts') chartComponentLittleStockProducts!: ChartComponent;
 
   constructor(public service: RequestService) { }
 
@@ -299,7 +315,7 @@ export class GraphicsComponent implements OnInit {
     if (this.saleProductsForMonth.length > 0) {
         this.barSale.datasets[0].data = this.saleProductsForMonth;
     }
- 
+
     if (this.moreSoldProductsName.length > 0 && this.moreSoldProductsQuantity.length > 0) {
         this.circularMostSale.labels = this.moreSoldProductsName;
         this.circularMostSale.datasets[0].data = this.moreSoldProductsQuantity;
@@ -342,9 +358,47 @@ export class GraphicsComponent implements OnInit {
       this.littleStockProducts.datasets[0].data = this.lessStockProductsValue;
     }
 
-    if (this.chartComponent?.updateChart) {
-      this.chartComponent.updateChart();
+    
+    if (this.barSale.datasets[0].data.length > 0 && this.chartComponentBarSale) {
+      this.chartComponentBarSale.updateChart();
     }
+    if (this.lineSale.datasets[0].data.length > 0 && this.chartComponentLineSale) {
+      this.chartComponentLineSale.updateChart();
+    }
+
+    if (this.circularMostSale.datasets[0].data.length > 0 && this.chartComponentCircularMostSale) {
+      this.chartComponentCircularMostSale.updateChart();
+    }
+
+    //NO
+    if (this.lineEntrateProducts.datasets[0].data.length > 0 && this.chartComponentLineEntrateProducts) {
+      this.chartComponentLineEntrateProducts.updateChart();
+    }
+    if (this.lineExitProducts.datasets[0].data.length > 0 && this.chartComponentLineExitProducts) {
+      this.chartComponentLineExitProducts.updateChart();
+    }
+
+    if (this.lineGrossProfits.datasets[0].data.length > 0 && this.chartComponentLineGrossProfits) {
+      this.chartComponentLineGrossProfits.updateChart();
+    }
+    if (this.lineNetProfits.datasets[0].data.length > 0 && this.chartComponentLineNetProfits) {
+      this.chartComponentLineNetProfits.updateChart();
+    }
+
+    if (this.mostExpensiveProducts.datasets[0].data.length > 0 && this.chartComponentMostExpensiveProducts) {
+      this.chartComponentMostExpensiveProducts.updateChart();
+    }
+    if (this.mostCheapProducts.datasets[0].data.length > 0 && this.chartComponentMostCheapProducts) {
+      this.chartComponentMostCheapProducts.updateChart();
+    }
+
+    if (this.moreStockProducts.datasets[0].data.length > 0 && this.chartComponentMoreStockProducts) {
+      this.chartComponentMoreStockProducts.updateChart();
+    }
+    if (this.littleStockProducts.datasets[0].data.length > 0 && this.chartComponentLittleStockProducts) {
+      this.chartComponentLittleStockProducts.updateChart();
+    }
+
     
  }
 
@@ -493,6 +547,18 @@ export class GraphicsComponent implements OnInit {
   
   //GRAFICOS PREDEFINIDOS
   public barSale: any = {  
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    datasets: [{
+      label: 'Ventas anuales',
+      data: [],  
+      backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA'],
+      borderColor: '#5B3F7C', 
+      borderWidth: 1
+    }]
+  };
+
+  //PRUEBA
+  public barSale2: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
       label: 'Ventas anuales',
