@@ -12,7 +12,7 @@ o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacio
 
 Revisar graficos, el de productos mas caros no se genera, teniendo todos los datos
 
-Revisar generacino de graficos por IA, ha dejado de funcionar
+Revisar generacino de graficos por IA, ha dejado de funcionar(PROBLEMA: Deja de funcionar cuando trabaja con muchos datos)
 
 Cuando vendemos un mismo producto los campos no varias, si hay alguna modificacion en algun campo como puede ser la fecha
 ese producto se guarda con la misma fecha que el primer producto del mismo tipo vendido 

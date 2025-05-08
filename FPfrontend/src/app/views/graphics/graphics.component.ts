@@ -42,6 +42,14 @@ export class GraphicsComponent implements OnInit {
   public mostExpensiveProductsPrice: number[] = [];
   public mostExpensiveProductsName: string[] = [];
 
+  public mostCheapProductName: string[] = [];
+  public mostCheapProductPrice: number[] = [];
+
+  public mostStockProductsName: string[] = [];
+  public mostStockProductsValue: number[] = [];
+
+  public lessStockProductsName: string[] = [];
+  public lessStockProductsValue: number[] = [];
 
   public cont1: number = 0;
   public cont2: number = 0;
@@ -179,6 +187,9 @@ export class GraphicsComponent implements OnInit {
       let labelsSplit = this.dataNewGraphics[0].split(' ');
       let dataSplit = this.dataNewGraphics[2].split(' ');
 
+      console.log('LabelSplit: ', labelsSplit);
+      console.log('DataSplit: ', dataSplit);
+
       for (let i = 0; i < dataSplit.length; i++) {
         necessaryColors.push(allColors[i]);  
       }
@@ -269,15 +280,17 @@ export class GraphicsComponent implements OnInit {
       next: (response) => {
         this.productsSold = response;
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
-        this.getProductsForMonth();
         this.checkProductsData();
         this.getMoreSoldProducts();
         this.getProductsForWeek();
+        this.calculateIncomeAndBenefit();
+        this.calculateStockExtremes();
+        this.calculateProductPrices();
+        this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
         this.checkProductsData();
-
       }
     });
   }
@@ -307,31 +320,30 @@ export class GraphicsComponent implements OnInit {
     this.lineGrossProfits.datasets[0].data = this.grossIncome;
     this.lineNetProfits.datasets[0].data = this.netIncome;
 
-    if (this.mostExpensiveProductsPrice.length > 0 && this.mostExpensiveProductsName.length > 0) {
+    if (this.mostExpensiveProductsName.length > 0 && this.mostExpensiveProductsPrice.length > 0) {
       this.mostExpensiveProducts.labels = this.mostExpensiveProductsName;
-      this.mostExpensiveProducts.datasets[0] = this.mostExpensiveProductsPrice;
-    }
+      this.mostExpensiveProducts.datasets[0].data = this.mostExpensiveProductsPrice;
+    } 
+
+    if (this.mostCheapProductName.length > 0 && this.mostCheapProductPrice.length > 0) {
+      this.mostCheapProducts.labels = this.mostCheapProductName;
+      this.mostCheapProducts.datasets[0].data = this.mostCheapProductPrice;
+    } 
 
     
- 
+
     if (this.chartComponent?.updateChart) {
       this.chartComponent.updateChart();
     }
     
  }
- 
-  public getProductsForMonth(): void { 
+
+ //-------------------------------CALCULOS DE DATOS PARA LOS GRAFICOS-------------------------------------------//
+  public calculateMonthlySalesAndStock(): void {
     let actualYear = new Date().getFullYear();
     let salesForMonth = new Array(12).fill(0);
     let stockForMonth = new Array(12).fill(0);
-    
-    let grossIncomeMony = new Array(12).fill(0);
-    let netIncomeMoney = new Array(12).fill(0);
 
-    let mostExpensiveProductsValue: number[] = []; 
-    let mostExpensiveProductN: string[] = [];
-    
-    // Ventas de cada mes
     for (let i = 0; i < this.productsSold.length; i++) {
       let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
       if (fecha.getFullYear() === actualYear) {
@@ -339,47 +351,73 @@ export class GraphicsComponent implements OnInit {
         salesForMonth[month] += this.productsSoldQuantity[i] || 0;
       }
     }
-  
+
     for (let i = 0; i < this.products.length; i++) {
       let product = this.products[i];
-      let month = new Date(product.entry_date).getMonth(); 
-      stockForMonth[month] += product.stock; 
-      grossIncomeMony[month] += product.purchase_price;
-      netIncomeMoney[month] += product.price
+      let month = new Date(product.entry_date).getMonth();
+      stockForMonth[month] += product.stock;
     }
 
-    //SE COGE BRAND PERO TAMBIEN SERIA CORRECTO COGER NOMBRE, DEPENDE DE COMO SE QUIERA USAR
-    const sortedByPrice = [...this.products]
-    .filter(p => p.price !== undefined && p.id !== undefined && p.brand !== undefined)
-    .sort((a, b) => b.price - a.price)
-    .slice(0, 5);
+    let unsoldProducts = stockForMonth.map((stock, i) => stock - salesForMonth[i]);
 
-    mostExpensiveProductsValue = sortedByPrice.map(p => p.price!);
-    mostExpensiveProductN = sortedByPrice.map(p => p.name!);
-
-    this.mostExpensiveProductsName = mostExpensiveProductN;
-    this.mostExpensiveProductsPrice = mostExpensiveProductsValue;
-  
-    let unsoldProductsForMonth = stockForMonth.map((stock, index) => stock - salesForMonth[index]);
-    
     this.saleProductsForMonth = salesForMonth;
-    this.entrateProductsForMonth = unsoldProductsForMonth; 
-
-    let estimatedBenefit = grossIncomeMony.map((gross, i) => netIncomeMoney[i] - gross);
-
-    this.grossIncome = grossIncomeMony;
-    this.netIncome = estimatedBenefit;
-
-
+    this.entrateProductsForMonth = unsoldProducts;
     this.reloadGraphics();
-    console.log('Productos mas caros: ', this.mostExpensiveProductsPrice);
-    console.log('Nombres de productos más caros:', this.mostExpensiveProductsName);
-    //console.log('COMPRA:', this.grossIncome);
-    //console.log('VENTA: ',  netIncomeMoney);
-    //console.log('BENEFICIO: ',  this.netIncome);
-
   }
-  
+
+  public calculateProductPrices(): void {
+    const sortedByPriceDesc = [...this.products]
+      .filter(p => p.price !== undefined && p.name !== undefined)
+      .sort((a, b) => b.price - a.price)
+      .slice(0, 5);
+
+    this.mostExpensiveProductsName = sortedByPriceDesc.map(p => p.name!);
+    this.mostExpensiveProductsPrice = sortedByPriceDesc.map(p => p.price!);
+
+    const sortedByPriceAsc = [...this.products]
+      .filter(p => p.price !== undefined && p.name !== undefined)
+      .sort((a, b) => a.price - b.price)
+      .slice(0, 5);
+
+    this.mostCheapProductName = sortedByPriceAsc.map(p => p.name!);
+    this.mostCheapProductPrice = sortedByPriceAsc.map(p => p.price!);
+    this.reloadGraphics();
+  }
+
+  public calculateStockExtremes(): void {
+    const sortedByStockDesc = [...this.products]
+      .filter(p => p.stock !== undefined && p.name !== undefined)
+      .sort((a, b) => b.stock - a.stock)
+      .slice(0, 5);
+
+    this.mostStockProductsName = sortedByStockDesc.map(p => p.name!);
+    this.mostStockProductsValue = sortedByStockDesc.map(p => p.stock!);
+
+    const sortedByStockAsc = [...this.products]
+      .filter(p => p.stock !== undefined && p.name !== undefined)
+      .sort((a, b) => a.stock - b.stock)
+      .slice(0, 5);
+
+    this.lessStockProductsName = sortedByStockAsc.map(p => p.name!);
+    this.lessStockProductsValue = sortedByStockAsc.map(p => p.stock!);
+    this.reloadGraphics();
+  }
+
+  public calculateIncomeAndBenefit(): void {
+    let grossIncome: number[] = new Array(12).fill(0);
+    let netIncome: number[] = new Array(12).fill(0);
+
+    for (let product of this.products) {
+      let month = new Date(product.entry_date).getMonth();
+      grossIncome[month] += product.purchase_price;
+      netIncome[month] += product.price;
+    }
+
+    this.grossIncome = grossIncome;
+    this.netIncome = netIncome.map((net, i) => net - grossIncome[i]);
+    this.reloadGraphics();
+  }
+
   public getProductsForWeek(): void {
     let actualYear = new Date().getFullYear();
     let currentWeekNumber = this.getWeekNumber(new Date());
@@ -430,7 +468,7 @@ export class GraphicsComponent implements OnInit {
     //console.log('Cantidad', this.moreSoldProductsQuantity);
     //console.log('MoreSoldProductsName', this.moreSoldProductsName);
   }
-  
+//--------------------------------------------------------------------------------------------------//
   
   public checkProductsData():void {
     if (this.products.length > 0 || this.productsSold.length > 0) {
@@ -546,12 +584,12 @@ export class GraphicsComponent implements OnInit {
       borderWidth: 2
     }]
   };
-  
+
   public mostCheapProducts: any = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    labels: [],
     datasets: [{
       label: 'Productos mas baratos',
-      data: [200, 250, 300, 350, 700, 450, 500, 550, 600, 650, 700, 750],  
+      data: [],  
       backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94', '#7A6DA7'], 
       borderColor: 'rgb(159, 94, 148)',
       borderWidth: 2
