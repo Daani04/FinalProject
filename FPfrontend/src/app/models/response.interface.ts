@@ -17,12 +17,12 @@ export interface ProductAllData {
 //NO ESTAN TODOS LOS CAMPOS DECLARADOS, HAY QUE DECLARARLOS
 //CAMPOS AÑADIDOS: Name
 export interface ProductSold {
-    id: number;
-    productData: ProductAllData;  
-    warehouse: Warehouse;
+    id?: number | null;
+    product: number;  
+    warehouse: number;
     quantity: number;
     sale_date: string;  
-    name: string
+    name?: string| null
 }
 
 export interface User {

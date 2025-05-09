@@ -80,6 +80,10 @@ export class GraphicsComponent implements OnInit {
   public loadingAllPage: boolean = false;
   public changueScreen: boolean = false;
 
+  public loadingData: boolean = false;
+  public changueScreenData: boolean = false;
+
+
   public showFormIa: boolean = false;
   public GraphicIA: any;
   public dataNewGraphics: string[] = [];
@@ -281,6 +285,8 @@ export class GraphicsComponent implements OnInit {
   }
 
   public getProductsSold(): void {
+    this.loadingData = true;
+    this.changueScreenData = true; 
     let userIdString = localStorage.getItem('userId');
   
     if (!userIdString) {
@@ -294,9 +300,11 @@ export class GraphicsComponent implements OnInit {
   
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
+        this.loadingData = false;
+        this.changueScreenData = false; 
+
         this.productsSold = response;
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
-        this.checkProductsData();
         this.getMoreSoldProducts();
         this.getProductsForWeek();
         this.calculateIncomeAndBenefit();
@@ -305,6 +313,8 @@ export class GraphicsComponent implements OnInit {
         this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
+        this.loadingData = false;
+        this.changueScreenData = false; 
         console.error('Error al sacar los productos:', error);
         this.checkProductsData();
       }
@@ -505,10 +515,10 @@ export class GraphicsComponent implements OnInit {
     return Math.ceil(((date.valueOf() - startDate.valueOf()) / 86400000 + 1) / 7);
   }
 
-  public getMoreSoldProducts(): void {  
+  public getMoreSoldProducts(): void { 
     for (let i = 0; i < this.productsSold.length; i++) {
       let quantity = this.productsSold[i].quantity;
-      let name = this.productsSold[i].name;
+      let name = this.productsSold[i].name ?? 'No se ha encontrado el nombre del producto';
   
       if (this.moreSoldProductsQuantity.length < 4) {
         this.moreSoldProductsQuantity.push(quantity);

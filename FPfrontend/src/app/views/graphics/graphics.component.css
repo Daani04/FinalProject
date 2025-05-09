@@ -223,7 +223,7 @@ h3 {
   }
 }
 
-/*CSS para la imagen de carga*/
+/*CSS para la imagen de carga de los graficos generados por IA*/
 .spinner {
   width: 40px;
   height: 40px;
@@ -279,7 +279,7 @@ h3 {
 }
 
 
-/*CSS para la pantalla de carga al no tener datos*/
+/*CSS para la pantalla(NO pantalla de carga) no tener datos*/
 .spinner-background {
   position: fixed;
   top: 0;
@@ -290,7 +290,7 @@ h3 {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 999;
 }
 
 #noProductsAlert {
@@ -323,4 +323,52 @@ h3 {
   align-items: center;
   gap: 20px; 
 }
+
+/*Pantalla de carga*/
+.spinnerLoadingData {
+  width: 70px;
+  height: 70px;
+  position: relative;
+}
+
+.spinnerLoadingData-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.doubleD-bounce1, 
+.doubleD-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-image: linear-gradient(to bottom, #4E2394, #DBC9F5);
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.doubleD-bounce2 {
+  animation-delay: -1.0s;
+}
+
+@keyframes sk-bounce {
+  0%, 100% { 
+    transform: scale(0);
+  } 50% { 
+    transform: scale(1.0);
+  }
+}
+
+
+
 

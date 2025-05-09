@@ -1,8 +1,8 @@
 .double-chart {
   display: flex;
   width: 100%;
-  height: 100%;
-  min-height: 400px;
+  min-height: 100px;
+  max-height: 900px;
   border-radius: 15px;
   background-color: rgba(60, 60, 64, 0.5);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -21,6 +21,31 @@
   width: 100%;
   display: block;
   padding: 20px;
+}
+
+.alertNoDataProductsContainer {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: 0.1px solid rgba(146, 146, 147, 0.2);
+  border-radius: 20px;
+  max-width: 800px;
+  margin: 30px auto; 
+  font-size: 0.8em;
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px;
+}
+
+@media (max-width: 767px) {
+  .alertNoDataProductsContainer {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+}
+
+
+.alertNoDataProductsH5 {
+  padding: 12px;
+  margin: 0 auto;
 }
 
 
@@ -171,6 +196,26 @@ form {
   width: 50px;
   height: 50px;
   cursor: pointer;
+}
+
+.withdrawProductsManually {
+  background-color: rgba(60, 60, 64, 0.5);
+  border: 0.1px solid rgba(146, 146, 147, 0.5);
+}
+
+#formForDeleteManually {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+}
+
+#titlewithdrawProduct{
+  margin-top: 30px;
+}
+
+#withdrawButton {
+  margin-bottom: 30px;
 }
 
 /* Pantalla de carga */

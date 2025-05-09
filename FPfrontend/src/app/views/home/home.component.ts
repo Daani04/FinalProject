@@ -49,6 +49,15 @@ export class HomeComponent {
 
   public showForm: boolean = false;
 
+  public showWithdrawForm: boolean = false;
+  public selectWarehouse: boolean = false;
+  public userWarehousesNames: string[] = [];
+  public selectUserWarehouse: number = 0;
+  public productUserNames: any[] = [];
+
+  public productSoldId: number = 0;
+  public productSoldQuantity: number = 0;
+
   public contInsertionData: number = 0;
 
   public userLocation: string = '';
@@ -57,6 +66,7 @@ export class HomeComponent {
 
   public filtratedProductsforWarehouseId: any[] = [];
   public productsUser: any[] = [];
+
 
   public page: number = 0;
   public itemsPerPage: number = 4;
@@ -114,6 +124,98 @@ export class HomeComponent {
     selectWarehouse: new FormControl('')
   });
 
+  withdrawFormSelectWarehouse = new FormGroup({
+    warehouseName: new FormControl(''),
+  });
+
+  withdrawFormSelectProduct = new FormGroup({
+    productName: new FormControl(''),
+    productQuantity: new FormControl('')
+  });
+//-----------------------------------------------------------------------------------
+/**
+ * Propósito: Muestra el formulario de selección de almacén y carga los nombres de los almacenes disponibles
+ */
+public loadWarehouseSelection(): void {
+  this.userWarehousesNames = this.warehouses.map(warehouse => warehouse.name);
+  this.showWithdrawForm = true;
+}
+
+/**
+ * Propósito: Procesa la selección del almacén y carga los productos disponibles en ese almacén
+ */
+public handleWarehouseSelection(): void {
+  this.selectWarehouse = true;
+  this.showWithdrawForm = false;
+
+  const selectedWarehouse = this.warehouses.find(
+    warehouse => warehouse.name === this.withdrawFormSelectWarehouse.value.warehouseName
+  );
+  
+  this.selectUserWarehouse = selectedWarehouse?.id ?? 0;
+  this.loadWarehouseProducts();
+
+  //console.log('Almacén seleccionado:', this.selectUserWarehouse);
+}
+
+/**
+ * Propósito: Carga y filtra los productos disponibles en el almacén seleccionado
+ */
+public loadWarehouseProducts(): void {
+  this.productUserNames = this.productsUser
+    .filter(product => product.warehouse == this.selectUserWarehouse)
+    .map(product => ({
+      id: product.id,
+      name: product.name
+    }));
+
+  //console.log('Productos disponibles:', this.productUserNames);
+}
+
+/**
+ * Propósito: Procesa la retirada de productos del inventario
+ */
+public moveToSold(): void {
+  let productId = Number(this.withdrawFormSelectProduct.value.productName);
+  let quantity = Number(this.withdrawFormSelectProduct.value.productQuantity);
+
+  if (!productId || !quantity) {
+    console.error('Datos incompletos');
+    return;
+  }
+
+  let selectedProduct = this.productUserNames.find(p => p.id == productId);
+
+  if (selectedProduct) {
+    this.productSoldId = selectedProduct.id
+    this.productSoldQuantity = quantity;
+    this.moveProductsToSold();
+  } else {
+    console.error('Producto no encontrado');
+  }
+}
+
+public moveProductsToSold(): void {
+  console.log('1', this.productSoldId);
+  console.log('1',this.productSoldQuantity );
+
+  console.log('almacEn: ', this.selectUserWarehouse);
+
+  const soldProducts: ProductSold = {
+    id: null,
+    product: this.productSoldId,
+    warehouse: this.selectUserWarehouse,
+    quantity: this.productSoldQuantity,
+    sale_date: new Date().toISOString()
+  };
+
+  this.service.moveProductsToSold(this.apiSalesUrl, soldProducts).subscribe(
+    (response) => console.log('Producto añadido con exito:', response),
+    (error) => console.error('Error al añadir producto:', error)
+  );
+
+}
+//----------------------------------------------------------------------
   public showOptionForInsertData(): void {
     this.selectedWarehouse = true;
     console.log(this.selectWarehouseForInsertProducts.value.selectWarehouse);
@@ -294,8 +396,10 @@ export class HomeComponent {
       next: (response) => {
         this.loading = false;
         this.changueScreen = false;
+
         this.productsUser = response;
         this.filtratedProductsforWarehouseId = [];
+        this.productUserNames = [];
 
         for (let i = 0; i < this.productsUser.length; i++) {
           if (this.productsUser[i].warehouse == warehouse_id) {
@@ -307,7 +411,6 @@ export class HomeComponent {
         this.showProducts();
         this.takePage();
         this.getProductsSold();
-        console.log('Productos(P): ', this.productsUser);
       },
       error: (error) => {
         this.loading = false;
@@ -333,7 +436,6 @@ export class HomeComponent {
       next: (response) => {
         this.productsSold = response;
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
-        console.log(this.productsSold);
         this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
@@ -367,7 +469,6 @@ export class HomeComponent {
   }
   //------------------------------------------------GENERAR GRAFICOS CON DATOS BBDD-------------------------------//
   public calculateMonthlySalesAndStock(): void {
-    console.log('Productos(OP)', this.productsUser); 
     let actualYear = new Date().getFullYear();
     let salesForMonth = new Array(12).fill(0);
     let stockForMonth = new Array(12).fill(0);
@@ -396,7 +497,6 @@ export class HomeComponent {
     this.reloadGraphics();
   }
 
-  
   public reloadGraphics(): void {
   if (this.saleProductsForMonth.length > 0) {
       this.lineExitProducts.datasets[0].data = this.saleProductsForMonth;
