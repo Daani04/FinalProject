@@ -210,7 +210,7 @@
 
         <button type="submit" class="btn btn-success" (click)="uploadProducts()">Enviar</button>
       </form>
-      <p class="close" (click)="closeProducts()">Cerrar</p>
+      <p class="closeSoldProducts" (click)="closeProducts()">Cerrar</p>
       }
     </div>
   </div>
@@ -223,47 +223,42 @@
           <button id="withdrawButton" type="button" class="btn" (click)="loadWarehouseSelection()" >Seleccionar Almacen</button>
         }
         @if (showWithdrawForm === true) {
-          <form [formGroup]="withdrawFormSelectWarehouse"  class="search-form">
-            <div class="search-bar">
-  
-              <div class="form-group">
-                <label>Mis almacenes</label>
-                <select formControlName="warehouseName" class="search-select">
-                  <option value="">Almacenes</option>
-                  @for (type of userWarehousesNames; track $index) {
-                    <option [value]="type">{{ type }}</option>
-                  }
-                </select>        
-              </div>
-        
-              <button type="submit" class="search-button" (click)="handleWarehouseSelection()">Seleccionar</button>
-            </div>
+          <form [formGroup]="withdrawFormSelectWarehouse" class="soldProductsForm">
+            <div class="form-group">
+              <label class="form-label">Mis almacenes</label>
+              <select formControlName="warehouseName" class="form-control my-2">
+                <option value="">Almacenes</option>
+                @for (type of userWarehousesNames; track $index) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>   
+            </div>             
+            <button type="submit" class="btn" (click)="handleWarehouseSelection()">Seleccionar</button>
           </form>
+          <p class="closeSoldProducts" (click)="closeProducts()">Cerrar</p>
         } 
 
         @if (selectWarehouse === true) {
-          <form [formGroup]="withdrawFormSelectProduct"  class="search-form">
-            <div class="search-bar">
-  
-              <div class="form-group">
-                <label>Productos</label>
-              <!-- Selección de productos -->
-              <select formControlName="productName" class="search-select">
+          <form [formGroup]="withdrawFormSelectProduct" class="soldProductsForm">
+            <div class="form-group">
+              <label class="form-label">Productos</label>
+              <select formControlName="productName" class="form-control my-2">
                 <option value="">Todos los productos</option>
                 @for (product of productUserNames; track product.id) {
                   <option [value]="product.id">{{ product.name }}</option>
                 }
               </select>       
-              </div>
-  
-              <div class="form-group">
-                <label for="quantity">Cantidad a retirar</label>
-                <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" formControlName="productQuantity" required>
-              </div>
-        
-              <button type="submit" class="search-button" (click)="moveToSold()">Retirar</button>
             </div>
+          
+            <div class="form-group">
+              <label for="quantity" class="form-label">Cantidad a retirar</label>
+              <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" 
+                     formControlName="productQuantity" required class="form-control my-2">
+            </div>
+          
+            <button type="submit" class="btn" (click)="moveToSold()">Retirar</button>
           </form>
+          <p class="closeSoldProducts" (click)="closeProducts()">Cerrar</p>
         }
       </div>
     </div> 

@@ -458,6 +458,9 @@ public moveProductsToSold(): void {
 
   public closeProducts(): void {
     this.showForm = false;
+
+    this.showWithdrawForm = false;
+    this.selectWarehouse = false;
   }
 
   public openModal(): void {
