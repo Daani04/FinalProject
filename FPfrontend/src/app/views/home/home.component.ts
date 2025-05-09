@@ -132,90 +132,82 @@ export class HomeComponent {
     productName: new FormControl(''),
     productQuantity: new FormControl('')
   });
-//-----------------------------------------------------------------------------------
-/**
- * Propósito: Muestra el formulario de selección de almacén y carga los nombres de los almacenes disponibles
- */
-public loadWarehouseSelection(): void {
-  this.userWarehousesNames = this.warehouses.map(warehouse => warehouse.name);
-  this.showWithdrawForm = true;
-}
-
-/**
- * Propósito: Procesa la selección del almacén y carga los productos disponibles en ese almacén
- */
-public handleWarehouseSelection(): void {
-  this.selectWarehouse = true;
-  this.showWithdrawForm = false;
-
-  const selectedWarehouse = this.warehouses.find(
-    warehouse => warehouse.name === this.withdrawFormSelectWarehouse.value.warehouseName
-  );
   
-  this.selectUserWarehouse = selectedWarehouse?.id ?? 0;
-  this.loadWarehouseProducts();
-
-  //console.log('Almacén seleccionado:', this.selectUserWarehouse);
-}
-
-/**
- * Propósito: Carga y filtra los productos disponibles en el almacén seleccionado
- */
-public loadWarehouseProducts(): void {
-  this.productUserNames = this.productsUser
-    .filter(product => product.warehouse == this.selectUserWarehouse)
-    .map(product => ({
-      id: product.id,
-      name: product.name
-    }));
-
-  //console.log('Productos disponibles:', this.productUserNames);
-}
-
-/**
- * Propósito: Procesa la retirada de productos del inventario
- */
-public moveToSold(): void {
-  let productId = Number(this.withdrawFormSelectProduct.value.productName);
-  let quantity = Number(this.withdrawFormSelectProduct.value.productQuantity);
-
-  if (!productId || !quantity) {
-    console.error('Datos incompletos');
-    return;
+  public loadWarehouseSelection(): void {
+    this.userWarehousesNames = this.warehouses.map(warehouse => warehouse.name);
+    this.showWithdrawForm = true;
   }
 
-  let selectedProduct = this.productUserNames.find(p => p.id == productId);
+  public handleWarehouseSelection(): void {
+    this.selectWarehouse = true;
+    this.showWithdrawForm = false;
 
-  if (selectedProduct) {
-    this.productSoldId = selectedProduct.id
-    this.productSoldQuantity = quantity;
-    this.moveProductsToSold();
-  } else {
-    console.error('Producto no encontrado');
+    const selectedWarehouse = this.warehouses.find(
+      warehouse => warehouse.name === this.withdrawFormSelectWarehouse.value.warehouseName
+    );
+    
+    this.selectUserWarehouse = selectedWarehouse?.id ?? 0;
+    this.loadWarehouseProducts();
+
+    //console.log('Almacén seleccionado:', this.selectUserWarehouse);
   }
-}
 
-public moveProductsToSold(): void {
-  console.log('1', this.productSoldId);
-  console.log('1',this.productSoldQuantity );
+  public loadWarehouseProducts(): void {
+    this.productUserNames = this.productsUser
+      .filter(product => product.warehouse == this.selectUserWarehouse)
+      .map(product => ({
+        id: product.id,
+        name: product.name
+      }));
 
-  console.log('almacEn: ', this.selectUserWarehouse);
+    //console.log('Productos disponibles:', this.productUserNames);
+  }
 
-  const soldProducts: ProductSold = {
-    id: null,
-    product: this.productSoldId,
-    warehouse: this.selectUserWarehouse,
-    quantity: this.productSoldQuantity,
-    sale_date: new Date().toISOString()
-  };
+  public moveToSold(): void {
+    let productId = Number(this.withdrawFormSelectProduct.value.productName);
+    let quantity = Number(this.withdrawFormSelectProduct.value.productQuantity);
 
-  this.service.moveProductsToSold(this.apiSalesUrl, soldProducts).subscribe(
-    (response) => console.log('Producto añadido con exito:', response),
-    (error) => console.error('Error al añadir producto:', error)
-  );
+    if (!productId || !quantity) {
+      console.error('Datos incompletos');
+      return;
+    }
 
-}
-//----------------------------------------------------------------------
+    let selectedProduct = this.productUserNames.find(p => p.id == productId);
+
+    if (selectedProduct) {
+      this.productSoldId = selectedProduct.id
+      this.productSoldQuantity = quantity;
+      this.moveProductsToSold();
+    } else {
+      console.error('Producto no encontrado');
+    }
+  }
+
+  public moveProductsToSold(): void {
+    this.loading = true;
+    this.changueScreen = true;
+
+    const soldProducts: ProductSold = {
+      id: null,
+      product: this.productSoldId,
+      warehouse: this.selectUserWarehouse,
+      quantity: this.productSoldQuantity,
+      sale_date: new Date().toISOString()
+    };
+
+    this.service.moveProductsToSold(this.apiSalesUrl, soldProducts).subscribe(
+      (response) => {
+        console.log('Producto añadido con exito:', response)
+        this.loading = false;
+        this.changueScreen = false;
+        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
+        window.location.reload();
+        //-----------------------------------------------------------------------------------------------------------
+      },
+      (error) => console.error('Error al añadir producto:', error)
+    );
+
+  }
   public showOptionForInsertData(): void {
     this.selectedWarehouse = true;
     console.log(this.selectWarehouseForInsertProducts.value.selectWarehouse);
@@ -289,6 +281,9 @@ public moveProductsToSold(): void {
   }
 
   public newWarehouse(coordinates: any): void {
+    this.loading = false;
+    this.changueScreen = false;
+
     let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
     let coordinatesString = String(coordinates);
 
@@ -317,7 +312,14 @@ public moveProductsToSold(): void {
     console.log('Datos enviados al servidor:', warehouseData);
 
     this.service.createWarehouse(this.apiWarehouseUrl, warehouseData).subscribe(
-      (response) => console.log('Almacén creado con éxito:', response),
+      (response) => {
+        this.loading = true;
+        this.changueScreen = true;
+        console.log('Almacén creado con éxito:', response);
+        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
+        window.location.reload();
+        //-----------------------------------------------------------------------------------------------------------
+      },
       (error) => console.error('Error al crear almacén:', error)
     );
   }
@@ -350,6 +352,8 @@ public moveProductsToSold(): void {
   }
 
   public insertProductsWarehouse(): void {
+    this.loading = true;
+    this.changueScreen = true;
 
     let priceToNumber = parseFloat(this.productForm.value.price ?? '0');
     let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
@@ -373,7 +377,14 @@ public moveProductsToSold(): void {
     };
 
     this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
-      (response) => console.log('Producto añadido con exito:', response),
+      (response) => {
+        this.loading = true;
+        this.changueScreen = true;
+        console.log('Producto añadido con exito:', response);
+        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
+        window.location.reload();
+        //-----------------------------------------------------------------------------------------------------------
+      },
       (error) => console.error('Error al añadir producto:', error)
     );
   }
