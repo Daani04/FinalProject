@@ -25,6 +25,8 @@ Todos => OK
 Revisar funcionamiengo graficos IA, si no eres especifico o hay muchos datos no funciona
 Revisar carga de graficos, no cargan todos de primeras 
 
+La entrada de productos funciona mal, ya que cuando se retiran el valor cambia
+
 PANTALLA DE CARGA PRO TERMINAR
 
 FILTRADO:

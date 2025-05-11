@@ -673,7 +673,7 @@ export class GraphicsComponent implements OnInit {
   public littleStockProducts: any = {  
     labels: [],
     datasets: [{
-      label: 'Costos de productos',
+      label: 'Stock del producto',
       data: [],
       backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#7A6DA7', '#9A8BCA'], 
       borderColor: 'rgb(159, 94, 148)',
@@ -684,7 +684,7 @@ export class GraphicsComponent implements OnInit {
   public moreStockProducts: any = {  
     labels: [],
     datasets: [{
-      label: 'Descuentos aplicados',
+      label: 'Stock del producto',
       data: [],  
       backgroundColor: ['#9A8BCA', '#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94'], 
       borderColor: 'rgb(159, 94, 148)', 
