@@ -204,7 +204,7 @@ class ApiProductAllDataController extends AbstractController {
         return $this->json($data);
     }
 
-
+    //NO ELIMINA EL PRODUCTO, SIMPLEMENTE BAJA EL STOCK A 0
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse {
         if (!isset($id)) {
@@ -212,10 +212,19 @@ class ApiProductAllDataController extends AbstractController {
         }
 
         $productData = $entityManager->getRepository(ProductAllData::class)->find($id);
-        $entityManager->remove($productData);
+
+        if (!$productData) {
+            return $this->json(['error' => 'Product not found'], 404);
+        }
+
+        $productData->setStock(0);
+
+        $entityManager->persist($productData);
         $entityManager->flush();
-        return $this->json(['message' => 'User deleted successfully'], 200);
+
+        return $this->json(['message' => 'Product stock set to zero (deactivated)'], 200);
     }
+
 
     #[Route('/{id}', name: 'update', methods: ['PUT'])]
     public function update(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse

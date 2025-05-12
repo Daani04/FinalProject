@@ -55,7 +55,6 @@ export class WarehouseComponent {
 
   ngOnInit(): void {
     this.checkWarehouses();
-    this.checkProducts();
   }
 
   public getStreetForm(): void {
@@ -135,6 +134,7 @@ export class WarehouseComponent {
         for (let i = 0; i < this.warehouses.length; i++) {
           this.idUserWarehouses.push(this.warehouses[i].id?? 0);
         }
+            this.checkProducts();
       },
       error: (error) => {
         console.error('Error fetching warehouses:', error);
@@ -182,7 +182,7 @@ export class WarehouseComponent {
           } 
           
           this.numOfArticles[i] = count.toString();
-          this.netProfitPerWarehouse[i] = totalProfit;
+          this.netProfitPerWarehouse[i] = Math.round(totalProfit * 100) / 100;
           this.totalInventoryValue[i] = Math.round(totalValue); 
           }
       },
