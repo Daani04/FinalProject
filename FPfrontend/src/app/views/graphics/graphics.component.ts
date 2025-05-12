@@ -276,13 +276,19 @@ export class GraphicsComponent implements OnInit {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.products = response;
+        this.calculateStockExtremes();
+        this.calculateProductPrices();
+        this.calculateMonthlySalesAndStock();
+        this.calculateIncomeAndBenefit();
 
+        /*
         this.getMoreSoldProducts();
         this.getProductsForWeek();
         this.calculateIncomeAndBenefit();
         this.calculateStockExtremes();
         this.calculateProductPrices();
         this.calculateMonthlySalesAndStock();
+        */
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
@@ -585,18 +591,6 @@ export class GraphicsComponent implements OnInit {
       borderWidth: 1
     }]
   };
-
-  //PRUEBA
-  public barSale2: any = {  
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    datasets: [{
-      label: 'Ventas anuales',
-      data: [],  
-      backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA'],
-      borderColor: '#5B3F7C', 
-      borderWidth: 1
-    }]
-  };
   
   public lineSale: any = {
     labels: ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'],
@@ -614,7 +608,7 @@ export class GraphicsComponent implements OnInit {
   public circularMostSale: any = {
     labels: [],
     datasets: [{
-      label: 'Distribución de Ventas',
+      label: 'Cantidad vendida',
       data: [],
       backgroundColor: ['#6F4D94', '#7A6DA7', '#9A8BCA', '#6F4D94'] 
     }]
