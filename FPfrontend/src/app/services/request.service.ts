@@ -13,7 +13,11 @@ export class RequestService {
   public getUsers(url: string): Observable<User[]> {
     return this.http.get<User[]>(url);
   }
-  
+
+  public deleteUser(url: string): Observable<any> {
+    return this.http.delete<any>(url); 
+  }
+
   public createUser(url: string, usuario: User): Observable<User> {
     return this.http.post<User>(url, usuario);
   }

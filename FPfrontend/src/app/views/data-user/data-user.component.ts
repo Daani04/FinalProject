@@ -1,6 +1,9 @@
   import { Component } from '@angular/core';
   import { FooterComponent } from "../../component/footer/footer.component";
   import { ModalComponent } from "../../component/modal/modal.component";
+  import { RequestService } from '../../services/request.service';
+  import { HttpClient } from '@angular/common/http';
+  import { Router } from '@angular/router';  
 
   @Component({
     selector: 'app-data-user',
@@ -9,6 +12,10 @@
     styleUrl: './data-user.component.css'
   })
   export class DataUserComponent {
+
+    constructor(private router: Router, public service: RequestService, private http: HttpClient) { }
+    
+    public userUrl: string = "http://localhost:8000/api/user";
     
     isModalOpen = false;
     accountDeleted: boolean = false;
@@ -37,5 +44,30 @@
       this.accountDeleted = true;
       console.log('¿Se eliminó la cuenta?:', this.accountDeleted); // Aquí tienes el TRUE
       this.closeModal();
+      this.deleteUser();
     }
+
+    public deleteUser(): void {
+      let userIdString = localStorage.getItem('userId');
+
+      if (!userIdString) {
+        console.error('Error: No se encontró userId en localStorage');
+        return;
+      }
+
+      let userId = parseInt(userIdString, 10);
+
+      let userUrlWithId = `${this.userUrl}/${userId}`;
+
+      this.service.deleteUser(userUrlWithId).subscribe({
+        next: (response) => {
+          console.log('Usuario eliminado correctamente', response);
+           this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          console.error('Error al sacar los datos del usuario:', error);
+        }
+      });
+    }
+
   }

@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RequestService } from '../../services/request.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { User } from '../../models/response.interface';
 
 

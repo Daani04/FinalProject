@@ -16,7 +16,7 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $user_name = null;
+    private ?string $user_name = null;  
 
     #[ORM\Column(length: 255)]
     private ?string $company_name = null;
@@ -30,8 +30,9 @@ class User
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: Warehouse::class)]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: Warehouse::class, cascade: ["remove"])]
     private Collection $warehouses;
+
 
     public function __construct()
     {
