@@ -276,6 +276,13 @@ export class GraphicsComponent implements OnInit {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.products = response;
+
+        this.getMoreSoldProducts();
+        this.getProductsForWeek();
+        this.calculateIncomeAndBenefit();
+        this.calculateStockExtremes();
+        this.calculateProductPrices();
+        this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);

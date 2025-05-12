@@ -270,6 +270,17 @@ form.soldProductsForm {
   margin-bottom: 30px;
 }
 
+#lefArrow, #rigArrow{
+    transition: filter 0.5s ease;  
+}
+
+#lefArrow:hover {
+    filter: grayscale(100%) brightness(200%);
+}
+
+#rigArrow:hover {
+    filter: grayscale(100%) brightness(200%);
+}
 
 
 /* Pantalla de carga */
