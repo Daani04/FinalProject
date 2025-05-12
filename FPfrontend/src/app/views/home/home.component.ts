@@ -11,10 +11,11 @@ import { RouterModule } from '@angular/router';
 import { ModalScannerComponent } from "../../component/modal-scanner/modal-scanner.component";
 import { NgStyle } from '@angular/common';
 import { ViewChild } from '@angular/core';
+import { ModalComponent } from "../../component/modal/modal.component";
 
 @Component({
   selector: 'app-home',
-  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent, NgStyle],
+  imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent, NgStyle, ModalComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -67,7 +68,6 @@ export class HomeComponent {
   public filtratedProductsforWarehouseId: any[] = [];
   public productsUser: any[] = [];
 
-
   public page: number = 0;
   public itemsPerPage: number = 4;
   public totalPages: number = 0;
@@ -77,11 +77,18 @@ export class HomeComponent {
 
   public saleProductsForMonth: number[] = [];
   public entrateProductsForMonth: number[] = [];
+
+  public isModalOpen: boolean = false;
+  public modalAction: string = "insertData";
     
   public insertionMethod(): void {
     this.contInsertionData = 1;
   }
 
+  public closeModalVerifyDataInsertion(): void {
+    this.isModalOpen = false;
+  }
+  
   productForm = new FormGroup({
     name: new FormControl(''),
     brand: new FormControl(''),
@@ -200,9 +207,7 @@ export class HomeComponent {
         console.log('Producto añadido con exito:', response)
         this.loading = false;
         this.changueScreen = false;
-        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
-        window.location.reload();
-        //-----------------------------------------------------------------------------------------------------------
+        this.isModalOpen = true;
       },
       (error) => console.error('Error al añadir producto:', error)
     );
@@ -281,8 +286,8 @@ export class HomeComponent {
   }
 
   public newWarehouse(coordinates: any): void {
-    this.loading = false;
-    this.changueScreen = false;
+    this.loading = true;
+    this.changueScreen = true;
 
     let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
     let coordinatesString = String(coordinates);
@@ -313,12 +318,10 @@ export class HomeComponent {
 
     this.service.createWarehouse(this.apiWarehouseUrl, warehouseData).subscribe(
       (response) => {
-        this.loading = true;
-        this.changueScreen = true;
+        this.loading = false;
+        this.changueScreen = false;
+        this.isModalOpen = true;
         console.log('Almacén creado con éxito:', response);
-        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
-        window.location.reload();
-        //-----------------------------------------------------------------------------------------------------------
       },
       (error) => console.error('Error al crear almacén:', error)
     );
@@ -378,19 +381,18 @@ export class HomeComponent {
 
     this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
       (response) => {
-        this.loading = true;
-        this.changueScreen = true;
+        this.loading = false;
+        this.changueScreen = false;
+        this.isModalOpen = true;
+
         console.log('Producto añadido con exito:', response);
-        //IMPORTANTEEEEEEEEEEEEEE!! ESTE Y LOS DEMAS RELOAD DE INSERCION CAMBIAR POR UN MODAL DE QUE TODO HA SIDO OK
-        window.location.reload();
-        //-----------------------------------------------------------------------------------------------------------
       },
       (error) => console.error('Error al añadir producto:', error)
     );
   }
 
   public takeWarehouseProducts(warehouse_id: any): void {
-    this.loading = true;
+    this.loading = false;
     this.changueScreen = true;
 
     let userIdString = localStorage.getItem('userId');

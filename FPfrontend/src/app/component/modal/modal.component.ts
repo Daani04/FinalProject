@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RequestService } from '../../services/request.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/response.interface';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 @Component({
   selector: 'app-modal',
   imports: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA], 
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css'
 })

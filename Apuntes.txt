@@ -5,15 +5,10 @@ Chart.js(Revisar dependencias)
 OpenLayers(Revisar dependencias)
 Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-worker --save --force  
 
-
-PROBLEMAS
-
-
 Revisar generacino de graficos por IA, ha dejado de funcionar(PROBLEMA: Deja de funcionar cuando trabaja con muchos datos)
 
 POR TERMINAL
 Meter productos a traves del scanner
-Panel de Usuario
 
 FILTRADO:
 Las fechas solo se filtran bien si se insertan desde postman, si se inserta desde el formulario no se filtran
