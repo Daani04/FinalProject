@@ -1,11 +1,23 @@
   @if (isOpen === true) {
+    @if (modalAction === "getInfo") {
     <div class="modal-overlay">
-    <div class="modal-content">
-      <h2>¿Estás seguro de que deseas eliminar tu cuenta?</h2>
-      <p>Esta acción es irreversible.</p>
-      <button id="delete" (click)="confirm()">Sí, eliminar cuenta</button>
-      <button id="close" (click)="close()">Cancelar</button>
+      <div class="modal-content">
+        <h2>Datos de tu cuenta</h2>
+        <p>Nombre de usuario: {{username}} </p>
+        <p>Correo electronico: {{email}} </p>
+        <p>Nombre de la empresa: {{companyName}} </p>
+        <button id="close" (click)="close()">Cerrar</button>
+      </div>
+    </div>  
+    } @else {
+      <div class="modal-overlay">
+        <div class="modal-content">
+          <h2>¿Estás seguro de que deseas eliminar tu cuenta?</h2>
+          <p>Esta acción es irreversible.</p>
+          <button id="delete" (click)="confirm()">Sí, eliminar cuenta</button>
+          <button id="close" (click)="close()">Cancelar</button>
+        </div>
     </div>
-  </div>
+    }
   }
 

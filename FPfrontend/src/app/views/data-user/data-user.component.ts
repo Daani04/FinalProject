@@ -12,12 +12,18 @@
     
     isModalOpen = false;
     accountDeleted: boolean = false;
+    modalAction: string = "";
 
-    openModal() {
+    public selectAction(action: string): void {
+      this.modalAction = action;
       this.isModalOpen = true;
     }
 
-    closeModal() {
+    public openModal(): void {
+      this.isModalOpen = true;
+    }
+
+    public closeModal(): void {
       this.isModalOpen = false;
     }
 

@@ -1,28 +1,17 @@
 <h1>CONFIGURACIÓN DE LA CUENTA</h1>
 <div class="container">
-    <div class="row">
-        <div class="col-md-3 mx-4 mb-4">
-            <p>Cambiar foto de perfil</p>
-        </div>
-        <div class="col-md-3 mx-4 mb-4">
-            <p>Cambiar nombre</p>
-        </div>
-        <div class="col-md-3 mx-4 mb-4">
-            <p>Cambiar contraseña</p>
-        </div>
+  <div class="row flex-column align-items-center">
+    <div (click)="selectAction('getInfo')" class="col-12 col-md-6 mb-4">
+    <p>Información de la cuenta</p>
     </div>
-
-    <div class="row">
-        <div class="col-md-3 mx-4 mb-4">
-            <p>Información de la cuenta</p>
-        </div>
-        <div class="col-md-3 mx-4 mb-4"  (click)="closeSesion()">
-            <p>Cerrar sesion</p>
-        </div>
-        <div (click)="openModal()" class="col-md-3 mx-4 mb-4" style="background-color: rgb(195, 58, 58);">
-            <p>Eliminar cuenta</p>
-        </div>
+    <div class="col-12 col-md-6 mb-4" (click)="closeSesion()">
+      <p>Cerrar sesión</p>
     </div>
+    <div (click)="selectAction('deleteAccount')" class="col-12 col-md-6 mb-4" style="background-color: rgb(195, 58, 58);">
+    <p>Eliminar cuenta</p>
+    </div>
+  </div>
 </div>
-<app-modal [isOpen]="isModalOpen" (closeModal)="closeModal()" (confirmAction)="confirmDelete()"></app-modal>
+
+<app-modal [isOpen]="isModalOpen" [modalAction]="modalAction" (closeModal)="closeModal()" (confirmAction)="confirmDelete()"></app-modal>
 <app-footer></app-footer>
