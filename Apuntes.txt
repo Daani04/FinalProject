@@ -7,13 +7,9 @@ Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-wo
 
 
 PROBLEMAS
-No se pueden eliminar los productos que esten tambien en ventas, hay que solucionar esto cambiando las entidades 
-o en vez de elminando todo bajando la cantidad en 1 y no permitir una eliminacion total
+
 
 Revisar generacino de graficos por IA, ha dejado de funcionar(PROBLEMA: Deja de funcionar cuando trabaja con muchos datos)
-
-Cuando vendemos un mismo producto los campos no varian, si hay alguna modificacion en algun campo como puede ser la fecha
-ese producto se guarda con la misma fecha que el primer producto del mismo tipo vendido 
 
 POR TERMINAL
 Meter productos a traves del scanner
@@ -22,6 +18,4 @@ Panel de Usuario
 FILTRADO:
 Las fechas solo se filtran bien si se insertan desde postman, si se inserta desde el formulario no se filtran
 
-WAREHOUSES:
-Muchas veces no se cargan los datos y aparece N/a, no te deja entrar a ver los productos cuando pasa esto 
 

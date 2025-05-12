@@ -157,7 +157,6 @@ export class GraphicsComponent implements OnInit {
     this.showFormIa = true
   }
 
-  
   createGraphics(prompt: any) {
     let promptbbdd = this.createPromptFromProducts();
     this.loading = true; 
@@ -411,32 +410,32 @@ export class GraphicsComponent implements OnInit {
 
  //-------------------------------CALCULOS DE DATOS PARA LOS GRAFICOS-------------------------------------------//
   public calculateMonthlySalesAndStock(): void {
-    let actualYear = new Date().getFullYear();
-    let salesForMonth = new Array(12).fill(0);
-    let stockForMonth = new Array(12).fill(0);
+      let actualYear = new Date().getFullYear();
+      let salesForMonth = new Array(12).fill(0);
+      let stockForMonth = new Array(12).fill(0);
 
-    for (let i = 0; i < this.productsSold.length; i++) {
-      let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
-      if (fecha.getFullYear() === actualYear) {
-        let month = fecha.getMonth();
-        salesForMonth[month] += this.productsSoldQuantity[i] || 0;
+      // Calcular ventas por mes
+      for (let i = 0; i < this.productsSold.length; i++) {
+          let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
+          if (fecha.getFullYear() === actualYear) {
+              let month = fecha.getMonth();
+              salesForMonth[month] += this.productsSoldQuantity[i] || 0;
+          }
       }
-    }
 
-    for (let i = 0; i < this.products.length; i++) {
-      let product = this.products[i];
-      let month = new Date(product.entry_date).getMonth();
-      stockForMonth[month] += product.stock;
-    }
+      let entrateProductsForMonth = new Array(12).fill(0);
+      for (let i = 0; i < this.products.length; i++) {
+          let product = this.products[i];
+          let month = new Date(product.entry_date).getMonth();
+          entrateProductsForMonth[month] += product.stock; 
+      }
 
-    let unsoldProducts = stockForMonth.map((stock, i) => stock - salesForMonth[i]);
+      this.saleProductsForMonth = salesForMonth;
+      this.entrateProductsForMonth = entrateProductsForMonth;
+      this.reloadGraphics();
 
-    this.saleProductsForMonth = salesForMonth;
-    this.entrateProductsForMonth = unsoldProducts;
-    this.reloadGraphics();
-
-    console.log('Salida de productos OK', this.saleProductsForMonth);
-    console.log('Entrada de productos OK', this.entrateProductsForMonth);
+      console.log('Salida de productos OK', this.saleProductsForMonth);
+      console.log('Entrada de productos OK', this.entrateProductsForMonth);
   }
 
   public calculateProductPrices(): void {
@@ -502,7 +501,8 @@ export class GraphicsComponent implements OnInit {
       if (fecha.getFullYear() === actualYear && this.getWeekNumber(fecha) === currentWeekNumber) {
         let dayOfWeek = fecha.getDay(); 
         let correctedDayOfWeek = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;  //Ajuste para que las posiciones de los dias sean correctas
-        salesForWeek[correctedDayOfWeek] += this.productsSoldQuantity[i] || 0;      }
+        salesForWeek[correctedDayOfWeek] += this.productsSoldQuantity[i] || 0;      
+      }
     }
   
     this.saleProductsForWeek = salesForWeek; 
@@ -510,9 +510,21 @@ export class GraphicsComponent implements OnInit {
     this.reloadGraphics();
   }
   
+  //Saca la fecha semana actual para solo mostrar los datos sobre esta 
   private getWeekNumber(date: Date): number {
-    let startDate = new Date(date.getFullYear(), 0, 1);
-    return Math.ceil(((date.valueOf() - startDate.valueOf()) / 86400000 + 1) / 7);
+      let tempDate = new Date(date);
+
+      // Ajustar la fecha al primer día de la semana 
+      tempDate.setDate(tempDate.getDate() - tempDate.getDay() + 1);
+
+      // Calcular la diferencia en milisegundos entre la fecha ajustada y el 1 de enero
+      let startOfYear = new Date(tempDate.getFullYear(), 0, 1);
+      let daysDifference = Math.floor((tempDate.getTime() - startOfYear.getTime()) / (1000 * 3600 * 24));
+
+      // Calcular el número de la semana
+      let weekNumber = Math.ceil((daysDifference + 1) / 7);
+
+      return weekNumber;
   }
 
   public getMoreSoldProducts(): void { 

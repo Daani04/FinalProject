@@ -483,33 +483,33 @@ export class HomeComponent {
   }
   //------------------------------------------------GENERAR GRAFICOS CON DATOS BBDD-------------------------------//
   public calculateMonthlySalesAndStock(): void {
-    let actualYear = new Date().getFullYear();
-    let salesForMonth = new Array(12).fill(0);
-    let stockForMonth = new Array(12).fill(0);
-  
-    for (let i = 0; i < this.productsSold.length; i++) {
-      let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
-      if (fecha.getFullYear() === actualYear) {
-        let month = fecha.getMonth();
-        salesForMonth[month] += this.productsSoldQuantity[i] || 0;
-      }
+        let actualYear = new Date().getFullYear();
+        let salesForMonth = new Array(12).fill(0);
+        let stockForMonth = new Array(12).fill(0);
+
+        // Calcular ventas por mes
+        for (let i = 0; i < this.productsSold.length; i++) {
+            let fecha = new Date(this.productsSold[i].sale_date.replace(" ", "T"));
+            if (fecha.getFullYear() === actualYear) {
+                let month = fecha.getMonth();
+                salesForMonth[month] += this.productsSoldQuantity[i] || 0;
+            }
+        }
+
+        let entrateProductsForMonth = new Array(12).fill(0);
+        for (let i = 0; i < this.productsUser.length; i++) {
+            let product = this.productsUser[i];
+            let month = new Date(product.entry_date).getMonth();
+            entrateProductsForMonth[month] += product.stock; 
+        }
+
+        this.saleProductsForMonth = salesForMonth;
+        this.entrateProductsForMonth = entrateProductsForMonth;
+        this.reloadGraphics();
+
+        console.log('Salida de productos OK', this.saleProductsForMonth);
+        console.log('Entrada de productos OK', this.entrateProductsForMonth);
     }
-  
-    for (let i = 0; i < this.productsUser.length; i++) {
-      let product = this.productsUser[i];
-      if (product.entry_date) {
-        let month = new Date(product.entry_date).getMonth();
-        stockForMonth[month] += product.stock;
-      }
-    }
-  
-    let unsoldProducts = stockForMonth.map((stock, i) => stock - salesForMonth[i]);
-  
-    this.saleProductsForMonth = salesForMonth;
-    this.entrateProductsForMonth = unsoldProducts;
-  
-    this.reloadGraphics();
-  }
 
   public reloadGraphics(): void {
   if (this.saleProductsForMonth.length > 0) {
