@@ -22,7 +22,8 @@ export interface ProductSold {
     warehouse: number;
     quantity: number;
     sale_date: string;  
-    name?: string| null
+    name?: string| null, 
+    barcode?: string | null;
 }
 
 export interface User {

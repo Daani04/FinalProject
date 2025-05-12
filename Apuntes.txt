@@ -13,4 +13,7 @@ Meter productos a traves del scanner
 FILTRADO:
 Las fechas solo se filtran bien si se insertan desde postman, si se inserta desde el formulario no se filtran
 
+GRAFICOS: 
+El grafico de productos mas vendidos repite los productos si se venden varias veces en vez de sumar su cantidad vendida
+
 

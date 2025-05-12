@@ -381,6 +381,7 @@ export class GraphicsComponent implements OnInit {
     }
 
     
+
     if (this.barSale.datasets[0].data.length > 0 && this.chartComponentBarSale) {
       this.chartComponentBarSale.updateChart();
     }
@@ -540,33 +541,39 @@ export class GraphicsComponent implements OnInit {
       return weekNumber;
   }
 
-  public getMoreSoldProducts(): void { 
-    for (let i = 0; i < this.productsSold.length; i++) {
-      let quantity = this.productsSold[i].quantity;
-      let name = this.productsSold[i].name ?? 'No se ha encontrado el nombre del producto';
-  
-      if (this.moreSoldProductsQuantity.length < 4) {
-        this.moreSoldProductsQuantity.push(quantity);
-        this.moreSoldProductsName.push(name);
-      } else {
-        let minIndex = 0;
-        for (let j = 1; j < this.moreSoldProductsQuantity.length; j++) {
-          if (this.moreSoldProductsQuantity[j] < this.moreSoldProductsQuantity[minIndex]) {
-            minIndex = j;
-          }
-        }
-  
-        // Si el nuevo producto tiene mayor cantidad, lo reemplazamos
-        if (quantity > this.moreSoldProductsQuantity[minIndex]) {
-          this.moreSoldProductsQuantity[minIndex] = quantity;
-          this.moreSoldProductsName[minIndex] = name;
-        }
-      }
+  public getMoreSoldProducts(): void {
+  const productMap: Map<string, { name: string, quantity: number }> = new Map();
+
+  for (let i = 0; i < this.productsSold.length; i++) {
+    let product = this.productsSold[i];
+    let barcode = product.barcode ?? 'Sin codigo de barras';
+    let quantity = product.quantity;
+    let name = product.name ?? 'No se ha encontrado el nombre del producto';
+
+    //Comprueba si ya existe el codigo de barras que se intenta registrar, si es asi simplemente suma la cantidad, si no lo crea 
+    if (productMap.has(barcode)) {
+      productMap.get(barcode)!.quantity += quantity;
+    } else {
+      productMap.set(barcode, { name, quantity });
     }
-    this.reloadGraphics();
-    //console.log('Cantidad', this.moreSoldProductsQuantity);
-    //console.log('MoreSoldProductsName', this.moreSoldProductsName);
   }
+
+  // Ordenar por cantidad descendente y tomar los 4 primeros
+  const topProducts = Array.from(productMap.values())
+    .sort((a, b) => b.quantity - a.quantity)
+    .slice(0, 4);
+
+  this.moreSoldProductsName = [];
+  this.moreSoldProductsQuantity = [];
+
+  for (const product of topProducts) {
+    this.moreSoldProductsName.push(product.name);
+    this.moreSoldProductsQuantity.push(product.quantity);
+  }
+
+  this.reloadGraphics();
+}
+
 //--------------------------------------------------------------------------------------------------//
   
   public checkProductsData():void {
@@ -584,7 +591,7 @@ export class GraphicsComponent implements OnInit {
   public barSale: any = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
-      label: 'Ventas anuales',
+      label: 'Ventas Mensuales',
       data: [],  
       backgroundColor: ['#5B3F7C', '#6F4D94', '#7A6DA7', '#8A7DBD', '#9A8BCA'],
       borderColor: '#5B3F7C', 
