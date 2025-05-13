@@ -1,4 +1,5 @@
 <h1>BIENVENIDO {{userName}} </h1>
+<button class="btn btn-primary" onclick="iniciarTour()">¿Cómo funciona?</button>
 <div class="container">
 
 
@@ -273,13 +274,17 @@
 
   <div class="row justify-content-center gap-5 custom-row"
     style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5  p-4  rounded" (click)="openModal()" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+    <div class="col-md-5  p-4  rounded" (click)="openModal()" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); "
+    data-intro="Aquí puedes añadir un producto escaneándolo"
+    data-step="1">
       <h3>Añadir producto</h3>
       <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
       <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>
     </div>
 
-    <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+    <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);"       
+    data-intro="Aquí puedes retirar un producto escaneándolo"
+    data-step="2">
       <h3>Retirar producto</h3>
       <img id="addAndRemove" src="/img/removePhoto.png" (click)="openModal()" class="img-fluid" alt="Añadir foto">
       <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>

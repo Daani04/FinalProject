@@ -27,6 +27,7 @@
     "datatables.net-dt": "^2.2.2",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "intro.js": "^7.2.0",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.11.0",

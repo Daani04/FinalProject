@@ -221,6 +221,16 @@ export class HomeComponent {
     );
   }
 
+  public iniciarTour(): void {
+    introJs().setOptions({
+      nextLabel: 'Siguiente',
+      prevLabel: 'Anterior',
+      doneLabel: 'Entendido',
+      showProgress: true,
+      showBullets: false,
+    }).start();
+  }
+
   public moveToSold(): void {
     let productId = Number(this.withdrawFormSelectProduct.value.productName);
     let quantity = Number(this.withdrawFormSelectProduct.value.productQuantity);
