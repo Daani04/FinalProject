@@ -101,6 +101,16 @@ h1 {
   width: 60px;
 }
 
+#warehouseDelete {
+  width: 20px;
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+#warehouseDelete:hover {
+    
+}
+
 #userWarehouses p {
   margin: 0; 
 }

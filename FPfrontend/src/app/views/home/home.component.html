@@ -45,7 +45,11 @@
       <div id="userWarehouses">
         <img id="warehouseLogo" src="/img/almacen.png" alt="logo">
         <p>{{warehouse.name}}</p>
-      </div>
+      <img id="warehouseDelete" src="{{deleteImg[$index]}}" alt="logo" 
+              (mouseover)="changeDeleteImg($index)" 
+              (mouseout)="returnInitialImg($index)"
+              (click)="deleteWarehouse(warehouse.name)">      
+        </div>
       }
       } @else {
       <p class="warehouseP">No tienes ningun almacen</p>

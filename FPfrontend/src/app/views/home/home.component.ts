@@ -80,6 +80,8 @@ export class HomeComponent {
 
   public isModalOpen: boolean = false;
   public modalAction: string = "insertData";
+
+  public deleteImg: string[] = [];
     
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -87,6 +89,11 @@ export class HomeComponent {
 
   public closeModalVerifyDataInsertion(): void {
     this.isModalOpen = false;
+    window.location.reload();
+  }
+
+    ngOnInit(): void {
+    this.checkWarehouses();
   }
   
   productForm = new FormGroup({
@@ -168,6 +175,50 @@ export class HomeComponent {
       }));
 
     //console.log('Productos disponibles:', this.productUserNames);
+  }
+
+  public initializeDeleteImages(): void {
+    this.deleteImg = this.warehouses.map(() => "/img/pape1.png");
+  }
+
+  public changeDeleteImg(index: number): void {
+    this.deleteImg[index] = "/img/pape2.png";
+  }
+
+  public returnInitialImg(index: number): void {
+    this.deleteImg[index] = "/img/pape1.png";
+  }
+
+  public deleteWarehouse(name: string): void {
+    this.loading = true;
+    this.changueScreen = true;
+
+    let idWarehouseForDelete = 0;
+
+    this.warehouses.forEach((data, index) => {
+      if (data.name === name) {
+        idWarehouseForDelete = data.id ?? 0;
+      }
+    });
+
+    let deleteWarehouse = `${this.apiWarehouseUrl}/${idWarehouseForDelete}`;
+
+    this.service.deleteWarehouse(deleteWarehouse).subscribe(
+      (response) => {
+        this.loading = false;
+        this.changueScreen = false;
+
+        this.isModalOpen = true;
+        this.modalAction = "deleteWarehouse";
+
+        console.log('Almacen eliminado correctamente', response)
+      },
+      (error) => {
+        this.loading = false;
+        this.changueScreen = false;
+        console.log('Error al eliminar el almacen', error)
+      }
+    );
   }
 
   public moveToSold(): void {
@@ -281,10 +332,6 @@ export class HomeComponent {
     );
   }
 
-  ngOnInit(): void {
-    this.checkWarehouses();
-  }
-
   public newWarehouse(coordinates: any): void {
     this.loading = true;
     this.changueScreen = true;
@@ -347,6 +394,8 @@ export class HomeComponent {
         let randomWarehouse = this.warehouses[randomIndex];
         this.takeWarehouseProducts(randomWarehouse.id);
         this.randomWarehouseName = randomWarehouse.name ?? '';
+
+        this.initializeDeleteImages();
       },
       error: (error) => {
         console.error('Error fetching warehouses:', error);

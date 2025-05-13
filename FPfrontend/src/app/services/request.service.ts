@@ -34,6 +34,10 @@ export class RequestService {
     return this.http.get<any>(url);
   }
 
+  public deleteWarehouse(url: string): Observable<any> {
+    return this.http.delete<any>(url); 
+  }
+
   public insertProductsInWarehouse(url: string, productData: ProductAllData): Observable<any> {
     return this.http.post<any>(url, productData);
   }
@@ -254,6 +258,7 @@ generateNotification(prompt: string, ignoreNotifications: string): Observable<an
           - **NO incluyas nombres de secciones como "labels", "label" o "data"** en la respuesta. Solo escribe los datos.
           - No uses comas, puntos, corchetes, saltos de línea ni ningún carácter especial.
           - Todo debe estar en una única línea de texto.
+          - Cada label tiene que tener su data, no saques los datos del label sin sacar su data correspondiente
           - Los labels deben tener al menos 3 elementos.
           - Usa solo los datos que se te hayan proporcionado. No generes ni asumas datos.
           - La palabra del label (la descripción del gráfico) debe ser **clara, concisa, y en minúscula salvo la primera letra**.
