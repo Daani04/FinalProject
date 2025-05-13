@@ -157,7 +157,7 @@ export class GraphicsComponent implements OnInit {
     this.showFormIa = true
   }
 
-  createGraphics(prompt: any) {
+  public createGraphics(prompt: any) {
     let promptbbdd = this.createPromptFromProducts();
     this.loading = true; 
     this.dataNewGraphics = []; 
@@ -573,7 +573,6 @@ export class GraphicsComponent implements OnInit {
 
   this.reloadGraphics();
 }
-
 //--------------------------------------------------------------------------------------------------//
   
   public checkProductsData():void {
@@ -658,7 +657,7 @@ export class GraphicsComponent implements OnInit {
   public lineNetProfits: any  = {  
     labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     datasets: [{
-      label: 'Precio de venta',
+      label: 'Beneficio estimado',
       data: [],  
       borderColor: '#8F5B8C', 
       backgroundColor: 'rgba(159, 94, 148, 0.3)', 
@@ -712,5 +711,4 @@ export class GraphicsComponent implements OnInit {
     }]
   };
   
- 
 }  

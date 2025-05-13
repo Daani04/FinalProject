@@ -38,7 +38,7 @@
 
   <div class="row justify-content-center gap-5 custom-row"
     style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div class="col-md-5 p-4  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
+    <div class="col-md-5 p-4  custom-warehouse-box  rounded" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); ">
       <h3>Mis almacenes</h3>
       @if (warehouses.length !== 0) {
       @for (warehouse of warehouses; track $index) {
@@ -97,7 +97,7 @@
       }
     </div>
 
-    <div class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+    <div class="col-md-5 custom-warehouse-box p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Mis productos</h3>
       <h5> {{randomWarehouseName}} </h5>
       @if (products.length !== 0) {
