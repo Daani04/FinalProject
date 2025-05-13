@@ -12,6 +12,9 @@ import { ModalScannerComponent } from "../../component/modal-scanner/modal-scann
 import { NgStyle } from '@angular/common';
 import { ViewChild } from '@angular/core';
 import { ModalComponent } from "../../component/modal/modal.component";
+import introJs from 'intro.js';
+import 'intro.js/introjs.css'; // Esto es para los estilos, si no los has importado aún
+
 
 @Component({
   selector: 'app-home',
