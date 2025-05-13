@@ -232,7 +232,6 @@ img {
   .modal-content::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
   }
-  
 
   @media (max-width: 850px) {
     .search-bar {

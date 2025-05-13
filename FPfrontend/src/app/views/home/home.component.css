@@ -9,7 +9,6 @@
   border: 0.1px solid rgba(146, 146, 147, 0.5);
 }
 
-
 @media (max-width: 1000px) {
   .double-chart {
     flex-direction: column;
@@ -164,7 +163,7 @@ h1 {
   margin-bottom: 0px;
 }
 
-.closeSoldProducts {
+.closeSoldProducts, .closeSoldProductsSold {
   color: white;
   text-decoration: none;
   display: inline-block;
@@ -175,7 +174,11 @@ h1 {
   align-items: center;
   margin-bottom: 15px;
   margin-top: 15px;
-  width: 200px;
+  width: 100%;
+}
+
+.closeSoldProductsSold {
+  width:300px;
 }
 
 .close:hover {
@@ -188,6 +191,13 @@ h1 {
   background-color: #343a40;
   color: wheat;
   border-radius: 5px;
+}
+
+.closeSoldProductsSold:hover {
+  background-color: #343a40;
+  color: wheat;
+  border-radius: 5px;
+  width: 300px;
 }
 
 form {
