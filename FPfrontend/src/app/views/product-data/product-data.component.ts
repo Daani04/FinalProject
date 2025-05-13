@@ -223,6 +223,8 @@ export class ProductDataComponent {
     this.service.deleteProduct(deleteProductUrl).subscribe({
       next: (response) => {
         console.log('Producto eliminado:', this.selectedProduct);
+        window.location.reload();
+
       },
       error: (error) => {
         console.error('Error al eliminar el producto:', error);
