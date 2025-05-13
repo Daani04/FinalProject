@@ -260,7 +260,11 @@ export class HomeComponent {
         this.changueScreen = false;
         this.isModalOpen = true;
       },
-      (error) => console.error('Error al añadir producto:', error)
+      (error) => {
+        this.loading = true;
+        this.changueScreen = true;
+        console.error('Error al añadir producto:', error)
+      }
     );
 
   }
@@ -286,6 +290,8 @@ export class HomeComponent {
 
   public getStreetForm(): void {
     //this.newWarehouse();
+    this.loading = true;
+    this.changueScreen = true;
     this.getLocationCoordinates(this.reactiveForm.value.locationWarehouseCity, this.reactiveForm.value.locationWarehouseStreet, this.reactiveForm.value.locationWarehouseCommunity);
     console.log(this.reactiveForm.value);
   }
@@ -333,9 +339,6 @@ export class HomeComponent {
   }
 
   public newWarehouse(coordinates: any): void {
-    this.loading = true;
-    this.changueScreen = true;
-
     let userIdString = localStorage.getItem('userId'); // Obtiene el userId como string
     let coordinatesString = String(coordinates);
 

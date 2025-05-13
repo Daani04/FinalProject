@@ -64,7 +64,7 @@ export class ProductDataComponent {
   }
 
   public getProductTypes(): void {  
-    this.productsUser.forEach(product => {
+    this.filtratedProductsforWarehouseId.forEach(product => {
       if (!this.allProductType.includes(product.product_type)) { //includes => comprueba si el valro de encuentra en el array, devolviendo true o false
         this.allProductType.push(product.product_type);
       }
