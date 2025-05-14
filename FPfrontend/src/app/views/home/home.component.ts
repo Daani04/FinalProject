@@ -557,7 +557,7 @@ export class HomeComponent {
       this.startTour();
     }, 4500);
 
-    //this.modifyVisitStatus();
+    this.modifyVisitStatus();
   }
 
   public modifyVisitStatus(): void {

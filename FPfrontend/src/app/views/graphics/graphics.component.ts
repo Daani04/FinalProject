@@ -129,8 +129,6 @@ export class GraphicsComponent implements OnInit {
     if (isIntroStart === 'true') {
       this.startTour();
     }
-          this.startTour();
-
   }
 
     public startTour(): void {

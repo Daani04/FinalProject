@@ -13,6 +13,9 @@ import { HttpClient } from '@angular/common/http';
 import { RequestService } from '../../services/request.service';
 import { Warehouse } from '../../models/response.interface';
 import { NgStyle } from '@angular/common';
+import introJs from 'intro.js';
+import 'intro.js/introjs.css'; 
+
 
 @Component({
   selector: 'app-leaflet-map',
@@ -35,6 +38,34 @@ export class LeafletMapComponent {
 
   ngOnInit(): void {
     this.checkWarehouses();
+
+    let isIntroStart = localStorage.getItem('map');
+
+    if (isIntroStart === 'true') {
+      this.startTour();
+    }
+  }
+
+
+
+  public startTour(): void {
+    localStorage.setItem('map', 'false');
+
+    introJs().setOptions({
+      nextLabel: 'Siguiente',
+      prevLabel: 'Anterior',
+      doneLabel: 'Entendido',
+      showProgress: true,
+      showBullets: false,
+      steps: [
+        {
+          element: '#welcome',
+          intro: '🗺️ <strong>Visualización geográfica:</strong> En este mapa puedes ver <strong>todos los almacenes registrados</strong> en StockMaster. Los de color <strong>naranja</strong> son <strong>tuyos</strong> y los <strong>morados</strong> pertenecen a otros usuarios.',
+          position: 'bottom', 
+          tooltipClass: 'introjs-welcome-tooltip',
+        },
+      ],
+    }).start();
   }
 
   public startMap(): void {
