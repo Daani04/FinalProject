@@ -12,13 +12,15 @@ import { ModalScannerComponent } from "../../component/modal-scanner/modal-scann
 import { NgStyle } from '@angular/common';
 import { ViewChild } from '@angular/core';
 import { ModalComponent } from "../../component/modal/modal.component";
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import introJs from 'intro.js';
-import 'intro.js/introjs.css'; // Esto es para los estilos, si no los has importado aún
+import 'intro.js/introjs.css'; 
 
 
 @Component({
   selector: 'app-home',
   imports: [ChartComponent, FooterComponent, ReactiveFormsModule, RouterModule, ModalScannerComponent, NgStyle, ModalComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -85,6 +87,9 @@ export class HomeComponent {
   public modalAction: string = "insertData";
 
   public deleteImg: string[] = [];
+
+  public isFirstVisit: boolean = true;
+  public showWelcomeScreen: boolean = true;
     
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -97,6 +102,14 @@ export class HomeComponent {
 
     ngOnInit(): void {
     this.checkWarehouses();
+
+    setTimeout(() => {
+      this.showWelcomeScreen = false;
+    }, 4000);
+    
+    setTimeout(() => {
+      this.iniciarTour();
+    }, 4500);
   }
   
   productForm = new FormGroup({
@@ -231,8 +244,37 @@ export class HomeComponent {
       doneLabel: 'Entendido',
       showProgress: true,
       showBullets: false,
+      steps: [
+        {
+          element: '#welcome',
+          intro: '¡Bienvenido a StockMaster! Esta aplicación te ayudará a gestionar tus productos y almacenes de manera eficiente. Haz clic en "Siguiente" para comenzar el recorrido y descubrir cómo aprovecharla al máximo.',
+          position: 'bottom', 
+          tooltipClass: 'introjs-welcome-tooltip',
+        },
+        {
+          element: '#Step2Warehouses', 
+          intro: 'Aquí puedes ver y gestionar todos tus almacenes. ¡Organiza y visualiza fácilmente dónde se encuentra cada producto!',
+          position: 'bottom',
+        },
+        {
+          element: '#Step3Products', 
+          intro: 'En esta sección podrás ver todos tus productos. ¡Aquí puedes agregar manualmente nuevos artículos y gestionar los existentes de manera ordenada! Si necesitas añadir un nuevo producto, aquí es el lugar.',
+          position: 'bottom',
+        },
+        {
+          element: '#Step4AddProductScanner', 
+          intro: '¡Añadir productos nunca fue tan fácil! Utiliza el lector de QR para escanear productos y añadirlos a tu inventario rápidamente. ¡Escanea el código de barras y listo!',
+          position: 'bottom',
+        },
+        {
+          element: '#Step5RemoveProductScanner', 
+          intro: '¿Necesitas retirar productos de tu inventario? Escanea el código QR de cualquier producto para eliminarlo rápidamente. Es tan fácil como escanear y confirmar.',
+          position: 'bottom',
+        },
+      ],
     }).start();
   }
+
 
   public moveToSold(): void {
     let productId = Number(this.withdrawFormSelectProduct.value.productName);
@@ -592,8 +634,6 @@ export class HomeComponent {
   if (this.lineExitProducts.datasets[0].data.length > 0 && this.chartComponentLineExitProducts) {
     this.chartComponentLineExitProducts.updateChart();
   }
-  console.log('Salida de productos', this.saleProductsForMonth);
-  console.log('Entrada de productos', this.entrateProductsForMonth);
  }
  //------------------------------------------------------------------------------------------------------//
 
