@@ -8,6 +8,8 @@ import { ViewChild } from '@angular/core';
 import { ChartComponent } from '../../component/chart/chart.component';
 import { NgClass, NgStyle } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import introJs from 'intro.js';
+import 'intro.js/introjs.css'; 
 
 @Component({
   selector: 'app-graphics',
@@ -121,6 +123,40 @@ export class GraphicsComponent implements OnInit {
     this.checkAndLoadGraphics();
     this.checkProducts();
     this.getProductsSold();
+
+    let isIntroStart = localStorage.getItem('graphics');
+
+    if (isIntroStart === 'true') {
+      this.startTour();
+    }
+          this.startTour();
+
+  }
+
+    public startTour(): void {
+
+    localStorage.setItem('graphics', 'false');
+
+    introJs().setOptions({
+      nextLabel: 'Siguiente',
+      prevLabel: 'Anterior',
+      doneLabel: 'Entendido',
+      showProgress: true,
+      showBullets: false,
+      tooltipClass: 'custom-tooltip',
+      steps: [
+        {
+          element: '#welcome',
+          intro: `
+            <div style="text-align: center;">
+            <p>📊 <strong>Bienvenido a la sección de gráficos.</strong> Aquí podrás visualizar <strong>estadísticas clave</strong> sobre tus <strong>productos</strong> y <strong>ventas</strong>. Para ver resultados, comienza <strong>añadiendo productos</strong> y <strong>registrando tus primeras ventas</strong>.</p>
+              <img src="/img/graficosIntro.png" alt="Imagen de un grafico" style="max-width: 100%; height: auto; margin-top: 10px; border-radius: 15px;" />
+            </div>
+          `,
+          position: 'bottom', 
+        },
+      ],
+    }).start();
   }
 
   public onSubmitGraphics(): void {

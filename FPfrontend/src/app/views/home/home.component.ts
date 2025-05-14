@@ -231,6 +231,11 @@ export class HomeComponent {
   }
 
   public startTour(): void {
+    localStorage.setItem('warehouse', 'true');
+    localStorage.setItem('graphics', 'true');
+    localStorage.setItem('map', 'true');
+    localStorage.setItem('chatIA', 'true');
+
     introJs().setOptions({
       nextLabel: 'Siguiente',
       prevLabel: 'Anterior',
@@ -240,28 +245,28 @@ export class HomeComponent {
       steps: [
         {
           element: '#welcome',
-          intro: '¡Bienvenido a StockMaster! Esta aplicación te ayudará a gestionar tus productos y almacenes de manera eficiente. Haz clic en "Siguiente" para comenzar el recorrido y descubrir cómo aprovecharla al máximo.',
+          intro: '👋 <strong>¡Bienvenido a StockMaster!</strong> Esta aplicación te ayudará a <strong>gestionar tus productos y almacenes</strong> de manera eficiente. Haz clic en <strong>"Siguiente"</strong> para comenzar el recorrido y descubrir cómo aprovecharla al máximo.',
           position: 'bottom', 
           tooltipClass: 'introjs-welcome-tooltip',
         },
         {
           element: '#Step2Warehouses', 
-          intro: 'Aquí puedes ver y gestionar todos tus almacenes. ¡Organiza y visualiza fácilmente dónde se encuentra cada producto!',
+          intro: '🏢 <strong>Gestión de almacenes:</strong> Aquí puedes <strong>ver y gestionar</strong> todos tus almacenes. ¡Organiza y visualiza fácilmente dónde se encuentra cada producto!',
           position: 'bottom',
         },
         {
           element: '#Step3Products', 
-          intro: 'En esta sección podrás ver todos tus productos. ¡Aquí puedes agregar manualmente nuevos artículos y gestionar los existentes de manera ordenada! Si necesitas añadir un nuevo producto, aquí es el lugar.',
+          intro: '📦 <strong>Listado de productos:</strong> En esta sección puedes <strong>ver, añadir y gestionar</strong> todos tus productos de manera ordenada.',
           position: 'bottom',
         },
         {
           element: '#Step4AddProductScanner', 
-          intro: '¡Añadir productos nunca fue tan fácil! Utiliza el lector de QR para escanear productos y añadirlos a tu inventario rápidamente. ¡Escanea el código de barras y listo!',
+          intro: '📲 <strong>Añadir con QR:</strong> Utiliza el lector de <strong>código QR</strong> para escanear productos y <strong>añadirlos rápidamente</strong> a tu inventario.',
           position: 'bottom',
         },
         {
           element: '#Step5RemoveProductScanner', 
-          intro: '¿Necesitas retirar productos de tu inventario? Escanea el código QR de cualquier producto para eliminarlo rápidamente. Es tan fácil como escanear y confirmar.',
+          intro: '❌ <strong>Retirar productos:</strong> Escanea el código QR de un producto para <strong>eliminarlo fácilmente</strong> del inventario.',
           position: 'bottom',
         },
       ],
@@ -552,7 +557,7 @@ export class HomeComponent {
       this.startTour();
     }, 4500);
 
-    this.modifyVisitStatus();
+    //this.modifyVisitStatus();
   }
 
   public modifyVisitStatus(): void {

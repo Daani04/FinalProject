@@ -8,6 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/response.interface';
 import { RouterLink } from '@angular/router';
 import { NgStyle } from '@angular/common';
+import introJs from 'intro.js';
+import 'intro.js/introjs.css'; 
 
 
 @Component({
@@ -54,7 +56,36 @@ export class WarehouseComponent {
   });
 
   ngOnInit(): void {
+    let isIntroStart = localStorage.getItem('warehouse');
     this.checkWarehouses();
+
+    if (isIntroStart === 'true') {
+      this.startTour();
+    }
+  }
+
+  public startTour(): void {
+    localStorage.setItem('warehouse', 'false');
+    introJs().setOptions({
+      nextLabel: 'Siguiente',
+      prevLabel: 'Anterior',
+      doneLabel: 'Entendido',
+      showProgress: true,
+      showBullets: false,
+      steps: [
+        {
+          element: '#welcome',
+          intro: '🏬 Bienvenido a la sección de <strong>Almacenes</strong>. Desde aquí podrás ver todos tus almacenes, acceder a sus detalles y gestionar los productos que contienen de forma eficiente.',
+          position: 'bottom', 
+          tooltipClass: 'introjs-welcome-tooltip',
+        },
+        {
+          element: '#Step6AddWarehouse', 
+          intro: '➕ ¿Necesitas más espacio? Usa este botón para <strong>añadir nuevos almacenes</strong> y organizar mejor tu inventario.',
+          position: 'bottom',
+        },
+      ],
+    }).start();
   }
 
   public getStreetForm(): void {

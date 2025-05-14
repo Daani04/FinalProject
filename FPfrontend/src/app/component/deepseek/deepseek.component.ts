@@ -3,6 +3,8 @@ import { RequestService } from '../../services/request.service';
 import { FormsModule } from '@angular/forms';
 import { json } from 'express';
 import { ProductAllData } from '../../models/response.interface';
+import introJs from 'intro.js';
+import 'intro.js/introjs.css'; 
 
 @Component({
   selector: 'app-deepseek',
@@ -76,6 +78,41 @@ export class DeepseekComponent {
       }
     }, 100);
     this.checkProducts();
+
+    let isIntroStart = localStorage.getItem('chatIA');
+
+    if (isIntroStart === 'true') {
+      this.startTour();
+    }
+  }
+
+  public startTour(): void {
+    localStorage.setItem('chatIA', 'false');
+    introJs().setOptions({
+      nextLabel: 'Siguiente',
+      prevLabel: 'Anterior',
+      doneLabel: 'Entendido',
+      showProgress: true,
+      showBullets: false,
+      steps: [
+        {
+          element: '#welcome',
+          intro: '🚀 <strong>¡Bienvenido al asistente inteligente!</strong> Aquí podrás mantener una conversación con la IA, que entiende tus <strong>productos</strong> y puede ayudarte a tomar decisiones más rápidas y eficaces.',
+          position: 'bottom', 
+          tooltipClass: 'introjs-welcome-tooltip',
+        },
+        {
+          element: '#Step7ChatIA', 
+          intro: '💬 Este es el <strong>chat con la IA</strong>. Puedes preguntarle sobre <strong>productos</strong>, <strong>stock</strong>, <strong>ventas</strong>… lo que necesites. ¡Está aquí para ayudarte!',
+          position: 'bottom',
+        },
+                {
+          element: '#Step8ChatOptions', 
+          intro: '🎯 ¿No sabes por dónde empezar? Hazle una pregunta sencilla como <strong>“Stock de los productos”</strong> y sorpréndete con la respuesta.',
+          position: 'bottom',
+        },
+      ],
+    }).start();
   }
 
   public createPromptFromProducts(): string {
