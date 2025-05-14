@@ -39,9 +39,6 @@ class ProductAllData
     #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $expiration_date = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $product_photo = null;
-
     #[ORM\Column(nullable: true)]
     private ?float $purchasePrice = null;
 
@@ -62,22 +59,6 @@ class ProductAllData
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getProductPhoto()
-    {
-        return $this->product_photo;
-    }
-
-    /**
-     * @param string|null $product_photo
-     */
-    public function setProductPhoto($product_photo)
-    {
-        $this->product_photo = $product_photo;
     }
 
     /**

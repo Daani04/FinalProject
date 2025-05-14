@@ -34,6 +34,7 @@ export class RegisterComponent {
       password: this.reactiveForm.value.password ?? '',
       company: this.reactiveForm.value.company ?? '',
       role: "ROL_CLIENTE",
+      isFirstVisit : true
     };
     
     this.service.createUser(this.apiUrlUser, newUser).subscribe(

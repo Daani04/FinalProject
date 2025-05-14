@@ -25,6 +25,7 @@ class ApiUserController extends AbstractController {
                 'password' => $user->getPassword(),
                 'company' => $user->getCompanyName(),
                 'role' => $user->getRole(),
+                'isFirstVisit' => $user->isFirstVisit(),
             ];
         }
 
@@ -53,6 +54,7 @@ class ApiUserController extends AbstractController {
                 'username' => $user->getUserName(),
                 'email' => $user->getEmail(),
                 'role' => $user->getRole(),
+                'isFirstVisit' => $user->isFirstVisit(),
             ]
         ]);
     }
@@ -72,12 +74,36 @@ class ApiUserController extends AbstractController {
         $user->setPassword(password_hash($data['password'], PASSWORD_DEFAULT));
         $user->setCompanyName($data['company']);
         $user->setRole($data['role']);
+        $user->setIsFirstVisit(true); 
 
         $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->json(['message' => 'User created successfully'], 201);
     }
+
+    #[Route('/{id}/update-visit', name: 'update_visit', methods: ['PATCH'])]
+    public function updateVisit(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $user = $entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return $this->json(['error' => 'User not found'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['isFirstVisit'])) {
+            return $this->json(['error' => 'Missing isFirstVisit field'], 400);
+        }
+
+        $user->setIsFirstVisit($data['isFirstVisit']);
+
+        $entityManager->flush();
+
+        return $this->json(['message' => 'User visit status updated successfully'], 200);
+    }
+
 
     #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse {

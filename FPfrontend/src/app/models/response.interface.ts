@@ -11,7 +11,6 @@ export interface ProductAllData {
     product_type: string;
     entry_date: string;  
     expiration_date: string | null;  
-    product_photo: string | null;  
 }
 
 //NO ESTAN TODOS LOS CAMPOS DECLARADOS, HAY QUE DECLARARLOS
@@ -28,11 +27,12 @@ export interface ProductSold {
 
 export interface User {
     id?: number | null;  
-    username: string;
-    company: string;
-    email: string;
-    password: string;
-    role: string;
+    username?: string |null;
+    company?: string |null;
+    email?: string |null;
+    password?: string;
+    role?: string |null;
+    isFirstVisit : boolean;
 }
 
 export interface Warehouse {

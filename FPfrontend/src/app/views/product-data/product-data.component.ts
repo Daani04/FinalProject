@@ -126,7 +126,6 @@ export class ProductDataComponent {
     productType: new FormControl(''),
     expirationDate: new FormControl(''),
     entryDate: new FormControl(''),
-    productPhoto: new FormControl(''),
     purchasePrice: new FormControl('')
   });
 
@@ -254,7 +253,6 @@ export class ProductDataComponent {
         productType: this.selectedProduct.product_type,
         expirationDate: this.selectedProduct.expiration_date?.split(' ')[0] || '', 
         entryDate: this.selectedProduct.entry_date.split(' ')[0], 
-        productPhoto: '',
         purchasePrice: this.selectedProduct.purchase_price.toString()
       });
     },
@@ -289,7 +287,6 @@ export class ProductDataComponent {
       product_type: this.productForm.value.productType ?? '',
       entry_date: this.productForm.value.entryDate ?? '', 
       expiration_date: this.productForm.value.expirationDate || null,
-      product_photo: this.productForm.value.productPhoto || null,
       purchase_price: purchasePriceToNumber
     };
 

@@ -104,10 +104,6 @@ class ApiProductSoldController extends AbstractController {
             $sale->setEntryDate($product->getEntryDate());
         }
 
-        if ($product->getProductPhoto() !== null) {
-            $sale->setProductPhoto($product->getProductPhoto());
-        }
-
         if ($product->getBarcode() !== null) {
             $sale->setBarcode($product->getBarcode());
         }
@@ -154,7 +150,6 @@ class ApiProductSoldController extends AbstractController {
                 'product_type' => $sale->getProductType(),
                 'entry_date' => $sale->getEntryDate()?->format('Y-m-d H:i:s'),
                 'expiration_date' => $sale->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'product_photo' => $sale->getProductPhoto(),
                 'barcode' => $sale->getBarcode(),
             ];
         }

@@ -48,9 +48,6 @@ class ProductSold
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entry_date = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $productPhoto = null;
     
     #[ORM\Column(nullable: true)]
     private ?int $barcode = null;
@@ -215,18 +212,6 @@ class ProductSold
     public function setEntryDate(\DateTimeInterface $entry_date): static
     {
         $this->entry_date = $entry_date;
-
-        return $this;
-    }
-
-    public function getProductPhoto(): ?string
-    {
-        return $this->productPhoto;
-    }
-
-    public function setProductPhoto(string $productPhoto): static
-    {
-        $this->productPhoto = $productPhoto;
 
         return $this;
     }

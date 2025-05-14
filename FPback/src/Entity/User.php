@@ -33,6 +33,9 @@ class User
     #[ORM\OneToMany(mappedBy: "user", targetEntity: Warehouse::class, cascade: ["remove"])]
     private Collection $warehouses;
 
+    #[ORM\Column]
+    private ?bool $isFirstVisit = null;
+
 
     public function __construct()
     {
@@ -149,6 +152,18 @@ class User
     public function setUserName($user_name)
     {
         $this->user_name = $user_name;
+    }
+
+    public function isFirstVisit(): ?bool
+    {
+        return $this->isFirstVisit;
+    }
+
+    public function setIsFirstVisit(bool $isFirstVisit): static
+    {
+        $this->isFirstVisit = $isFirstVisit;
+
+        return $this;
     }
 
 }

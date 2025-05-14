@@ -53,6 +53,7 @@ export class LoginComponent {
           localStorage.setItem('company', user.company ?? '');
           localStorage.setItem('email', user.email ?? '');
           localStorage.setItem('role', user.role ?? '');
+          localStorage.setItem('userVisit', user.isFirstVisit ?? '');
 
           localStorage.setItem('user', user.email);
 

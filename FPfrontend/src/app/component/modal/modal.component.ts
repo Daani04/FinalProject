@@ -71,9 +71,9 @@ export class ModalComponent {
 
   public insertDataUser(): void {
     this.loginDataUser.forEach((element, index)=> {
-      this.companyName =  this.loginDataUser[index].company;
-      this.username = this.loginDataUser[index].username;
-      this.email =  this.loginDataUser[index].email;
+      this.companyName =  this.loginDataUser[index].company ?? '';
+      this.username = this.loginDataUser[index].username  ?? '';
+      this.email =  this.loginDataUser[index].email  ?? '';
     })
   }
 }

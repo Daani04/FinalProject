@@ -3,7 +3,7 @@ import { ChartComponent } from '../../component/chart/chart.component';
 import { FooterComponent } from "../../component/footer/footer.component";
 import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
 import { RequestService } from '../../services/request.service';
-import { ProductAllData, ProductSold, Warehouse } from '../../models/response.interface';
+import { ProductAllData, ProductSold, Warehouse, User } from '../../models/response.interface';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -35,6 +35,7 @@ export class HomeComponent {
   public apiProductsUrl: string = "http://localhost:8000/api/data";
   private apiLocationUrl = 'https://nominatim.openstreetmap.org/reverse?format=json';
   public apiSalesUrl: string = "http://localhost:8000/api/sales";
+  public apiUser: string = 'http://127.0.0.1:8000/api/user';
 
   public userName = localStorage.getItem('username');
 
@@ -88,8 +89,8 @@ export class HomeComponent {
 
   public deleteImg: string[] = [];
 
-  public isFirstVisit: boolean = true;
-  public showWelcomeScreen: boolean = true;
+  public isFirstVisit: boolean = false;
+  public showWelcomeScreen: boolean = false;
     
   public insertionMethod(): void {
     this.contInsertionData = 1;
@@ -102,14 +103,7 @@ export class HomeComponent {
 
     ngOnInit(): void {
     this.checkWarehouses();
-
-    setTimeout(() => {
-      this.showWelcomeScreen = false;
-    }, 4000);
-    
-    setTimeout(() => {
-      this.iniciarTour();
-    }, 4500);
+    this.verifyUserVisits();
   }
   
   productForm = new FormGroup({
@@ -121,7 +115,6 @@ export class HomeComponent {
     productType: new FormControl(''),
     expirationDate: new FormControl(''),
     entryDate: new FormControl(''),
-    productPhoto: new FormControl(''),
     purchasePrice: new FormControl('')
   });
 
@@ -237,7 +230,7 @@ export class HomeComponent {
     );
   }
 
-  public iniciarTour(): void {
+  public startTour(): void {
     introJs().setOptions({
       nextLabel: 'Siguiente',
       prevLabel: 'Anterior',
@@ -482,7 +475,6 @@ export class HomeComponent {
       product_type: this.productForm.value.productType ?? '',
       entry_date: this.productForm.value.entryDate ?? '',
       expiration_date: this.productForm.value.expirationDate || null,
-      product_photo: this.productForm.value.productPhoto || null,
       purchase_price: purchasePriceToNumber
     };
 
@@ -539,6 +531,57 @@ export class HomeComponent {
       }
     });
   }
+
+  public verifyUserVisits(): void {
+    let isUserVisit = localStorage.getItem('userVisit');
+    console.log('El usuario ha visitado la paigna??', isUserVisit);
+
+    if (isUserVisit === 'true') {
+      this.loadWelcomePage();
+    }
+  }
+
+  public loadWelcomePage(): void {
+    this.isFirstVisit = true;
+    this.showWelcomeScreen = true;
+    setTimeout(() => {
+      this.showWelcomeScreen = false;
+    }, 4000);
+    
+    setTimeout(() => {
+      this.startTour();
+    }, 4500);
+
+    this.modifyVisitStatus();
+  }
+
+  public modifyVisitStatus(): void {
+    localStorage.setItem('userVisit', 'false');
+    let userIdString = localStorage.getItem('userId');
+
+    if (!userIdString) {
+      console.error('Error: No se encontró userId en localStorage');
+      return;
+    }
+
+    let userId = parseInt(userIdString, 10);
+
+    let url = `http://127.0.0.1:8000/api/user/${userId}/update-visit`;
+
+    const visitPage: User = {
+      isFirstVisit : false, 
+    };
+
+    this.service.editUserVisitStatus(url, visitPage).subscribe({
+      next: (response) => {
+        console.log('Usuario registrado como visitante de la página', response);
+      },
+      error: (error) => {
+        console.log('No se puede verificar que el usuario ha visitado la página', error);
+      }
+    });
+  }
+
 //-----------------------------------------------GENERAR GRAFICOS(Saca los productos vendidos, pero solo se usan en los graficos)------//
   public getProductsSold(): void {
     let userIdString = localStorage.getItem('userId');

@@ -26,6 +26,10 @@ export class RequestService {
     return this.http.post<any>(url, { email, password });
   }
 
+  public editUserVisitStatus(url: string, newVisitStatus: User): Observable<any> {
+    return this.http.patch<any>(url, newVisitStatus);
+  }
+
   public createWarehouse(url: string, warehouseData: Warehouse): Observable<any> {
     return this.http.post<any>(url, warehouseData);
   }

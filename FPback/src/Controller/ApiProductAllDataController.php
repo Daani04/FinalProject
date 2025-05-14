@@ -31,7 +31,6 @@ class ApiProductAllDataController extends AbstractController {
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
                 'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'product_photo' => $productData->getProductPhoto(),
             ];
         }
 
@@ -62,7 +61,6 @@ class ApiProductAllDataController extends AbstractController {
             'product_type' => $productData->getProductType(),
             'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
             'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-            'product_photo' => $productData->getProductPhoto(),
         ];
 
         // Devolver los datos del producto en formato JSON
@@ -151,7 +149,6 @@ class ApiProductAllDataController extends AbstractController {
             $productData->setProductType($data['product_type']);
             $productData->setEntryDate(new \DateTime($data['entry_date']));
             $productData->setExpirationDate(isset($data['expiration_date']) ? new \DateTime($data['expiration_date']) : null);
-            $productData->setProductPhoto($data['product_photo'] ?? null);
 
             $entityManager->persist($productData);
             $createdCount++;
@@ -197,7 +194,6 @@ class ApiProductAllDataController extends AbstractController {
                 'product_type' => $productData->getProductType(),
                 'entry_date' => $productData->getEntryDate()->format('Y-m-d H:i:s'),
                 'expiration_date' => $productData->getExpirationDate()?->format('Y-m-d H:i:s'),
-                'product_photo' => $productData->getProductPhoto(),
             ];
         }
 
@@ -257,8 +253,6 @@ class ApiProductAllDataController extends AbstractController {
         if (isset($data['expiration_date'])) {
             $product->setExpirationDate(new \DateTime($data['expiration_date']));
         }
-        $product->setProductPhoto($data['product_photo'] ?? $product->getProductPhoto());
-
         $entityManager->flush();
 
         return $this->json(['message' => 'Product updated successfully'], 200);
