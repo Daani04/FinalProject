@@ -87,6 +87,8 @@ export class HomeComponent {
   public isModalOpen: boolean = false;
   public modalAction: string = "insertData";
 
+  public scannerAction: string = "addProductToStock";
+
   public deleteImg: string[] = [];
 
   public isFirstVisit: boolean = false;
@@ -631,7 +633,13 @@ export class HomeComponent {
     this.selectWarehouse = false;
   }
 
-  public openModal(): void {
+  public openModalAddProduct(): void {
+    this.scannerAction = 'addProductToStock'
+    this.openModalScanner = true;
+  }
+
+  public openModalSoldProduct(): void {
+    this.scannerAction = 'moveProductToSold'
     this.openModalScanner = true;
   }
 

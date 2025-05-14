@@ -164,7 +164,7 @@
       </form>
       @if (selectedWarehouse === true) {
       <button class="btn" (click)="changeShowForm()">Añadir manualmente</button>
-      <button class="btn" (click)="openModal()">Escanear productos</button>
+      <button class="btn" (click)="openModalAddProduct()">Escanear productos</button>
       <app-modal-scanner (closeModal)="closeModal()"></app-modal-scanner>
       }
       } @else {
@@ -284,16 +284,16 @@
 
   <div class="row justify-content-center gap-5 custom-row"
     style="margin-bottom: 50px; margin-top: 50px; text-align: center;">
-    <div id="Step4AddProductScanner" class="col-md-5  p-4  rounded" (click)="openModal()" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
+    <div id="Step4AddProductScanner" class="col-md-5  p-4  rounded" (click)="openModalAddProduct()" style=" box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Añadir producto</h3>
       <img id="addAndRemove" src="/img/addPhoto.png" class="img-fluid" alt="Añadir foto">
-      <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>
+      <app-modal-scanner [openScanner]="openModalScanner" [scannerAction]="scannerAction" (closeModal)="closeModal()"></app-modal-scanner>
     </div>
 
   <div id="Step5RemoveProductScanner" class="col-md-5 p-4  rounded" style="text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);">
       <h3>Retirar producto</h3>
-      <img id="addAndRemove" src="/img/removePhoto.png" (click)="openModal()" class="img-fluid" alt="Añadir foto">
-      <app-modal-scanner [openScanner]="openModalScanner" (closeModal)="closeModal()"></app-modal-scanner>
+      <img id="addAndRemove" src="/img/removePhoto.png" (click)="openModalSoldProduct()" class="img-fluid" alt="Añadir foto">
+      <app-modal-scanner [openScanner]="openModalScanner" [scannerAction]="scannerAction" (closeModal)="closeModal()"></app-modal-scanner>
     </div>
   </div>
 

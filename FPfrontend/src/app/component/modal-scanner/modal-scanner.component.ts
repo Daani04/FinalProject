@@ -11,7 +11,13 @@ export class ModalScannerComponent {
 
   @Input() public openScanner: boolean = false;
   @Input() scannedCode: string = '';//Intentando traer los datos del escáner
+  @Input() scannerAction: string = '';
+
   @Output() closeModal = new EventEmitter<void>();
+
+  ngOninit(): void {
+    console.log('Modal status', this.scannerAction);
+  }
   
   closeModalScanner(): void {
     this.closeModal.emit();
@@ -22,6 +28,7 @@ export class ModalScannerComponent {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['scannedCode']) {
       console.log('ModalScannerComponent: Código escaneado:', this.scannedCode);
+      console.log('Modal status', this.scannerAction);
     }
   }
 }

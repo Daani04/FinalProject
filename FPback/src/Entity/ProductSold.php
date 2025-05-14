@@ -49,8 +49,8 @@ class ProductSold
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $entry_date = null;
     
-    #[ORM\Column(nullable: true)]
-    private ?int $barcode = null;
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $barcode = null;    
 
     /**
      * @return int|null
@@ -216,16 +216,15 @@ class ProductSold
         return $this;
     }
 
-    public function getBarcode(): ?int
+    public function getBarcode(): ?string
     {
         return $this->barcode;
     }
-
-    public function setBarcode(?int $barcode): static
+    
+    public function setBarcode(?string $barcode): static
     {
         $this->barcode = $barcode;
-
         return $this;
-    }
+    }    
 
 }

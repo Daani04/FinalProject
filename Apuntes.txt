@@ -16,4 +16,6 @@ Las fechas solo se filtran bien si se insertan desde postman, si se inserta desd
 GRAFICOS: 
 El grafico de productos mas vendidos repite los productos si se venden varias veces en vez de sumar su cantidad vendida
 
+SCANER:
+NO DEJA PASAR QUE TIPO DE ACCION QUIERES HACER AÑADIR/VENDER, DE MOMENTO SOLO SE VA A PODER AÑADIR
 
