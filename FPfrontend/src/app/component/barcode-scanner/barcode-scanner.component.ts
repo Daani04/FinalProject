@@ -20,6 +20,7 @@ export class BarcodeScannerComponent {
   @Output() scanResult = new EventEmitter<string>();
   @Output() scanCompleted = new EventEmitter<void>();
 
+  @Input() scannerAction: string = '';
 
   public apiProductsUrl: string = "http://localhost:8000/api/data";
   public productsUser: any[] = [];
@@ -50,10 +51,7 @@ export class BarcodeScannerComponent {
   const result = event as string;
 
   if (result === this.scannedCode) return;
-
   this.scannedCode = result;
-
-  console.log('Código de barras escaneado:', result); 
 
   if (this.barcodeUserProducts[result]) {
     this.productDetails = this.barcodeUserProducts[result];
@@ -62,12 +60,10 @@ export class BarcodeScannerComponent {
     this.addScannProduct();
 
     console.log('Producto escaneado con exito:', this.productDetails);
-
   } else {
     this.productDetails = { name: 'Producto no encontrado', description: '' };
     this.isValid = false;
   }
-
   this.scanResult.emit(result);
 }
 
@@ -75,7 +71,13 @@ export class BarcodeScannerComponent {
   public addScannProduct(): void {
     let selectOneProductUrl = `${this.apiProductsUrl}/${this.productDetails.id}`;
 
-    let updateStock = this.productDetails.stock += 1;
+    let updateStock = this.productDetails.stock;
+
+    if (this.scannerAction === "moveProductToSold" && updateStock !== 0) {
+      updateStock -= 1;
+    } else if(this.scannerAction === "addProductToStock") {
+      updateStock += 1;
+    }
 
     const products: ProductAllData = {
       id: null,

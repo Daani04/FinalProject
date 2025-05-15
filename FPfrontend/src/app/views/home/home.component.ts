@@ -636,11 +636,13 @@ export class HomeComponent {
   public openModalAddProduct(): void {
     this.scannerAction = 'addProductToStock'
     this.openModalScanner = true;
+    console.log('Action: ', this.scannerAction);
   }
 
   public openModalSoldProduct(): void {
     this.scannerAction = 'moveProductToSold'
     this.openModalScanner = true;
+    console.log('Action: ', this.scannerAction);
   }
 
   public closeModal(): void {

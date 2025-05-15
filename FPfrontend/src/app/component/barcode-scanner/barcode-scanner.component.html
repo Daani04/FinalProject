@@ -6,20 +6,4 @@
   (scanSuccess)="onScanSuccess($event)">
 </zxing-scanner>
 
-<!-- Mostrar el código escaneado -->
-<p *ngIf="scannedCode">Código escaneado: <strong>{{ scannedCode }}</strong></p>
-
-<!-- Mostrar información del producto si es válido -->
-<div *ngIf="productDetails">
-  <h3>{{ productDetails.name }}</h3>
-  <p><strong>Descripción:</strong> {{ productDetails.description }}</p>
-  <p *ngIf="productDetails.calories !== undefined"><strong>Calorías:</strong> {{ productDetails.calories }} kcal</p>
-  <p><strong>Precio:</strong> {{ productDetails.price }}</p>
-  <p><strong>Marca:</strong> {{ productDetails.brand }}</p>
-</div>
-
-<!-- Mostrar si el código es válido o no -->
-<p *ngIf="isValid !== null">
-  <span *ngIf="isValid" style="color: green;">✅ Código válido</span>
-  <span *ngIf="!isValid" style="color: red;">❌ Código inválido</span>
-</p>
+  
