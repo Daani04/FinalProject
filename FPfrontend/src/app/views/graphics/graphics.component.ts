@@ -481,9 +481,6 @@ export class GraphicsComponent implements OnInit {
       this.saleProductsForMonth = salesForMonth;
       this.entrateProductsForMonth = entrateProductsForMonth;
       this.reloadGraphics();
-
-      console.log('Salida de productos OK', this.saleProductsForMonth);
-      console.log('Entrada de productos OK', this.entrateProductsForMonth);
   }
 
   public calculateProductPrices(): void {

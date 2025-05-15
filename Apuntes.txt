@@ -1,4 +1,5 @@
 DEPENDENCIAS: 
+OpenFoodFacts(Revisar dependencias)
 Escaner(Revisar dependencias)
 DeepSeek(Revisar dependencias)
 Chart.js(Revisar dependencias)
@@ -8,7 +9,7 @@ Angular PWA(Permite instalar como apicacion) ==> npm install @angular/service-wo
 Revisar generacino de graficos por IA, ha dejado de funcionar(PROBLEMA: Deja de funcionar cuando trabaja con muchos datos)
 
 POR TERMINAL
-Meter productos a traves del scanner
+FALTA!!!! añadir datos del formulario a   public addProduct(warehouseId: number) en modal-scanner
 
 FILTRADO:
 Las fechas solo se filtran bien si se insertan desde postman, si se inserta desde el formulario no se filtran

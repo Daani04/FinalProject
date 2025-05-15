@@ -1,68 +1,126 @@
-#scanner {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    z-index: 9999; 
+.scanner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
-#modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    z-index: 9998; /* Justo debajo del modal */
-}
-
-app-barcode-scanner {
-    background-color: rgba(60, 60, 64, 0.9);
-    width: 700px;
-    height: 550px;
-    padding: 20px;
-    border-radius: 8px; 
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-}
-
-#close {
-    background-color: #686868;
-    border-radius: 5px;
-    padding: 10px 20px; 
-    margin-top: 10px;  
-    cursor: pointer;  
-    transition: background-color 0.3s ease;
-}
-
-#close:hover {
-    background-color: #1d2124;
-    color: wheat;
+#modal-overlay,
+#checkCont {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 #checkCont {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
 
 #checkCont > dotlottie-player {
-    background-color: rgba(60, 60, 64, 0.9);
-    width: 700px;
-    height: 550px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+  background-color: rgba(60, 60, 64, 0.9);
+  width: 700px;
+  height: 550px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+app-barcode-scanner {
+  background-color: rgba(60, 60, 64, 0.9);
+  width: 700px;
+  height: 550px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.insertDataOptions,
+.selectWareHouse {
+  background-color: rgba(60, 60, 64, 1);
+  width: 700px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.selectWareHouse {
+  height: 450px;
+}
+
+.insertDataOptions h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  color: #f0f0f0;
+}
+
+.printCont {
+  width: 300px;
+  background-color: #1d2124;
+  border: 3px solid rgba(146, 146, 147, 0.5);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.printCont p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.printCont p strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 20px;
+  color: #ccc;
+  border-bottom: 2px solid #666;
+  padding-bottom: 4px;
+}
+
+.close,
+.closeSelectWarehouse {
+  background-color: #686868;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: white;
+  text-align: center;
+}
+
+.close:hover,
+.closeSelectWarehouse:hover {
+  background-color: #1d2124;
+  color: wheat;
+}
+
+#selectWarehouseP {
+  max-width: 80%;
+  text-align: center;
+}
+
+select {
+  width: 250px;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
 }

@@ -40,7 +40,6 @@ export class ModalComponent {
 
   ngOnInit() {
     this.getUsers();
-    console.log('Accion del modal: ', this.modalAction);
   }
 
   public getUsers(): void {

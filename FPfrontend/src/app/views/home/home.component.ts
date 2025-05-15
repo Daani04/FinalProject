@@ -454,6 +454,7 @@ export class HomeComponent {
         this.randomWarehouseName = randomWarehouse.name ?? '';
 
         this.initializeDeleteImages();
+        console.log('ALMACENES DEL USUARIO', this.warehouses);
       },
       error: (error) => {
         console.error('Error fetching warehouses:', error);
@@ -541,7 +542,6 @@ export class HomeComponent {
 
   public verifyUserVisits(): void {
     let isUserVisit = localStorage.getItem('userVisit');
-    console.log('El usuario ha visitado la paigna??', isUserVisit);
 
     if (isUserVisit === 'true') {
       this.loadWelcomePage();
@@ -636,13 +636,11 @@ export class HomeComponent {
   public openModalAddProduct(): void {
     this.scannerAction = 'addProductToStock'
     this.openModalScanner = true;
-    console.log('Action: ', this.scannerAction);
   }
 
   public openModalSoldProduct(): void {
     this.scannerAction = 'moveProductToSold'
     this.openModalScanner = true;
-    console.log('Action: ', this.scannerAction);
   }
 
   public closeModal(): void {
@@ -673,9 +671,6 @@ export class HomeComponent {
         this.saleProductsForMonth = salesForMonth;
         this.entrateProductsForMonth = entrateProductsForMonth;
         this.reloadGraphics();
-
-        console.log('Salida de productos OK', this.saleProductsForMonth);
-        console.log('Entrada de productos OK', this.entrateProductsForMonth);
     }
 
   public reloadGraphics(): void {

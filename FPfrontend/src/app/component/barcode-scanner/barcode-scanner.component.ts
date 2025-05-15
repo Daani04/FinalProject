@@ -19,6 +19,7 @@ export class BarcodeScannerComponent {
 
   @Output() scanResult = new EventEmitter<string>();
   @Output() scanCompleted = new EventEmitter<void>();
+  @Output() barcodeCheck = new EventEmitter<void>();
 
   @Input() scannerAction: string = '';
 
@@ -30,11 +31,10 @@ export class BarcodeScannerComponent {
 
   public modalAction: string = '';
 
-  public openCehckModal: boolean = false;
-
-  scannedCode: string = '';
-  productDetails: any = null;
-  isValid: boolean | null = null;
+  private isProcessing = false;
+  public scannedCode: string = '';
+  public productDetails: any = null;
+  public isValid: boolean | null = null;
   
   // Definir los formatos de código de barras permitidos correctamente
   formats = [BarcodeFormat.EAN_13, BarcodeFormat.CODE_128];
@@ -48,9 +48,10 @@ export class BarcodeScannerComponent {
   }
 
   onScanSuccess(event: any) {
-  const result = event as string;
+  let result = event as string;
 
-  if (result === this.scannedCode) return;
+  if (this.isProcessing || result === this.scannedCode) return; //Evita escanear mas de una vez el codigo, de forma que si el codigo que acaba de leer es igual que el anterior devuelve un return y sale de la funcion
+  this.isProcessing = true;
   this.scannedCode = result;
 
   if (this.barcodeUserProducts[result]) {
@@ -58,13 +59,17 @@ export class BarcodeScannerComponent {
     this.isValid = true;
 
     this.addScannProduct();
-
     console.log('Producto escaneado con exito:', this.productDetails);
   } else {
-    this.productDetails = { name: 'Producto no encontrado', description: '' };
+    this.getProductFromOpenFoodFacts(this.scannedCode);
     this.isValid = false;
+    console.log('Producto con codigo de barras ', this.scannedCode, 'no encontrado');
   }
   this.scanResult.emit(result);
+
+    setTimeout(() => {
+    this.isProcessing = false;
+  }, 2000);
 }
 
   
@@ -98,7 +103,6 @@ export class BarcodeScannerComponent {
       next: (response) => {
         console.log('Producto modificado:', response);
           this.scanCompleted.emit();
-          this.openCehckModal = true;
       },
       error: (error) => {
         console.error('Error al modificar el producto:', error);
@@ -127,12 +131,46 @@ export class BarcodeScannerComponent {
             this.barcodeUserProducts[product.barcode] = product;
           }
         });
-        console.log('Codigo de barras: ', this.barcodeUserProducts);
       },
       error: (error) => {
         console.error('Error al sacar los productos:', error);
       }
     });
   }
+
+  //Conexion con la API de busqueda de comida
+  getProductFromOpenFoodFacts(barcode: string) {
+  let url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
+  this.http.get<any>(url).subscribe({
+    next: (response) => {
+      if (response.status === 1) { // Producto encontrado
+        let product = response.product;
+        
+        const filteredProduct = {
+          name: product.product_name || 'Nombre no disponible',
+          brand: product.brands || 'Marca no disponible',
+          purchasePrice: product.purchase_price || null,  
+          salePrice: product.sale_price || null,       
+          expirationDate: product.expiration_date || null 
+        };
+        
+        localStorage.setItem('product_name', filteredProduct.name);
+        localStorage.setItem('product_brand', filteredProduct.brand);
+        localStorage.setItem('product_purchase_price', filteredProduct.purchasePrice ?? '');
+        localStorage.setItem('product_expiration_date', filteredProduct.expirationDate ?? '');    
+
+
+        this.barcodeCheck.emit();
+        console.log('Producto filtrado:', filteredProduct);
+      } else {
+        console.log('Producto no encontrado en OpenFoodFacts');
+      }
+    },
+    error: (error) => {
+      console.error('Error al llamar a OpenFoodFacts', error);
+    }
+  });
+}
+
 
 }
