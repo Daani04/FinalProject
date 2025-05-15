@@ -18,6 +18,8 @@ export class BarcodeScannerComponent {
   constructor(public service: RequestService, private http: HttpClient) { }
 
   @Output() scanResult = new EventEmitter<string>();
+  @Output() scanCompleted = new EventEmitter<void>();
+
 
   public apiProductsUrl: string = "http://localhost:8000/api/data";
   public productsUser: any[] = [];
@@ -26,6 +28,8 @@ export class BarcodeScannerComponent {
   public isModalOpen: boolean = false;
 
   public modalAction: string = '';
+
+  public openCehckModal: boolean = false;
 
   scannedCode: string = '';
   productDetails: any = null;
@@ -36,7 +40,6 @@ export class BarcodeScannerComponent {
 
   ngOnInit() {
     this.getUserProducts();
-    console.log('Modal status', this.isModalOpen);
   }
 
   public closeModal(): void {
@@ -44,46 +47,64 @@ export class BarcodeScannerComponent {
   }
 
   onScanSuccess(event: any) {
-    const result = event as string; // Asegurar que el evento se maneje como string
-    this.scannedCode = result;
-  
-    console.log('Código de barras escaneado:', result); 
-  
-    if (this.barcodeUserProducts[result]) {
-      this.productDetails = this.barcodeUserProducts[result];
-      this.isValid = true;
-      //this.addScannProduct();
-      console.log('Producto con codigo ', result , ' añadido correctamente a la base de datos'); 
-      console.log('Producto escaneado: ', this.productDetails)
-      //REVISAR BIEN LA CONDICION DEL ELSE
-    } else {
-      this.productDetails = { name: 'Producto no encontrado', description: '' };
-      this.isValid = false;
-    }
-    this.scanResult.emit(result);//Modal
+  const result = event as string;
+
+  if (result === this.scannedCode) return;
+
+  this.scannedCode = result;
+
+  console.log('Código de barras escaneado:', result); 
+
+  if (this.barcodeUserProducts[result]) {
+    this.productDetails = this.barcodeUserProducts[result];
+    this.isValid = true;
+
+    this.addScannProduct();
+
+    console.log('Producto escaneado con exito:', this.productDetails);
+
+  } else {
+    this.productDetails = { name: 'Producto no encontrado', description: '' };
+    this.isValid = false;
   }
 
-  /*
-  public addScannProduct(): void {
-    let selectOneProductUrl = `${this.apiProductsUrl}/${this.productId}`;
+  this.scanResult.emit(result);
+}
 
-    let stockToNumber = parseInt(this.productForm.value.stock ?? '0');
+  
+  public addScannProduct(): void {
+    let selectOneProductUrl = `${this.apiProductsUrl}/${this.productDetails.id}`;
+
+    let updateStock = this.productDetails.stock += 1;
 
     const products: ProductAllData = {
       id: null,
-      stock: stockToNumber,
+      warehouse: this.productDetails.warehouse,
+      name: this.productDetails.name,
+      brand: this.productDetails.brand,
+      price: this.productDetails.price,
+      product_type: this.productDetails.product_type,
+      entry_date: this.productDetails.entry_date, 
+      expiration_date: this.productDetails.expiration_date,
+      purchase_price: this.productDetails.purchase_price,
+      barcode: this.productDetails.barcode,
+
+      stock: updateStock //Unico campo que se modifica, los demas mantienen el valor 
     };
 
     this.service.editProduct(selectOneProductUrl, products).subscribe({
       next: (response) => {
         console.log('Producto modificado:', response);
+          this.scanCompleted.emit();
+          this.openCehckModal = true;
       },
       error: (error) => {
         console.error('Error al modificar el producto:', error);
       }
     });
   }
-*/
+
+
   public getUserProducts(): void {
     let userIdString = localStorage.getItem('userId');
 
