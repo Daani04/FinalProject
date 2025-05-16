@@ -1,85 +1,101 @@
-@if ( openScanner === true) {
+<!-- Modal Overlay -->
+@if (currentModalState !== 'closed') {
 <div id="modal-overlay"></div>
+}
 
+<!-- Scanner Modal -->
+@if (currentModalState === 'scanner') {
 <div class="scanner">
-    <app-barcode-scanner (scanCompleted)="openCheckWindows()" (barcodeCheck)="insertNewDataOptions()"
-        [scannerAction]="scannerAction"></app-barcode-scanner>
+    <app-barcode-scanner 
+        (scanCompleted)="openCheckWindows()" 
+        (barcodeCheck)="insertNewDataOptions()"
+        [scannerAction]="scannerAction">
+    </app-barcode-scanner>
     <p class="close" (click)="closeModalScanner()">Cerrar</p>
 </div>
-} @else if (isModalScanned === true) {
+}
+
+<!-- Scan Completed Modal -->
+@if (currentModalState === 'scanned') {
 <div id="checkCont">
-    <dotlottie-player src="https://lottie.host/d13abdc7-99bc-46b0-bcd0-bb883cc52603/u2ei4KJ6qs.lottie"
-        background="transparent" speed="1" style="width: 200px; height: 200px; margin: 0 auto;"
-        autoplay></dotlottie-player>
+    <dotlottie-player 
+        src="https://lottie.host/d13abdc7-99bc-46b0-bcd0-bb883cc52603/u2ei4KJ6qs.lottie"
+        background="transparent" 
+        speed="1" 
+        style="width: 200px; height: 200px; margin: 0 auto;"
+        autoplay>
+    </dotlottie-player>
 </div>
-} @else if(insertDataOptions === true) {
-<div id="modal-overlay"></div>
-@if (selectWareHouse === true) {
+}
+
+<!-- Warehouse Selection Modal -->
+@if (currentModalState === 'selectWarehouse') {
 <div class="scanner">
     <div class="selectWareHouse">
         <h1>Producto no encontrado</h1>
         <p id="selectWarehouseP">
             No tienes este producto registrado en ninguno de tus almacenes, selecciona un almacen para escanear el
-            producto
-            y añadirlo de forma automatica al almacen seleccionado
+            producto y añadirlo de forma automatica al almacen seleccionado
         </p>
         <span class="inline-container">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor"
                 class="bi bi-exclamation-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                <path
-                    d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
             </svg>
             <p style="margin: 0;">Solo productos alimenticios</p>
         </span>
         <h3>Selecciona el almacén</h3>
         <select #warehouseSelect class="custom-select">
             <option disabled selected>Mis almacenes</option>
-            @for(warehouse of warehouses; track $index) {
-            <option value="{{warehouse.id}}">{{warehouse.name}}</option>
+            @for(warehouse of warehouses; track warehouse.id) {
+                <option [value]="warehouse.id">{{warehouse.name}}</option>
             }
         </select>
         <p class="close" (click)="selectWarehouse(warehouseSelect.value)">Seleccionar</p>
-        <p class="closeSelectWarehouse" (click)="closeModalOptions()">Cerrar</p>
+        <p class="closeSelectWarehouse" (click)="closeModalScanner()">Cerrar</p>
     </div>
 </div>
-}@else {
+}
+
+<!-- Product Info Modal -->
+@if (currentModalState === 'productInfo') {
 <div class="container full-screen-container">
-  <div class="row justify-content-center align-items-center full-screen-row">
-    <div class="col-12 d-flex justify-content-center">
+    <div class="row justify-content-center align-items-center full-screen-row">
+        <div class="col-12 d-flex justify-content-center">
             <div class="product-info-box">
                 <div class="row w-100">
                     <div class="col-md-6 d-flex flex-column align-items-center gap-2">
                         <h4>Información del Producto</h4>
                         <div class="printCont">
-                            <p><strong>Nombre</strong> {{ name || 'N/A' }}</p>
+                            <p><strong>Nombre:</strong> {{ productData.name || 'N/A' }}</p>
                         </div>
                         <div class="printCont">
-                            <p><strong>Marca</strong> {{ brand || 'N/A' }}</p>
+                            <p><strong>Marca:</strong> {{ productData.brand || 'N/A' }}</p>
                         </div>
                         <div class="printCont">
-                            <p><strong>Fecha de Caducidad</strong> {{ expirationDate || 'N/A' }}</p>
+                            <p><strong>Fecha de Caducidad:</strong> {{ productData.expirationDate || 'N/A' }}</p>
                         </div>
                         <p class="closeApiProduct" (click)="addApiProduct()">Rellenar datos faltantes</p>
-                        <p class="close" (click)="closeModalOptions()">Cerrar</p>
+                        <p class="close" (click)="closeModalScanner()">Cerrar</p>
                     </div>
 
                     <div class="col-md-6 d-flex flex-column align-items-center gap-2">
                         <h4>Información adicional</h4>
                         <div class="printContAditional">
-                            <p><strong>Cantidad:</strong> {{ quantity }}</p>
+                            <p><strong>Cantidad:</strong> {{ productData.quantity }}</p>
                         </div>
                         <div class="printContAditional">
-                            <p><strong>Proteinas:</strong> {{ protein }}</p>
+                            <p><strong>Proteinas:</strong> {{ productData.protein }}</p>
                         </div>
                         <div class="printContAditional">
-                            <p><strong>Nutriscore:</strong> {{ nutriscore }}</p>
+                            <p><strong>Nutriscore:</strong> {{ productData.nutriscore }}</p>
                         </div>
                         <div class="printContAditional">
-                            <p><strong>Ecoscore:</strong> {{ ecoscore }}</p>
+                            <p><strong>Ecoscore:</strong> {{ productData.ecoscore }}</p>
                         </div>
                         <div class="printContAditionalImg">
-                            <img id="imgProduct" [src]="imageUrl" alt="Imagen del producto" />
+                            <img id="imgProduct" [src]="productData.imageUrl" alt="Imagen del producto" />
                         </div>
                     </div>
                 </div>
@@ -88,31 +104,49 @@
     </div>
 </div>
 }
-} @else if(visibleFormData === true) {
-<div id="modal-overlay"></div>
+
+<!-- Form Data Modal -->
+@if (currentModalState === 'formData') {
 <div class="scanner">
     <div class="insertDataOptions">
         <h4>Datos faltantes del producto</h4>
         <p>Añade los siguientes datos del producto para poder insertarlos a la base de datos</p>
-        <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+        <form [formGroup]="productForm" class="product-form">
             <div class="form-group mb-3">
                 <label for="soldPrice">Precio de venta</label>
                 <input id="soldPrice" formControlName="soldPrice" type="number" class="form-control" />
+                @if (productForm.get('soldPrice')?.errors?.['required'] && productForm.get('soldPrice')?.touched) {
+                    <div class="invalid-feedback">
+                        El precio de venta es requerido
+                    </div>
+                }
             </div>
 
             <div class="form-group mb-3">
                 <label for="purchasePrice">Precio de compra</label>
                 <input id="purchasePrice" formControlName="purchasePrice" type="number" class="form-control" />
+                @if (productForm.get('purchasePrice')?.errors?.['required'] && productForm.get('purchasePrice')?.touched) {
+                    <div class="invalid-feedback">
+                        El precio de compra es requerido
+                    </div>
+                }
             </div>
 
             <div class="form-group mb-3">
-                <label for="expirationDate">Feha de caducidad</label>
+                <label for="expirationDate">Fecha de caducidad</label>
                 <input id="expirationDate" formControlName="expirationDate" type="date" class="form-control" />
+                @if (productForm.get('expirationDate')?.errors?.['required'] && productForm.get('expirationDate')?.touched) {
+                    <div class="invalid-feedback">
+                        La fecha de caducidad es requerida
+                    </div>
+                }
             </div>
 
-            <button type="submit" class="btn btn-success" (click)="callInsertDataFunction()">Subir producto</button>
+            <button type="button" class="btn btn-success" (click)="addProduct()" [disabled]="!productForm.valid">
+                Subir producto
+            </button>
         </form>
-        <p class="close" (click)="closeModalOptions()">Cerrar</p>
+        <p class="close" (click)="closeModalScanner()">Cerrar</p>
     </div>
 </div>
 }

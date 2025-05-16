@@ -1,147 +1,154 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { BarcodeScannerComponent } from "../barcode-scanner/barcode-scanner.component";
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ProductAllData, Warehouse } from '../../models/response.interface';
 import { RequestService } from '../../services/request.service';
 import { HttpClient } from '@angular/common/http';
-import { ReactiveFormsModule, FormControl, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+export type ModalState = 'closed' | 'scanner' | 'scanned' | 'selectWarehouse' | 'productInfo' | 'formData';
 
 @Component({
   selector: 'app-modal-scanner',
-  imports: [BarcodeScannerComponent, ReactiveFormsModule],
+  standalone: true,
+  imports: [
+    BarcodeScannerComponent, 
+    ReactiveFormsModule, 
+    CommonModule
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './modal-scanner.component.html',
   styleUrl: './modal-scanner.component.css'
 })
-export class ModalScannerComponent {
+export class ModalScannerComponent implements OnInit {
   constructor(public service: RequestService, private http: HttpClient) { }
 
   @Input() openScanner: boolean = false;
   @Input() scannerAction: string = '';
   @Input() barcodeCheck: string = '';
-
   @Output() closeModal = new EventEmitter<void>();
 
-  public apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
-  public apiProductsUrl: string = "http://localhost:8000/api/data";
+  // API endpoints
+  private readonly apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
+  private readonly apiProductsUrl: string = "http://localhost:8000/api/data";
 
-  public warehouses: Warehouse[] = [];
-  public warehouseID: number = 0;
+  // Modal state management
+  currentModalState: ModalState = 'closed';
+  
+  // Data management
+  warehouses: Warehouse[] = [];
+  warehouseID: number = 0;
+  productData = {
+    name: '',
+    brand: '',
+    expirationDate: '',
+    quantity: '',
+    protein: '',
+    nutriscore: '',
+    ecoscore: '',
+    imageUrl: ''
+  };
 
-  public isModalScanned: boolean = false;
-  public insertDataOptions: boolean = false;
-
-  public selectWareHouse: boolean = false;
-  public takeApiProduct: boolean = false;
-  public visibleFormData: boolean = false;
-
-  public name: string = '';
-  public brand: string = '';
-  public expirationDate: string = '';
-
-  public quantity: string = '';
-  public protein: string = '';
-  public nutriscore: string = '';
-  public ecoscore: string = '';
-  public imageUrl: string = '';
-
-    productForm = new FormGroup({
-    soldPrice: new FormControl(''),
-    purchasePrice: new FormControl(''),
-    expirationDate: new FormControl(''),
+  productForm = new FormGroup({
+    soldPrice: new FormControl('', [Validators.required, Validators.min(0)]),
+    purchasePrice: new FormControl('', [Validators.required, Validators.min(0)]),
+    expirationDate: new FormControl('', [Validators.required])
   });
 
-  onSubmit(): void {
-    console.log('Formulario enviado', this.productForm.value);
+  ngOnInit() {
+    if (this.openScanner) {
+      this.setModalState('scanner');
+    }
   }
 
+  ngOnChanges() {
+    if (this.openScanner) {
+      this.setModalState('scanner');
+    } else {
+      this.setModalState('closed');
+    }
+  }
 
+  private setModalState(state: ModalState) {
+    this.currentModalState = state;
+    
+    if (state === 'closed') {
+      this.closeModal.emit();
+      this.resetData();
+    }
+  }
+
+  private resetData() {
+    this.openScanner = false;
+    this.warehouseID = 0;
+    this.productForm.reset();
+    this.productData = {
+      name: '',
+      brand: '',
+      expirationDate: '',
+      quantity: '',
+      protein: '',
+      nutriscore: '',
+      ecoscore: '',
+      imageUrl: ''
+    };
+  }
+
+  private loadProductData() {
+    this.productData = {
+      name: localStorage.getItem('product_name') ?? '',
+      brand: localStorage.getItem('product_brand') ?? '',
+      expirationDate: localStorage.getItem('product_expiration_date') ?? '',
+      quantity: localStorage.getItem('product_quantity') ?? '',
+      protein: localStorage.getItem('product_protein') ?? '',
+      nutriscore: localStorage.getItem('product_nutriscore') ?? '',
+      ecoscore: localStorage.getItem('product_ecoscore') ?? '',
+      imageUrl: localStorage.getItem('product_image_url') ?? ''
+    };
+  }
+
+  // Public methods for UI interaction
   public closeModalScanner(): void {
-    this.closeModal.emit();
-    this.openScanner = false;
-    window.location.reload();
-  }
-
-  public closeModalOptions(): void {
-    this.openScanner = false;
-    this.insertDataOptions = false;
-    this.selectWareHouse = false
-    window.location.reload();
+    this.setModalState('closed');
   }
 
   public openCheckWindows(): void {
-    this.closeModal.emit();
-    this.openScanner = false;
-    this.insertDataOptions = false;
-    this.selectWareHouse = false
-    this.visibleFormData = false;
-    this.isModalScanned = true;
-
+    this.setModalState('scanned');
     setTimeout(() => {
-      this.closeModal.emit();
-      this.isModalScanned = false;
-      this.closeModalOptions();
-      this.closeModalScanner();
+      this.setModalState('closed');
     }, 3000);
   }
 
   public insertNewDataOptions(): void {
-    this.openScanner = false;
-    this.insertDataOptions = true;
-    this.selectWareHouse = true
-
-    this.name = localStorage.getItem('product_name') ?? '';
-    this.brand = localStorage.getItem('product_brand') ?? '';
-    this.expirationDate = localStorage.getItem('product_expiration_date') ?? '';
-
-    this.quantity = localStorage.getItem('product_quantity') ?? '';
-    this.protein = localStorage.getItem('product_protein') ?? '';
-    this.nutriscore = localStorage.getItem('product_nutriscore') ?? '';
-    this.ecoscore = localStorage.getItem('product_ecoscore') ?? '';
-    this.imageUrl = localStorage.getItem('product_image_url') ?? '';
+    this.loadProductData();
     this.checkWarehouses();
+    this.setModalState('selectWarehouse');
   }
 
-  public selectWarehouse(warehouseId: any): void {
-    this.selectWareHouse = false;
-    this.takeApiProduct = true;
-    let id = +warehouseId;//Combierte la warehouseId a numerico
-
+  public selectWarehouse(warehouseId: string): void {
+    const id = +warehouseId;
     if (!id) {
       console.warn('ID inválido o vacío:', warehouseId);
       return;
     }
     this.warehouseID = id;
-    console.log('Almacén seleccionado:', id);
+    this.setModalState('productInfo');
   }
 
   public addApiProduct(): void {
-    this.openScanner = false;
-    this.insertDataOptions = false;
-    this.selectWareHouse = false
-    this.visibleFormData = true;
+    this.setModalState('formData');
   }
-
-  public callInsertDataFunction(): void {
-    let id = this.warehouseID;
-    this.addProduct(id);
-
-    this.visibleFormData = false;
-  }
-
 
   public checkWarehouses(): void {
-    this.openScanner = false;
-    let userIdString = localStorage.getItem('userId');
-
+    const userIdString = localStorage.getItem('userId');
     if (!userIdString) {
       console.error('Error: No se encontró userId en localStorage');
       return;
     }
 
-    let userId = parseInt(userIdString, 10);
-
-    let apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
+    const userId = parseInt(userIdString, 10);
+    const apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
 
     this.service.takeWarehouse(apiUrl).subscribe({
       next: (response) => {
@@ -149,19 +156,25 @@ export class ModalScannerComponent {
       },
       error: (error) => {
         console.error('Error fetching warehouses:', error);
+        this.setModalState('closed');
       }
     });
   }
 
-  public addProduct(warehouseId: number): void {
-    this.openScanner = false;
-    let today = new Date().toISOString().split('T')[0];
-    let barcode = localStorage.getItem('barcode');
+  public addProduct(): void {
+    if (!this.productForm.valid) {
+      console.warn('Formulario inválido');
+      return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    const barcode = localStorage.getItem('barcode');
+    
     const products: ProductAllData = {
       id: null,
-      warehouse: warehouseId,
-      name: this.name,
-      brand: this.brand ?? '',
+      warehouse: this.warehouseID,
+      name: this.productData.name,
+      brand: this.productData.brand,
       price: Number(this.productForm.value.soldPrice) || 0,
       stock: 1,
       barcode: barcode ? Number(barcode) : null,
@@ -171,18 +184,15 @@ export class ModalScannerComponent {
       purchase_price: Number(this.productForm.value.purchasePrice) || 0
     };
 
-    this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
-      (response) => {
-        console.log('Producto añadido con exito:', response);
-        this.visibleFormData = false;
-        this.insertDataOptions = false;
-        this.openScanner = false;
-        this.selectWareHouse = false; 
-        
+    this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe({
+      next: (response) => {
+        console.log('Producto añadido con éxito:', response);
         this.openCheckWindows();
       },
-      (error) => console.error('Error al añadir producto:', error)
-    );
+      error: (error) => {
+        console.error('Error al añadir producto:', error);
+        this.setModalState('closed');
+      }
+    });
   }
-  
 }
