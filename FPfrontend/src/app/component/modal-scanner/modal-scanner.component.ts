@@ -37,9 +37,13 @@ export class ModalScannerComponent {
 
   public name: string = '';
   public brand: string = '';
-  public purchasePrice: string = '';
-  public salePrice: string = '';
   public expirationDate: string = '';
+
+  public quantity: string = '';
+  public protein: string = '';
+  public nutriscore: string = '';
+  public ecoscore: string = '';
+  public imageUrl: string = '';
 
     productForm = new FormGroup({
     soldPrice: new FormControl(''),
@@ -68,10 +72,15 @@ export class ModalScannerComponent {
   public openCheckWindows(): void {
     this.closeModal.emit();
     this.openScanner = false;
+    this.insertDataOptions = false;
+    this.selectWareHouse = false
+    this.visibleFormData = false;
     this.isModalScanned = true;
 
     setTimeout(() => {
+      this.closeModal.emit();
       this.isModalScanned = false;
+      this.selectWareHouse = false
     }, 3000);
   }
 
@@ -82,9 +91,13 @@ export class ModalScannerComponent {
 
     this.name = localStorage.getItem('product_name') ?? '';
     this.brand = localStorage.getItem('product_brand') ?? '';
-    this.purchasePrice = localStorage.getItem('product_purchase_price') ?? '';
     this.expirationDate = localStorage.getItem('product_expiration_date') ?? '';
 
+    this.quantity = localStorage.getItem('product_quantity') ?? '';
+    this.protein = localStorage.getItem('product_protein') ?? '';
+    this.nutriscore = localStorage.getItem('product_nutriscore') ?? '';
+    this.ecoscore = localStorage.getItem('product_ecoscore') ?? '';
+    this.imageUrl = localStorage.getItem('product_image_url') ?? '';
     this.checkWarehouses();
   }
 
@@ -110,11 +123,14 @@ export class ModalScannerComponent {
 
   public callInsertDataFunction(): void {
     let id = this.warehouseID;
-    //this.addProduct(id);
+    this.addProduct(id);
+
+    this.visibleFormData = false;
   }
 
 
   public checkWarehouses(): void {
+    this.openScanner = false;
     let userIdString = localStorage.getItem('userId');
 
     if (!userIdString) {
@@ -136,28 +152,36 @@ export class ModalScannerComponent {
     });
   }
 
-  /*
   public addProduct(warehouseId: number): void {
+    this.openScanner = false;
+    let today = new Date().toISOString().split('T')[0];
+    let barcode = localStorage.getItem('barcode');
     const products: ProductAllData = {
       id: null,
       warehouse: warehouseId,
       name: this.name,
       brand: this.brand ?? '',
-      price: this.purchasePrice,
+      price: Number(this.productForm.value.soldPrice) || 0,
       stock: 1,
-      barcode: barcodeToNumber,
-      product_type: this.productForm.value.productType ?? '',
-      entry_date: this.productForm.value.entryDate ?? '',
+      barcode: barcode ? Number(barcode) : null,
+      product_type: 'alimenticio',
+      entry_date: today,
       expiration_date: this.productForm.value.expirationDate || null,
-      purchase_price: purchasePriceToNumber
+      purchase_price: Number(this.productForm.value.purchasePrice) || 0
     };
 
     this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe(
       (response) => {
         console.log('Producto añadido con exito:', response);
+        this.visibleFormData = false;
+        this.insertDataOptions = false;
+        this.openScanner = false;
+        this.selectWareHouse = false; 
+        
+        this.openCheckWindows();
       },
       (error) => console.error('Error al añadir producto:', error)
     );
   }
-  */
+  
 }

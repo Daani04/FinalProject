@@ -64,6 +64,7 @@ export class BarcodeScannerComponent {
     this.getProductFromOpenFoodFacts(this.scannedCode);
     this.isValid = false;
     console.log('Producto con codigo de barras ', this.scannedCode, 'no encontrado');
+    localStorage.setItem('barcode', this.scannedCode);
   }
   this.scanResult.emit(result);
 
@@ -149,19 +150,26 @@ export class BarcodeScannerComponent {
         const filteredProduct = {
           name: product.product_name || 'Nombre no disponible',
           brand: product.brands || 'Marca no disponible',
-          purchasePrice: product.purchase_price || null,  
-          salePrice: product.sale_price || null,       
-          expirationDate: product.expiration_date || null 
+          quantity: product.quantity || 'Cantidad no disponible',
+          protein: product.nutriments?.proteins_100g?.toString() || 'No disponible',
+          expirationDate: product.expiration_date || 'Fecha de caducidad no disponible',
+          nutriscore: product.nutriscore_grade || 'Sin calificación',
+          ecoscore: product.ecoscore_score !== undefined ? product.ecoscore_score : 'Sin puntuación',
+          imageUrl: product.image_url || ''
         };
         
         localStorage.setItem('product_name', filteredProduct.name);
         localStorage.setItem('product_brand', filteredProduct.brand);
-        localStorage.setItem('product_purchase_price', filteredProduct.purchasePrice ?? '');
-        localStorage.setItem('product_expiration_date', filteredProduct.expirationDate ?? '');    
-
+        localStorage.setItem('product_expiration_date', filteredProduct.expirationDate);
+        
+        localStorage.setItem('product_quantity', filteredProduct.quantity);
+        localStorage.setItem('product_protein', filteredProduct.protein);
+        localStorage.setItem('product_nutriscore', filteredProduct.nutriscore);
+        localStorage.setItem('product_ecoscore', filteredProduct.ecoscore.toString());
+        localStorage.setItem('product_image_url', filteredProduct.imageUrl);
 
         this.barcodeCheck.emit();
-        console.log('Producto filtrado:', filteredProduct);
+        console.log('Producto filtrado:', product);
       } else {
         console.log('Producto no encontrado en OpenFoodFacts');
       }
