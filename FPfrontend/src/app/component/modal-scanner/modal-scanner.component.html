@@ -92,8 +92,9 @@
 <div id="modal-overlay"></div>
 <div class="scanner">
     <div class="insertDataOptions">
+        <h4>Datos faltantes del producto</h4>
+        <p>Añade los siguientes datos del producto para poder insertarlos a la base de datos</p>
         <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-
             <div class="form-group mb-3">
                 <label for="soldPrice">Precio de venta</label>
                 <input id="soldPrice" formControlName="soldPrice" type="number" class="form-control" />

@@ -80,7 +80,8 @@ export class ModalScannerComponent {
     setTimeout(() => {
       this.closeModal.emit();
       this.isModalScanned = false;
-      this.selectWareHouse = false
+      this.closeModalOptions();
+      this.closeModalScanner();
     }, 3000);
   }
 

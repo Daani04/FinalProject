@@ -563,6 +563,9 @@ export class HomeComponent {
   }
 
   public modifyVisitStatus(): void {
+    this.loading = true;
+    this.changueScreen = true;
+
     localStorage.setItem('userVisit', 'false');
     let userIdString = localStorage.getItem('userId');
 
@@ -581,9 +584,13 @@ export class HomeComponent {
 
     this.service.editUserVisitStatus(url, visitPage).subscribe({
       next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
         console.log('Usuario registrado como visitante de la página', response);
       },
       error: (error) => {
+        this.loading = false;
+        this.changueScreen = false;
         console.log('No se puede verificar que el usuario ha visitado la página', error);
       }
     });
@@ -591,6 +598,9 @@ export class HomeComponent {
 
 //-----------------------------------------------GENERAR GRAFICOS(Saca los productos vendidos, pero solo se usan en los graficos)------//
   public getProductsSold(): void {
+    this.loading = true;
+    this.changueScreen = true;
+
     let userIdString = localStorage.getItem('userId');
   
     if (!userIdString) {
@@ -604,11 +614,15 @@ export class HomeComponent {
   
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
+        this.loading = false;
+        this.changueScreen = false;
         this.productsSold = response;
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
         this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
+        this.loading = false;
+        this.changueScreen = false;
         console.error('Error al sacar los productos:', error);
       }
     });
