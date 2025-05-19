@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat } from '@zxing/library'; 
 import { CommonModule } from '@angular/common';
@@ -13,12 +13,13 @@ import { ProductAllData } from '../../models/response.interface';
   templateUrl: './barcode-scanner.component.html',
   styleUrl: './barcode-scanner.component.css'
 })
-export class BarcodeScannerComponent {
+export class BarcodeScannerComponent implements OnInit {
+
   constructor(public service: RequestService, private http: HttpClient) { }
 
   @Output() scanResult = new EventEmitter<string>();
   @Output() scanCompleted = new EventEmitter<void>();
-  @Output() barcodeCheck = new EventEmitter<void>();
+  @Output() productNotFound = new EventEmitter<void>();
 
   @Input() scannerAction: string = '';
 
@@ -26,10 +27,19 @@ export class BarcodeScannerComponent {
   public productsUser: any[] = [];
   public barcodeUserProducts: { [barcode: string]: any } = {};
 
-  private isProcessing = false;
-  public scannedCode: string = '';
-  public productDetails: any = null;
-  public isValid: boolean | null = null;
+  public isModalOpen: boolean = false;
+
+  public modalAction: string = '';
+
+  public openCehckModal: boolean = false;
+
+  private isProcessing: boolean = false;
+  private lastScannedCode: string = '';
+  private scanTimeout: any = null;
+
+  scannedCode: string = '';
+  productDetails: any = null;
+  isValid: boolean | null = null;
   
   formats = [BarcodeFormat.EAN_13, BarcodeFormat.CODE_128];
 
@@ -38,40 +48,66 @@ export class BarcodeScannerComponent {
   }
 
   onScanSuccess(event: any) {
-    let result = event as string;
+    const result = event as string;
 
-    if (this.isProcessing || result === this.scannedCode) return;
+    // Si estamos procesando un código, ignorar nuevos escaneos
+    if (this.isProcessing) {
+      return;
+    }
+
+    // Si es el mismo código que el último escaneado, ignorar
+    if (result === this.lastScannedCode) {
+      return;
+    }
+
     this.isProcessing = true;
+    this.lastScannedCode = result;
     this.scannedCode = result;
 
-    if (this.barcodeUserProducts[result]) {
-      this.productDetails = this.barcodeUserProducts[result];
-      this.isValid = true;
-
-      this.addScannProduct();
-      console.log('Producto escaneado con exito:', this.productDetails);
-    } else {
-      this.getProductFromOpenFoodFacts(this.scannedCode);
-      this.isValid = false;
-      console.log('Producto con codigo de barras ', this.scannedCode, 'no encontrado');
-      localStorage.setItem('barcode', this.scannedCode);
+    // Limpiar cualquier timeout pendiente
+    if (this.scanTimeout) {
+      clearTimeout(this.scanTimeout);
     }
-    this.scanResult.emit(result);
 
-    setTimeout(() => {
+    console.log('Escaneando código:', result);
+    console.log('Productos disponibles:', Object.keys(this.barcodeUserProducts));
+
+    // Verificar si el producto existe
+    const productFound = this.barcodeUserProducts[result];
+    
+    if (productFound) {
+      console.log('Producto encontrado:', productFound);
+      this.productDetails = productFound;
+      this.isValid = true;
+      this.addScannProduct();
+    } else {
+      console.log('Producto no encontrado para el código:', result);
+      this.productNotFound.emit();
+    }
+
+    // Establecer un timeout para resetear el estado
+    this.scanTimeout = setTimeout(() => {
       this.isProcessing = false;
-    }, 2000);
+      this.lastScannedCode = '';
+    }, 3000);
   }
 
   public addScannProduct(): void {
-    let selectOneProductUrl = `${this.apiProductsUrl}/${this.productDetails.id}`;
+    if (!this.productDetails || !this.productDetails.id) {
+      console.error('No hay detalles válidos del producto para actualizar');
+      return;
+    }
 
+    let selectOneProductUrl = `${this.apiProductsUrl}/${this.productDetails.id}`;
     let updateStock = this.productDetails.stock;
 
-    if (this.scannerAction === "moveProductToSold" && updateStock !== 0) {
+    if (this.scannerAction === "moveProductToSold" && updateStock > 0) {
       updateStock -= 1;
     } else if(this.scannerAction === "addProductToStock") {
       updateStock += 1;
+    } else {
+      console.log('No se puede actualizar el stock:', this.scannerAction, updateStock);
+      return;
     }
 
     const products: ProductAllData = {
@@ -90,11 +126,17 @@ export class BarcodeScannerComponent {
 
     this.service.editProduct(selectOneProductUrl, products).subscribe({
       next: (response) => {
-        console.log('Producto modificado:', response);
+        console.log('Producto modificado exitosamente:', response);
+        // Actualizar el producto en el cache local
+        if (this.barcodeUserProducts[this.productDetails.barcode]) {
+          this.barcodeUserProducts[this.productDetails.barcode].stock = updateStock;
+        }
         this.scanCompleted.emit();
+        this.openCehckModal = true;
       },
       error: (error) => {
         console.error('Error al modificar el producto:', error);
+        this.isProcessing = false;
       }
     });
   }
@@ -113,54 +155,27 @@ export class BarcodeScannerComponent {
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
         this.productsUser = response;
+        // Limpiar y reconstruir el mapa de productos
+        this.barcodeUserProducts = {};
         this.productsUser.forEach((product) => {
           if (product.barcode) {
-            this.barcodeUserProducts[product.barcode] = product;
+            const barcodeStr = product.barcode.toString().trim();
+            if (barcodeStr !== '') {
+              this.barcodeUserProducts[barcodeStr] = product;
+            }
           }
         });
+        console.log('Productos cargados. Códigos disponibles:', Object.keys(this.barcodeUserProducts));
       },
       error: (error) => {
-        console.error('Error al sacar los productos:', error);
+        console.error('Error al cargar los productos:', error);
       }
     });
   }
 
-  getProductFromOpenFoodFacts(barcode: string) {
-    let url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
-    this.http.get<any>(url).subscribe({
-      next: (response) => {
-        if (response.status === 1) {
-          let product = response.product;
-          
-          const filteredProduct = {
-            name: product.product_name || 'Nombre no disponible',
-            brand: product.brands || 'Marca no disponible',
-            quantity: product.quantity || 'Cantidad no disponible',
-            protein: product.nutriments?.proteins_100g?.toString() || 'No disponible',
-            expirationDate: product.expiration_date || 'Fecha de caducidad no disponible',
-            nutriscore: product.nutriscore_grade || 'Sin calificación',
-            ecoscore: product.ecoscore_score !== undefined ? product.ecoscore_score : 'Sin puntuación',
-            imageUrl: product.image_url || ''
-          };
-          
-          localStorage.setItem('product_name', filteredProduct.name);
-          localStorage.setItem('product_brand', filteredProduct.brand);
-          localStorage.setItem('product_expiration_date', filteredProduct.expirationDate);
-          localStorage.setItem('product_quantity', filteredProduct.quantity);
-          localStorage.setItem('product_protein', filteredProduct.protein);
-          localStorage.setItem('product_nutriscore', filteredProduct.nutriscore);
-          localStorage.setItem('product_ecoscore', filteredProduct.ecoscore.toString());
-          localStorage.setItem('product_image_url', filteredProduct.imageUrl);
-
-          this.barcodeCheck.emit();
-          console.log('Producto filtrado:', product);
-        } else {
-          console.log('Producto no encontrado en OpenFoodFacts');
-        }
-      },
-      error: (error) => {
-        console.error('Error al llamar a OpenFoodFacts', error);
-      }
-    });
+  ngOnDestroy() {
+    if (this.scanTimeout) {
+      clearTimeout(this.scanTimeout);
+    }
   }
 }

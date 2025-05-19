@@ -316,8 +316,8 @@ export class HomeComponent {
         this.isModalOpen = true;
       },
       (error) => {
-        this.loading = true;
-        this.changueScreen = true;
+        this.loading = false;
+        this.changueScreen = false;
         console.error('Error al añadir producto:', error)
       }
     );
@@ -385,7 +385,6 @@ export class HomeComponent {
         let coordinates = res.choices[0].message.content;
         console.log(coordinates);
         this.newWarehouse(coordinates);
-
       },
       (error) => {
         console.error('Error al generar notificación:', error);
@@ -433,6 +432,8 @@ export class HomeComponent {
   }
 
   public checkWarehouses(): void {
+    this.loading = true;
+    this.changueScreen = true;
     let userIdString = localStorage.getItem('userId');
 
     if (!userIdString) {
@@ -446,6 +447,8 @@ export class HomeComponent {
 
     this.service.takeWarehouse(apiUrl).subscribe({
       next: (response) => {
+          this.loading = false;
+          this.changueScreen = false;
         this.warehouses = response;
 
         let randomIndex = Math.floor(Math.random() * this.warehouses.length);
@@ -457,6 +460,8 @@ export class HomeComponent {
         console.log('ALMACENES DEL USUARIO', this.warehouses);
       },
       error: (error) => {
+          this.loading = false;
+          this.changueScreen = false;
         console.error('Error fetching warehouses:', error);
       }
     });
@@ -494,7 +499,11 @@ export class HomeComponent {
 
         console.log('Producto añadido con exito:', response);
       },
-      (error) => console.error('Error al añadir producto:', error)
+      (error) => {
+        this.loading = false;
+        this.changueScreen = false;
+        console.error('Error al añadir producto:', error)
+      }
     );
   }
 

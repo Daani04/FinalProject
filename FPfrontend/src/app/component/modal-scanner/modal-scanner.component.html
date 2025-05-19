@@ -1,108 +1,37 @@
-<!-- Modal Overlay -->
-@if (currentModalState !== 'closed') {
-<div id="modal-overlay"></div>
-}
+@if ( openScanner === true) {
+    <div id="modal-overlay"></div>
 
-<!-- Scanner Modal -->
-@if (currentModalState === 'scanner') {
-<div class="scanner">
-    <app-barcode-scanner 
-        (scanCompleted)="openCheckWindows()" 
-        (barcodeCheck)="insertNewDataOptions()"
-        [scannerAction]="scannerAction">
-    </app-barcode-scanner>
-    <p class="close" (click)="closeModalScanner()">Cerrar</p>
-</div>
-}
-
-<!-- Scan Completed Modal -->
-@if (currentModalState === 'scanned') {
-<div id="checkCont">
-    <dotlottie-player 
-        src="https://lottie.host/d13abdc7-99bc-46b0-bcd0-bb883cc52603/u2ei4KJ6qs.lottie"
+    <div id="scanner">
+        <app-barcode-scanner 
+            (scanCompleted)="openCheckWindows()" 
+            (productNotFound)="handleProductNotFound()"
+            [scannerAction]="scannerAction">
+        </app-barcode-scanner>
+        <p id="close" (click)="closeModalScanner()">Cerrar</p>
+    </div>
+} @else if (isModalScanned === true) {
+    <div id="checkCont">
+        <dotlottie-player
+            src="https://lottie.host/d13abdc7-99bc-46b0-bcd0-bb883cc52603/u2ei4KJ6qs.lottie"
+            background="transparent"
+            speed="1"
+            style="width: 200px; height: 200px; margin: 0 auto;"
+            autoplay
+          ></dotlottie-player>
+    </div>
+} @else if(noProductInBBDD === true) {
+    <div id="checkCont">
+        <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+        <dotlottie-player 
+        src="https://lottie.host/8cca6480-9747-4281-ac72-db9ab6793042/0xL04uW1Yk.lottie" 
         background="transparent" 
-        speed="1" 
+        speed="0.5" 
         style="width: 200px; height: 200px; margin: 0 auto;"
-        autoplay>
+        autoplay
+        >
     </dotlottie-player>
-</div>
-}
-
-<!-- Warehouse Selection Modal -->
-@if (currentModalState === 'selectWarehouse') {
-<div class="scanner">
-    <div class="selectWareHouse">
-        <h1>Producto no encontrado</h1>
-        <p id="selectWarehouseP">
-            No tienes este producto registrado en ninguno de tus almacenes, selecciona un almacen para escanear el
-            producto y añadirlo de forma automatica al almacen seleccionado
-        </p>
-        <span class="inline-container">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor"
-                class="bi bi-exclamation-circle" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
-            </svg>
-            <p style="margin: 0;">Solo productos alimenticios</p>
-        </span>
-        <h3>Selecciona el almacén</h3>
-        <select #warehouseSelect class="custom-select">
-            <option disabled selected>Mis almacenes</option>
-            @for(warehouse of warehouses; track warehouse.id) {
-                <option [value]="warehouse.id">{{warehouse.name}}</option>
-            }
-        </select>
-        <p class="close" (click)="selectWarehouse(warehouseSelect.value)">Seleccionar</p>
-        <p class="closeSelectWarehouse" (click)="closeModalScanner()">Cerrar</p>
+        <p class="noProductText">Producto no encontrado en la base de datos</p>
     </div>
-</div>
-}
-
-<!-- Product Info Modal -->
-@if (currentModalState === 'productInfo') {
-<div class="container full-screen-container">
-    <div class="row justify-content-center align-items-center full-screen-row">
-        <div class="col-12 d-flex justify-content-center">
-            <div class="product-info-box">
-                <div class="row w-100">
-                    <div class="col-md-6 d-flex flex-column align-items-center gap-2">
-                        <h4>Información del Producto</h4>
-                        <div class="printCont">
-                            <p><strong>Nombre:</strong> {{ productData.name || 'N/A' }}</p>
-                        </div>
-                        <div class="printCont">
-                            <p><strong>Marca:</strong> {{ productData.brand || 'N/A' }}</p>
-                        </div>
-                        <div class="printCont">
-                            <p><strong>Fecha de Caducidad:</strong> {{ productData.expirationDate || 'N/A' }}</p>
-                        </div>
-                        <p class="closeApiProduct" (click)="addApiProduct()">Rellenar datos faltantes</p>
-                        <p class="close" (click)="closeModalScanner()">Cerrar</p>
-                    </div>
-
-                    <div class="col-md-6 d-flex flex-column align-items-center gap-2">
-                        <h4>Información adicional</h4>
-                        <div class="printContAditional">
-                            <p><strong>Cantidad:</strong> {{ productData.quantity }}</p>
-                        </div>
-                        <div class="printContAditional">
-                            <p><strong>Proteinas:</strong> {{ productData.protein }}</p>
-                        </div>
-                        <div class="printContAditional">
-                            <p><strong>Nutriscore:</strong> {{ productData.nutriscore }}</p>
-                        </div>
-                        <div class="printContAditional">
-                            <p><strong>Ecoscore:</strong> {{ productData.ecoscore }}</p>
-                        </div>
-                        <div class="printContAditionalImg">
-                            <img id="imgProduct" [src]="productData.imageUrl" alt="Imagen del producto" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 }
 
 <!-- Form Data Modal -->

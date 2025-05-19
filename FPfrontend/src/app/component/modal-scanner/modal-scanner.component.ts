@@ -29,57 +29,11 @@ export class ModalScannerComponent implements OnInit {
   @Input() barcodeCheck: string = '';
   @Output() closeModal = new EventEmitter<void>();
 
-  // API endpoints
-  private readonly apiWarehouseUrl: string = "http://127.0.0.1:8000/api/warehouse";
-  private readonly apiProductsUrl: string = "http://localhost:8000/api/data";
-
-  // Modal state management
-  currentModalState: ModalState = 'closed';
+  public isModalScanned: boolean = false;
+  public noProductInBBDD: boolean = false;
   
-  // Data management
-  warehouses: Warehouse[] = [];
-  warehouseID: number = 0;
-  productData = {
-    name: '',
-    brand: '',
-    expirationDate: '',
-    quantity: '',
-    protein: '',
-    nutriscore: '',
-    ecoscore: '',
-    imageUrl: ''
-  };
-
-  productForm = new FormGroup({
-    soldPrice: new FormControl('', [Validators.required, Validators.min(0)]),
-    purchasePrice: new FormControl('', [Validators.required, Validators.min(0)]),
-    expirationDate: new FormControl('', [Validators.required])
-  });
-
-  ngOnInit() {
-    if (this.openScanner) {
-      this.setModalState('scanner');
-    }
-  }
-
-  ngOnChanges() {
-    if (this.openScanner) {
-      this.setModalState('scanner');
-    } else {
-      this.setModalState('closed');
-    }
-  }
-
-  private setModalState(state: ModalState) {
-    this.currentModalState = state;
-    
-    if (state === 'closed') {
-      this.closeModal.emit();
-      this.resetData();
-    }
-  }
-
-  private resetData() {
+  public closeModalScanner(): void {
+    this.closeModal.emit();
     this.openScanner = false;
     this.warehouseID = 0;
     this.productForm.reset();
@@ -114,85 +68,25 @@ export class ModalScannerComponent implements OnInit {
   }
 
   public openCheckWindows(): void {
-    this.setModalState('scanned');
+    console.log('Modal status', this.scannerAction);
+    this.closeModal.emit();
+    this.openScanner = false;
+    this.isModalScanned = true;
+
     setTimeout(() => {
-      this.setModalState('closed');
+      this.isModalScanned = false;
+      window.location.reload();
     }, 3000);
   }
 
-  public insertNewDataOptions(): void {
-    this.loadProductData();
-    this.checkWarehouses();
-    this.setModalState('selectWarehouse');
-  }
+  public handleProductNotFound(): void {
+    this.closeModal.emit();
+    this.openScanner = false;
+    this.noProductInBBDD = true;
 
-  public selectWarehouse(warehouseId: string): void {
-    const id = +warehouseId;
-    if (!id) {
-      console.warn('ID inválido o vacío:', warehouseId);
-      return;
-    }
-    this.warehouseID = id;
-    this.setModalState('productInfo');
-  }
-
-  public addApiProduct(): void {
-    this.setModalState('formData');
-  }
-
-  public checkWarehouses(): void {
-    const userIdString = localStorage.getItem('userId');
-    if (!userIdString) {
-      console.error('Error: No se encontró userId en localStorage');
-      return;
-    }
-
-    const userId = parseInt(userIdString, 10);
-    const apiUrl = `${this.apiWarehouseUrl}/user/${userId}`;
-
-    this.service.takeWarehouse(apiUrl).subscribe({
-      next: (response) => {
-        this.warehouses = response;
-      },
-      error: (error) => {
-        console.error('Error fetching warehouses:', error);
-        this.setModalState('closed');
-      }
-    });
-  }
-
-  public addProduct(): void {
-    if (!this.productForm.valid) {
-      console.warn('Formulario inválido');
-      return;
-    }
-
-    const today = new Date().toISOString().split('T')[0];
-    const barcode = localStorage.getItem('barcode');
-    
-    const products: ProductAllData = {
-      id: null,
-      warehouse: this.warehouseID,
-      name: this.productData.name,
-      brand: this.productData.brand,
-      price: Number(this.productForm.value.soldPrice) || 0,
-      stock: 1,
-      barcode: barcode ? Number(barcode) : null,
-      product_type: 'alimenticio',
-      entry_date: today,
-      expiration_date: this.productForm.value.expirationDate || null,
-      purchase_price: Number(this.productForm.value.purchasePrice) || 0
-    };
-
-    this.service.insertProductsInWarehouse(this.apiProductsUrl, products).subscribe({
-      next: (response) => {
-        console.log('Producto añadido con éxito:', response);
-        this.openCheckWindows();
-      },
-      error: (error) => {
-        console.error('Error al añadir producto:', error);
-        this.setModalState('closed');
-      }
-    });
+    setTimeout(() => {
+      this.noProductInBBDD = false;
+      window.location.reload();
+    }, 3000);
   }
 }
