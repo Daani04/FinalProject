@@ -457,7 +457,6 @@ export class HomeComponent {
         this.randomWarehouseName = randomWarehouse.name ?? '';
 
         this.initializeDeleteImages();
-        console.log('ALMACENES DEL USUARIO', this.warehouses);
       },
       error: (error) => {
           this.loading = false;
@@ -551,6 +550,7 @@ export class HomeComponent {
 
   public verifyUserVisits(): void {
     let isUserVisit = localStorage.getItem('userVisit');
+    console.log('El usuario ha visitado la paigna??', isUserVisit);
 
     if (isUserVisit === 'true') {
       this.loadWelcomePage();
@@ -572,9 +572,6 @@ export class HomeComponent {
   }
 
   public modifyVisitStatus(): void {
-    this.loading = true;
-    this.changueScreen = true;
-
     localStorage.setItem('userVisit', 'false');
     let userIdString = localStorage.getItem('userId');
 
@@ -593,13 +590,9 @@ export class HomeComponent {
 
     this.service.editUserVisitStatus(url, visitPage).subscribe({
       next: (response) => {
-        this.loading = false;
-        this.changueScreen = false;
         console.log('Usuario registrado como visitante de la página', response);
       },
       error: (error) => {
-        this.loading = false;
-        this.changueScreen = false;
         console.log('No se puede verificar que el usuario ha visitado la página', error);
       }
     });
@@ -607,9 +600,6 @@ export class HomeComponent {
 
 //-----------------------------------------------GENERAR GRAFICOS(Saca los productos vendidos, pero solo se usan en los graficos)------//
   public getProductsSold(): void {
-    this.loading = true;
-    this.changueScreen = true;
-
     let userIdString = localStorage.getItem('userId');
   
     if (!userIdString) {
@@ -623,15 +613,11 @@ export class HomeComponent {
   
     this.service.takeProducts(apiUrl).subscribe({
       next: (response) => {
-        this.loading = false;
-        this.changueScreen = false;
         this.productsSold = response;
         this.productsSoldQuantity = this.productsSold.map((product: any) => product.quantity);
         this.calculateMonthlySalesAndStock();
       },
       error: (error) => {
-        this.loading = false;
-        this.changueScreen = false;
         console.error('Error al sacar los productos:', error);
       }
     });
@@ -659,11 +645,13 @@ export class HomeComponent {
   public openModalAddProduct(): void {
     this.scannerAction = 'addProductToStock'
     this.openModalScanner = true;
+    console.log('Action: ', this.scannerAction);
   }
 
   public openModalSoldProduct(): void {
     this.scannerAction = 'moveProductToSold'
     this.openModalScanner = true;
+    console.log('Action: ', this.scannerAction);
   }
 
   public closeModal(): void {
@@ -694,6 +682,9 @@ export class HomeComponent {
         this.saleProductsForMonth = salesForMonth;
         this.entrateProductsForMonth = entrateProductsForMonth;
         this.reloadGraphics();
+
+        console.log('Salida de productos OK', this.saleProductsForMonth);
+        console.log('Entrada de productos OK', this.entrateProductsForMonth);
     }
 
   public reloadGraphics(): void {

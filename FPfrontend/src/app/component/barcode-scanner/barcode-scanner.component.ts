@@ -4,11 +4,11 @@ import { BarcodeFormat } from '@zxing/library';
 import { CommonModule } from '@angular/common';
 import { RequestService } from '../../services/request.service';
 import { HttpClient } from '@angular/common/http';
-import { ProductAllData } from '../../models/response.interface';
+import { ProductAllData, User } from '../../models/response.interface';
+import { ModalComponent } from "../modal/modal.component";
 
 @Component({
   selector: 'app-barcode-scanner',
-  standalone: true,
   imports: [CommonModule, ZXingScannerModule],
   templateUrl: './barcode-scanner.component.html',
   styleUrl: './barcode-scanner.component.css'
@@ -45,6 +45,10 @@ export class BarcodeScannerComponent implements OnInit {
 
   ngOnInit() {
     this.getUserProducts();
+  }
+
+  public closeModal(): void {
+    this.isModalOpen = false;
   }
 
   onScanSuccess(event: any) {
